@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/customWhite</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+
+    <color name="identityColor">#6667AA</color>
+    <color name="customBlack">#333333</color>
+    <color name="customWhite">#F8F8F8</color>
+    <color name="white">#FFF</color>
+    <color name="black">#000</color>
+    <color name="gray">#C0C0C0</color>
+    <color name="darkGray">#5C5A59</color>
+    <color name="whiteGray">#FAFAFA</color>
+    <color name="transparency">#00000000</color>
+</resources>

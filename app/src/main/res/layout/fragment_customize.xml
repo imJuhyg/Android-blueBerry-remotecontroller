@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whiteGray"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".views.CustomizeFragment">
+
+    <View
+        android:id="@+id/title_frame"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.12"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/btn_add"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/transparency"
+        android:src="@drawable/icon_add_48"
+        android:scaleType="fitCenter"
+        android:padding="5dp"
+        android:layout_marginEnd="28dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.1"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.12"
+        app:layout_constraintRight_toRightOf="@id/title_frame"
+        app:layout_constraintTop_toTopOf="@id/title_frame"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@string/customize"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:gravity="center_vertical"
+        android:layout_marginStart="28dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.7"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.12"
+        app:layout_constraintTop_toTopOf="@id/title_frame"
+        app:layout_constraintLeft_toLeftOf="@id/title_frame"/>
+
+    <View
+        android:id="@+id/customize_view_frame"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="14dp"
+        android:background="@drawable/round_corners_white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/customize_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="14dp"
+        app:layout_constraintLeft_toLeftOf="@id/customize_view_frame"
+        app:layout_constraintRight_toRightOf="@id/customize_view_frame"
+        app:layout_constraintTop_toTopOf="@id/customize_view_frame"
+        app:layout_constraintBottom_toBottomOf="@id/customize_view_frame"/>
+
+    <TextView
+        android:id="@+id/no_customize_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="@string/request_add_customize"
+        android:textSize="16sp"
+        android:gravity="center"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

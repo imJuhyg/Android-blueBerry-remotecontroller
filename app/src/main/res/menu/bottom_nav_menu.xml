@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_customize"
+        android:icon="@drawable/icon_menu_customize_48"
+        android:title="@string/customize"/>
+
+    <item
+        android:id="@+id/menu_communication_test"
+        android:icon="@drawable/icon_menu_communication_48"
+        android:title="@string/connect_test"/>
+
+    <item
+        android:id="@+id/menu_more"
+        android:icon="@drawable/icon_menu_more_48"
+        android:title="@string/more"/>
+</menu>

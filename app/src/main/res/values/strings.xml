@@ -1,0 +1,68 @@
+<resources>
+    <string name="app_name">blueBerry</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="button_submit">Submit</string>
+    <string name="ok">확인</string>
+    <string name="cancel">취소</string>
+    <string name="setting">설정</string>
+    <string name="next">다음</string>
+    <string name="stop">중지</string>
+    <string name="search">검색</string>
+    <string name="re_search">재검색</string>
+    <string name="re_connect">재연결</string>
+    <string name="device_name">이름</string>
+    <string name="mac_address">MAC 주소</string>
+    <string name="paired_devices">페어링된 디바이스</string>
+    <string name="setting_uuid">UUID설정</string>
+    <string name="received">전송됨</string>
+    <string name="scan_device">주변 디바이스를 검색하고 있습니다</string>
+    <string name="scan_list_name">검색된 디바이스</string>
+    <string name="paired_list_name">페어링된 디바이스</string>
+    <string name="search_connected_device">연결된 디바이스를 찾는중입니다</string>
+    <string name="custom_uuid">사용자 정의 UUID</string>
+    <string name="remote_device_name">Remote device</string>
+    <string name="customize">커스텀</string>
+    <string name="connect_test">테스트</string>
+    <string name="more">더보기</string>
+    <string name="connect_fail">연결 실패</string>
+    <string name="connected_device">연결된 디바이스</string>
+    <string name="next_step">다음단계</string>
+    <string name="connect_to_raspberrypi">라즈베리파이와 연결하려는 경우</string>
+    <string name="input_customize_name">커스텀이름을 입력해주세요</string>
+    <string name="already_paired_device">이미 페어링된 디바이스입니다</string>
+    <string name="request_add_customize">\'+\'버튼을 눌러 새로운 커스텀을 생성하세요"</string>
+    <string name="bluetooth_adapter_isnull">
+        블루투스를 사용할 수 없는 디바이스입니다\n애플리케이션을 종료합니다
+    </string>
+    <string name="request_enable_bluetooth">
+        디바이스를 검색하기 위해서 블루투스를 활성화합니다 (\'아니요\' 버튼을 누를경우 검색기능을 사용할 수 없습니다)
+    </string>
+    <string name="select_device_request_message">
+        연결하려는 디바이스를 선택해주세요
+    </string>
+    <string name="try_connect_message">연결 시도 중입니다</string>
+    <string name="try_pairing_message">페이링 요청 중입니다</string>
+    <string name="request_search_device">페어링된 디바이스가 없습니다\n 주변 디바이스를 검색해주세요</string>
+    <string name="connect_fail_explain">
+        연결하려는 디바이스의 소켓이 열려있지 않을 수도 있습니다\n
+        디바이스의 상태를 확인하고 연결을 다시 시도해 주세요
+    </string>
+    <string name="socket_close_message">디바이스와 연결이 끊어졌습니다</string>
+    <string name="test_close_message">테스트를 종료합니다</string>
+    <string name="connect_troubleshooting">
+        애플리케이션은 기본적으로 클라이언트가 되도록
+        설계되어 있으며 열린 서버소켓에 연결을 시도합니다.
+        따라서 연결하려는 디바이스는 소켓을 생성하고 연결 대기상태로 있어야합니다.
+    </string>
+    <string name="raspberrypi_troubleshooting_1">
+        라즈베리파이에서 서비스 클래스가 설정되어 있지 않을 수도 있습니다.
+        데이터 통신 방식은 Serial port class를 사용하기 때문에
+        라즈베리파이에서 서비스 클래스를 Serial port class로 설정해야 합니다.
+        자세한 사항은 Pybluez(advertise_service) 문서를 참조하거나
+        blueBerry 깃허브 샘플을 참조해 주세요.
+    </string>
+    <string name="raspberrypi_troubleshooting_2">
+        1의 방식으로 해결되지 않을 경우 라즈베리파이의 UUID를
+        아래의 UUID로 설정해 주세요.\n[Serial port class UUID]\n00001101-0000-1000-8000-00805F9B34FB
+    </string>
+</resources>

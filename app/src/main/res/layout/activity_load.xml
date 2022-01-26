@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoadActivity">
+
+    <ImageView
+        android:id="@+id/logo_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:src="@drawable/icon_menu_customize_48"
+        android:scaleType="fitCenter"
+        android:tint="@color/identityColor"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="compatible with"
+        android:textSize="16sp"
+        android:gravity="center"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.075"
+        app:layout_constraintVertical_bias="0.75"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="Raspberry Pi"
+        android:textSize="14sp"
+        android:gravity="center"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.035"
+        app:layout_constraintTop_toBottomOf="@id/tv_1"/>
+
+    <TextView
+        android:id="@+id/tv_3"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="Arduino"
+        android:textSize="14sp"
+        android:gravity="center"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.035"
+        app:layout_constraintTop_toBottomOf="@id/tv_2"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

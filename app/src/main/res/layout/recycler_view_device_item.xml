@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/device_recycler_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="3dp"
+    android:layout_marginTop="20dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:padding="20dp"
+        android:scaleType="fitCenter"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.25"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/name_text_view"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:lines="1"
+        android:maxLength="23"
+        android:gravity="bottom"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.75"
+        app:layout_constraintLeft_toRightOf="@+id/image_view"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/address_text_view"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:textSize="12sp"
+        android:paddingTop="4dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:background="@drawable/bottom_stroke_gray"
+        android:textColor="@color/customBlack"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.75"
+        app:layout_constraintLeft_toRightOf="@+id/image_view"
+        app:layout_constraintTop_toBottomOf="@+id/name_text_view"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
