@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1058970583719",
+    "project_id": "blueberry-777f7",
+    "storage_bucket": "blueberry-777f7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1058970583719:android:d24e86893e3f4e1666d182",
+        "android_client_info": {
+          "package_name": "com.limjuhyg.blueberry"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1058970583719-thjetseff7pfc8a6c5l21ur2om5fpjf3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSRb7MIqqJAlxvI19Qrq51G5CVRnulCew"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1058970583719-thjetseff7pfc8a6c5l21ur2om5fpjf3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

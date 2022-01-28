@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.totheptv.blueberry">
+    package="com.limjuhyg.blueberry">
     <!-- Allows applications to connect to paired bluetooth devices. -->
     <uses-permission
         android:name="android.permission.BLUETOOTH"
@@ -19,14 +19,14 @@
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
 
     <application
-        android:name=".MainApplication"
+        android:name="com.limjuhyg.blueberry.MainApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BlueBerry">
-        <activity android:name=".LoadActivity"
+        <activity android:name="com.limjuhyg.blueberry.LoadActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,10 +34,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".views.CustomSettingActivity" />
-        <activity android:name=".views.ClientCommunicationActivity" />
-        <activity android:name=".views.DeviceScanActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name="com.limjuhyg.blueberry.views.CustomizeSettingActivity" />
+        <activity android:name="com.limjuhyg.blueberry.views.ClientCommunicationActivity" />
+        <activity android:name="com.limjuhyg.blueberry.views.DeviceScanActivity" />
+        <activity android:name="com.limjuhyg.blueberry.MainActivity" />
     </application>
 
 </manifest>
