@@ -1,5 +1,5 @@
 package com.limjuhyg.blueberry.adapter.items
 
-import android.graphics.drawable.Drawable
+import android.graphics.Bitmap
 
-data class WidgetRecyclerViewItem(val image: Drawable, val title: String)
+data class WidgetRecyclerViewItem(val image: Bitmap, val title: String)

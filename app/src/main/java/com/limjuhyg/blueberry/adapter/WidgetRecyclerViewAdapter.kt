@@ -1,6 +1,8 @@
 package com.limjuhyg.blueberry.adapter
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
@@ -39,18 +41,20 @@ class WidgetRecyclerViewAdapter(private val context: Context) : RecyclerView.Ada
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val item = widgetItems[position]
 
-        viewHolder.imageView.setImageDrawable(item.image)
+        viewHolder.imageView.setImageBitmap(item.image)
         viewHolder.title.text = item.title
     }
 
     override fun getItemCount() = widgetItems.size
 
-    fun addItem(image: Drawable, title: String) {
+    fun addItem(image: Bitmap, title: String) {
         widgetItems.add(WidgetRecyclerViewItem(image, title))
         notifyDataSetChanged()
     }
 
-    fun addItemIgnoreNotify(image: Drawable, title: String) {
+    fun getItem(position: Int) = widgetItems[position]
+
+    fun addItemIgnoreNotify(image: Bitmap, title: String) {
         widgetItems.add(WidgetRecyclerViewItem(image, title))
     }
 

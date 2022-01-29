@@ -34,7 +34,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.limjuhyg.blueberry.views.CustomizeSettingActivity" />
+        <activity
+            android:name="com.limjuhyg.blueberry.views.CustomizeSettingActivity"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity android:name="com.limjuhyg.blueberry.views.ClientCommunicationActivity" />
         <activity android:name="com.limjuhyg.blueberry.views.DeviceScanActivity" />
         <activity android:name="com.limjuhyg.blueberry.MainActivity" />

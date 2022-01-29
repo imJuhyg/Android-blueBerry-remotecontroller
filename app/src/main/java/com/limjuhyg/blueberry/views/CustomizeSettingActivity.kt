@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -12,7 +13,9 @@ import com.limjuhyg.blueberry.R
 import com.limjuhyg.blueberry.databinding.ActivityCustomizeSettingBinding
 import com.limjuhyg.blueberry.models.CustomizeRepository
 import com.limjuhyg.blueberry.models.room.entities.Customize
+import com.limjuhyg.blueberry.models.room.entities.Widgets
 import com.limjuhyg.blueberry.utils.addFragment
+import com.limjuhyg.blueberry.utils.addFragmentWithAnimation
 import com.limjuhyg.blueberry.viewmodels.CustomizeViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,14 +25,16 @@ class CustomizeSettingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCustomizeSettingBinding
     private val customizeRepository by lazy { CustomizeRepository.getInstance(application) }
     private val customizeViewModel by lazy { ViewModelProvider(this).get(CustomizeViewModel::class.java) }
+    private val widgetsContainerFragment by lazy { WidgetsContainerFragment() }
+    private val keyboard by lazy { getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCustomizeSettingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // TEST
-        addFragment(R.id.fragment_container, WidgetListFragment())
+        binding.editText.requestFocus()
+        keyboard.showSoftInput(binding.editText, 0)
     }
 
     companion object CustomizeSet{
@@ -69,11 +74,11 @@ class CustomizeSettingActivity : AppCompatActivity() {
 
                     customize?.let {
                         Toast.makeText(this@CustomizeSettingActivity, "이미 생성된 커스텀 이름입니다", Toast.LENGTH_SHORT).show()
-                    } ?: let {
+                    } ?: run {
+                        keyboard.hideSoftInputFromWindow(editText.windowToken, 0)
                         customizeName = editText.text.toString()
-                        Log.d("DEBUG", "다음 단계")
-                        // TODO WidgetListFragment 먼저 테스트
-
+                        addFragment(fragmentContainer.id, widgetsContainerFragment, true)
+                        editText.setText("")
                     }
                 }
             }

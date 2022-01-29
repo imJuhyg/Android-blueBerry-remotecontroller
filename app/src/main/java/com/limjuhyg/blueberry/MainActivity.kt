@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
         overridePendingTransition(R.anim.disappear, R.anim.none)
         binding.bottomNavView.setOnItemSelectedListener(this)
 
-        addFragment(R.id.main_fragment_container, customizeFragment)
+        addFragment(R.id.main_fragment_container, customizeFragment, false)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
                     showFragment(it)
                 } ?: run {
                     pairedDevicesFragment = PairedDevicesFragment()
-                    addFragment(R.id.main_fragment_container, pairedDevicesFragment!!)
+                    addFragment(R.id.main_fragment_container, pairedDevicesFragment!!, false)
                 }
             }
 
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
                     showFragment(it)
                 } ?: run {
                     moreFragment = MoreFragment()
-                    addFragment(R.id.main_fragment_container, moreFragment!!)
+                    addFragment(R.id.main_fragment_container, moreFragment!!, false)
                 }
             }
         }
