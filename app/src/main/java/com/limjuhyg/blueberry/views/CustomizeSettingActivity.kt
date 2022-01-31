@@ -33,6 +33,8 @@ class CustomizeSettingActivity : AppCompatActivity() {
         binding = ActivityCustomizeSettingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        overridePendingTransition(R.anim.to_left_from_right, R.anim.none)
+
         binding.editText.requestFocus()
         keyboard.showSoftInput(binding.editText, 0)
     }
@@ -77,7 +79,7 @@ class CustomizeSettingActivity : AppCompatActivity() {
                     } ?: run {
                         keyboard.hideSoftInputFromWindow(editText.windowToken, 0)
                         customizeName = editText.text.toString()
-                        addFragment(fragmentContainer.id, widgetsContainerFragment, true)
+                        addFragmentWithAnimation(fragmentContainer.id, widgetsContainerFragment, R.anim.to_left_from_right, R.anim.none, true)
                         editText.setText("")
                     }
                 }

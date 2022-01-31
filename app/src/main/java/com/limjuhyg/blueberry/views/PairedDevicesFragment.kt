@@ -1,6 +1,5 @@
 package com.limjuhyg.blueberry.views
 
-import android.app.Activity.RESULT_OK
 import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.os.Bundle
@@ -8,20 +7,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
+import android.util.Log
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.limjuhyg.blueberry.MainApplication
 import com.limjuhyg.blueberry.databinding.FragmentPairedDevicesBinding
 import com.limjuhyg.blueberry.adapter.DeviceRecyclerViewAdapter
 import com.limjuhyg.blueberry.utils.addDeviceItemWithAnimation
+import com.limjuhyg.blueberry.viewmodels.BluetoothScanPair
 
 class PairedDevicesFragment : Fragment() {
     private lateinit var binding: FragmentPairedDevicesBinding
-    private val bluetoothAdapter by lazy { MainApplication.instance.bluetoothAdapter }
+    private val scanPairViewModel by lazy { ViewModelProvider(this).get(BluetoothScanPair::class.java) }
     private val deviceRecyclerViewAdapter by lazy { DeviceRecyclerViewAdapter(requireContext()) }
     private lateinit var bluetoothDevices: ArrayList<BluetoothDevice>
-    private lateinit var scanActivityResultLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentPairedDevicesBinding.inflate(inflater, container, false)
@@ -34,18 +33,23 @@ class PairedDevicesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // scan activity result launcher
-        scanActivityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if(it.resultCode == RESULT_OK) {
-                deviceRecyclerViewAdapter.clear()
-                getPairedDevices()
-            }
+
+        val pairedDevicesObserver = Observer<ArrayList<BluetoothDevice>> {
+            bluetoothDevices = it
+            for(device in bluetoothDevices)
+                addDeviceItemWithAnimation(device.name, device.address, deviceRecyclerViewAdapter)
+            refreshView()
         }
+        scanPairViewModel.pairedDevices.observe(viewLifecycleOwner, pairedDevicesObserver)
+        scanPairViewModel.getPairedDevices()
+
     }
 
     override fun onResume() {
         super.onResume()
-        getPairedDevices()
+
+        deviceRecyclerViewAdapter.clear()
+        scanPairViewModel.getPairedDevices()
 
         // Paired device click event
         deviceRecyclerViewAdapter.setOnItemClickListener(object: DeviceRecyclerViewAdapter.OnItemClickListener {
@@ -67,17 +71,17 @@ class PairedDevicesFragment : Fragment() {
         // scan button click event
         binding.btnSearch.setOnClickListener {
             val intent = Intent(activity, DeviceScanActivity::class.java)
-            scanActivityResultLauncher.launch(intent)
+            startActivity(intent)
         }
 
         // refresh button click event
         binding.btnRefresh.setOnClickListener {
             deviceRecyclerViewAdapter.clear()
-            getPairedDevices()
+            scanPairViewModel.getPairedDevices()
         }
     }
 
-    private fun replaceView() {
+    private fun refreshView() {
         binding.apply {
             if(bluetoothDevices.isEmpty()) {
                 pairedDeviceRecyclerView.visibility = View.GONE
@@ -87,13 +91,6 @@ class PairedDevicesFragment : Fragment() {
                 pairedDeviceRecyclerView.visibility = View.VISIBLE
             }
         }
-    }
-
-    private fun getPairedDevices() {
-        bluetoothDevices = ArrayList(bluetoothAdapter!!.bondedDevices)
-        for(device in bluetoothDevices)
-            addDeviceItemWithAnimation(device.name, device.address, deviceRecyclerViewAdapter)
-        replaceView()
     }
 
     override fun onDestroy() {

@@ -11,7 +11,6 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.setFragmentResultListener
 import com.limjuhyg.blueberry.R
 import com.limjuhyg.blueberry.customviews.CustomWidget
 import com.limjuhyg.blueberry.databinding.FragmentWidgetsContainerBinding
@@ -63,6 +62,7 @@ class WidgetsContainerFragment : Fragment() {
 
         addChildFragment(binding.fragmentContainer.id, widgetListFragment, false)
         binding.btnShowWidgetFragment.setColorFilter(ContextCompat.getColor(requireContext(), R.color.identityColor))
+        enableTopPanel(false)
 
         // status bar 높이 구하기
         val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
@@ -91,41 +91,16 @@ class WidgetsContainerFragment : Fragment() {
         }
     }
 
-    fun hideFragmentContainerGroup() {
-        binding.apply {
-            fragmentContainerGroup.visibility = View.GONE
-            btnShowWidgetFragment.isEnabled = true
-            btnShowWidgetFragment.clearColorFilter()
-        }
-    }
-
-    fun createWidget(bitmap: Bitmap, caption: String, data: String) {
-        hideFragmentContainerGroup()
-        // Add custom widget
-        val customWidget = CustomWidget(requireContext()).apply {
-            if(caption.isEmpty()) setCaptionVisibility(false)
-            else setWidgetCaption(caption)
-            setColorFilter(R.color.darkGray)
-            setWidgetImageBitmap(bitmap)
-            setWidgetData(data)
-            setWidgetCoordination(widgetInitialCoordinate.x.toFloat()-width/2, widgetInitialCoordinate.y.toFloat())
-            setOnTouchListener(WidgetMotionEvent())
-        }
-        binding.fragmentContainerGroup.visibility = View.GONE
-        binding.customizeLayout.addView(customWidget, widgetDefaultWidth, widgetDefaultHeight)
-        ++widgetCount
-    }
-
     override fun onResume() {
         super.onResume()
 
         // Show WidgetListFragment
         binding.btnShowWidgetFragment.setOnClickListener {
-            if(widgetCount < 2) {
+            if(widgetCount < 30) {
                 binding.fragmentContainerGroup.visibility = View.VISIBLE
                 binding.btnShowWidgetFragment.setColorFilter(ContextCompat.getColor(requireContext(), R.color.identityColor))
                 addChildFragment(binding.fragmentContainer.id, widgetListFragment, false)
-                it.isEnabled = false
+                enableTopPanel(false)
             }
             else {
                 Toast.makeText(requireContext(), "최대 30개까지 생성할 수 있습니다", Toast.LENGTH_SHORT).show()
@@ -165,6 +140,50 @@ class WidgetsContainerFragment : Fragment() {
                 binding.btnHorizontalGuideline.clearColorFilter()
             }
         }
+
+        // Remove child fragment
+        /*
+        binding.shadowPanel.setOnClickListener {
+            Log.d("shadow panel", "onClick")
+            removeChildFragmentWithAnimation(widgetListFragment, R.anim.to_bottom_from_top, R.anim.none)
+            hideFragmentContainerGroup()
+        }
+         */
+    }
+
+    fun enableTopPanel(boolean: Boolean) {
+        binding.apply {
+            btnBefore.isEnabled = boolean
+            btnShowWidgetFragment.isEnabled = boolean
+            btnVerticalGuideline.isEnabled = boolean
+            btnHorizontalGuideline.isEnabled = boolean
+            btnNext.isEnabled = boolean
+        }
+    }
+
+    fun refreshView() {
+        binding.apply {
+            fragmentContainerGroup.visibility = View.GONE
+            enableTopPanel(true)
+            btnShowWidgetFragment.clearColorFilter()
+        }
+    }
+
+    fun createWidget(bitmap: Bitmap, caption: String, data: String) {
+        refreshView()
+        // Add custom widget
+        val customWidget = CustomWidget(requireContext()).apply {
+            if(caption.isEmpty()) setCaptionVisibility(false)
+            else setWidgetCaption(caption)
+            setColorFilter(R.color.darkGray)
+            setWidgetImageBitmap(bitmap)
+            setWidgetData(data)
+            setWidgetCoordination(widgetInitialCoordinate.x.toFloat()-width/2, widgetInitialCoordinate.y.toFloat())
+            setOnTouchListener(WidgetMotionEvent())
+        }
+        binding.fragmentContainerGroup.visibility = View.GONE
+        binding.customizeLayout.addView(customWidget, widgetDefaultWidth, widgetDefaultHeight)
+        ++widgetCount
     }
 
     private inner class WidgetMotionEvent : View.OnTouchListener {

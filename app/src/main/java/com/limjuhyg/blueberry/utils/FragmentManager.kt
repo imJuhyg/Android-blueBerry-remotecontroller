@@ -47,6 +47,13 @@ fun Fragment.addChildFragment(fragmentContainer: Int, fragment: Fragment, addBac
     }
 }
 
+fun Fragment.removeChildFragmentWithAnimation(fragment: Fragment, enter: Int, exit: Int) {
+    childFragmentManager.beginTransaction()
+        .setCustomAnimations(enter, exit)
+        .remove(fragment)
+        .commit()
+}
+
 fun Fragment.removeFragment(fragment: Fragment) {
     parentFragmentManager.beginTransaction()
         .remove(fragment)
