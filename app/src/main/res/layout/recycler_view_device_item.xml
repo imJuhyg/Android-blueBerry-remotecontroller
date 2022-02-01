@@ -42,7 +42,6 @@
         android:paddingTop="4dp"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
-        android:background="@drawable/bottom_stroke_gray"
         android:textColor="@color/customBlack"
         app:layout_constrainedWidth="true"
         app:layout_constraintWidth_percent="0.75"

@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.limjuhyg.blueberry.MainApplication
 import com.limjuhyg.blueberry.models.CustomizeRepository
 import com.limjuhyg.blueberry.models.room.entities.Customize
 import com.limjuhyg.blueberry.models.room.entities.Widgets

@@ -9,15 +9,17 @@
         android:id="@+id/image_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:scaleType="center"
+        android:src="@drawable/icon_circle_button_48"
+        android:scaleType="fitCenter"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/caption_text_view"/>
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView
         android:id="@+id/data_text_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
+        android:textSize="10sp"
         android:visibility="invisible"
         app:layout_constraintLeft_toLeftOf="@id/image_view"
         app:layout_constraintRight_toRightOf="@id/image_view"
@@ -26,11 +28,11 @@
 
     <TextView
         android:id="@+id/caption_text_view"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
+        android:gravity="center_horizontal|bottom"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/image_view"
+        android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>

@@ -4,7 +4,7 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.os.Handler
 import android.util.Log
-import com.limjuhyg.blueberry.MainApplication
+import com.limjuhyg.blueberry.applications.MainApplication
 import java.io.IOException
 import java.util.*
 

@@ -33,6 +33,14 @@ fun AppCompatActivity.addFragmentWithAnimation(fragmentContainer: Int, fragment:
     }
 }
 
+fun AppCompatActivity.removeFragment(fragment: Fragment) {
+    supportFragmentManager.beginTransaction()
+        .remove(fragment)
+        .commit()
+    supportFragmentManager.popBackStack()
+}
+
+
 fun Fragment.addChildFragment(fragmentContainer: Int, fragment: Fragment, addBackStack: Boolean) {
     if(addBackStack) {
         childFragmentManager.beginTransaction()
@@ -47,17 +55,27 @@ fun Fragment.addChildFragment(fragmentContainer: Int, fragment: Fragment, addBac
     }
 }
 
-fun Fragment.removeChildFragmentWithAnimation(fragment: Fragment, enter: Int, exit: Int) {
-    childFragmentManager.beginTransaction()
-        .setCustomAnimations(enter, exit)
-        .remove(fragment)
-        .commit()
+fun Fragment.addChildFragmentWithAnimation(fragmentContainer: Int, fragment: Fragment, enter: Int, exit: Int, addBackStack: Boolean) {
+    if(addBackStack) {
+        childFragmentManager.beginTransaction()
+            .setCustomAnimations(enter, exit)
+            .add(fragmentContainer, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+    else {
+        childFragmentManager.beginTransaction()
+            .setCustomAnimations(enter, exit)
+            .add(fragmentContainer, fragment)
+            .commit()
+    }
 }
 
 fun Fragment.removeFragment(fragment: Fragment) {
     parentFragmentManager.beginTransaction()
         .remove(fragment)
         .commit()
+    parentFragmentManager.popBackStack()
 }
 
 fun AppCompatActivity.showFragment(fragment: Fragment) {

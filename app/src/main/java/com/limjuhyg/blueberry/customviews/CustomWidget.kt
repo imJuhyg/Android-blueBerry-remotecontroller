@@ -2,6 +2,7 @@ package com.limjuhyg.blueberry.customviews
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Point
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -11,6 +12,7 @@ import androidx.core.content.ContextCompat
 import com.limjuhyg.blueberry.R
 
 class CustomWidget constructor(context: Context) : ConstraintLayout(context) {
+    private lateinit var bitmap: Bitmap
     private var imageView: ImageView
     private var dataTextView: TextView
     private var captionTextView: TextView
@@ -25,20 +27,33 @@ class CustomWidget constructor(context: Context) : ConstraintLayout(context) {
     }
 
     fun setWidgetImageBitmap(bitmap: Bitmap) {
-        imageView.setImageBitmap(bitmap)
+        this.bitmap = bitmap
+        imageView.setImageBitmap(this.bitmap)
     }
+
+    fun getWidgetImageBitmap() = bitmap
 
     fun setWidgetData(data: String) {
         dataTextView.text = data
     }
 
+    fun getWidgetData() = dataTextView.text.toString()
+
     fun setWidgetCaption(text: String) {
         captionTextView.text = text
     }
 
+    fun getWidgetCaption() = captionTextView.text.toString()
+
     fun setWidgetCoordination(x: Float, y: Float) {
         this.x = x
         this.y = y
+    }
+
+    fun getWidgetCoordination(): Point {
+        val point = Point()
+        point.set(this.x.toInt(), this.y.toInt())
+        return point
     }
 
     fun setDataVisibility(visible: Boolean) {
@@ -54,4 +69,7 @@ class CustomWidget constructor(context: Context) : ConstraintLayout(context) {
     fun setColorFilter(color: Int) {
         imageView.setColorFilter(ContextCompat.getColor(context, color))
     }
+
+    fun getWidgetWidth() = this.width
+    fun getWidgetHeight() = this.height
 }

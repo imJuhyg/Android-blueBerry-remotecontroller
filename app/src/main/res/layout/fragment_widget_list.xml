@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".views.WidgetListFragment">
+    tools:context=".views.fragments.WidgetListFragment">
 
     <!-- widget list -->
     <androidx.constraintlayout.widget.Group
@@ -39,6 +39,9 @@
         android:background="@drawable/search_bar"
         android:textSize="12sp"
         android:paddingStart="35dp"
+        android:imeOptions="actionSearch"
+        android:privateImeOptions="defaultInputmode=english"
+        android:cursorVisible="false"
         android:hint="@string/search_google_icons"
         android:maxLength="35"
         android:maxLines="1"
@@ -55,7 +58,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:src="@drawable/icon_search_48"
-        android:tint="@color/darkGray"
+        android:tint="@color/identityColor"
         android:paddingStart="5dp"
         app:layout_constrainedWidth="true"
         app:layout_constraintWidth_percent="0.085"

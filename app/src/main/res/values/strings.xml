@@ -27,11 +27,13 @@
     <string name="connect_fail">연결 실패</string>
     <string name="connected_device">연결된 디바이스</string>
     <string name="next_step">다음단계</string>
+    <string name="skip">건너뛰기</string>
+    <string name="completion">완료</string>
     <string name="connect_to_raspberrypi">라즈베리파이와 연결하려는 경우</string>
     <string name="input_customize_name">커스텀이름을 입력해주세요</string>
     <string name="already_paired_device">이미 페어링된 디바이스입니다</string>
     <string name="request_add_customize">\'+\'버튼을 눌러 새로운 커스텀을 생성하세요"</string>
-    <string name="search_google_icons">Google에서 제공하는 다양한 아이콘들을 검색해보세요</string>
+    <string name="search_google_icons">Google Icons</string>
     <string name="bluetooth_adapter_isnull">
         블루투스를 사용할 수 없는 디바이스입니다\n애플리케이션을 종료합니다
     </string>
