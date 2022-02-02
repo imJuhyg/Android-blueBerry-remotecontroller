@@ -26,10 +26,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BlueBerry">
-        <activity android:name=".views.custom.CustomizeConnectSettingActivity"></activity>
+        <activity android:name=".TestModuleActivity"></activity>
+        <activity android:name=".views.custom.CustomizeConnectSettingActivity" />
         <activity
-            android:name=".views.custom.WidgetContainerActivity"
-            android:windowSoftInputMode="adjustNothing"></activity>
+            android:name=".views.custom.WidgetSettingActivity"
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".views.load.LoadActivity"
             android:exported="true">

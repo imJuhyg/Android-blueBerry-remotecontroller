@@ -17,6 +17,16 @@ import com.limjuhyg.blueberry.adapter.items.CustomizeRecyclerViewItem
 class CustomizeRecyclerViewAdapter(private val context: Context) : RecyclerView.Adapter<CustomizeRecyclerViewAdapter.ViewHolder>() {
     private val customizeItems by lazy { ArrayList<CustomizeRecyclerViewItem>() }
     private var startOffsetValue: Long = 0
+    private lateinit var onViewClickListener: OnViewClickListener
+    private lateinit var onButtonClickListener: OnButtonClickListener
+
+    interface OnViewClickListener {
+        fun onViewClick(view: View, position: Int)
+    }
+
+    interface OnButtonClickListener {
+        fun onButtonClick(view: View, position: Int)
+    }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val recyclerView: ConstraintLayout = view.findViewById(R.id.recycler_view_frame)
@@ -24,8 +34,23 @@ class CustomizeRecyclerViewAdapter(private val context: Context) : RecyclerView.
         val deviceImage: ImageView = view.findViewById(R.id.device_image)
         val deviceName: TextView = view.findViewById(R.id.device_name)
         val deviceAddress: TextView = view.findViewById(R.id.device_address)
-        val btnSetting: ImageButton = view.findViewById(R.id.btn_setting) // TODO 연결재설정, 컴포넌트 리디자인
-        val btnDelete: ImageButton = view.findViewById(R.id.btn_delete) // TODO delete시 데이터베이스에서 삭제
+        val btnSetting: ImageButton = view.findViewById(R.id.btn_customize_setting_change) // TODO 연결재설정, 컴포넌트 리디자인
+        val btnDelete: ImageButton = view.findViewById(R.id.btn_customize_delete) // TODO delete시 데이터베이스에서 삭제
+
+        init {
+            view.setOnClickListener {
+                val position = bindingAdapterPosition
+                if(position != RecyclerView.NO_POSITION) onViewClickListener.onViewClick(view, position)
+            }
+            btnSetting.setOnClickListener {
+                val position = bindingAdapterPosition
+                if(position != RecyclerView.NO_POSITION) onButtonClickListener.onButtonClick(it, position)
+            }
+            btnDelete.setOnClickListener {
+                val position = bindingAdapterPosition
+                if(position != RecyclerView.NO_POSITION) onButtonClickListener.onButtonClick(it, position)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -50,10 +75,26 @@ class CustomizeRecyclerViewAdapter(private val context: Context) : RecyclerView.
 
     override fun getItemCount() = customizeItems.size
 
-    fun addItem(customizeName: String, deviceImage: Drawable?, deviceName: String, deviceAddress: String) {
+    fun addItem(customizeName: String, deviceImage: Drawable?, deviceName: String?, deviceAddress: String?) {
         val item = CustomizeRecyclerViewItem(customizeName, deviceImage, deviceName, deviceAddress)
         customizeItems.add(item)
         notifyDataSetChanged()
+    }
+
+    fun getItem(position: Int) = customizeItems[position]
+
+    fun removeItem(position: Int) {
+        customizeItems.removeAt(position)
+        startOffsetValue = 0
+        notifyDataSetChanged()
+    }
+
+    fun setOnViewClickListener(listener: OnViewClickListener) {
+        onViewClickListener = listener
+    }
+
+    fun setOnButtonClickListener(listener: OnButtonClickListener) {
+        onButtonClickListener = listener
     }
 
     fun clear() {

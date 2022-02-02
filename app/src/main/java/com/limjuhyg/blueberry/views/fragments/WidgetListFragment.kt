@@ -18,7 +18,7 @@ import com.limjuhyg.blueberry.adapter.WidgetRecyclerViewAdapter
 import com.limjuhyg.blueberry.databinding.FragmentWidgetListBinding
 import com.limjuhyg.blueberry.utils.addDefaultWidgetItems
 import com.limjuhyg.blueberry.utils.removeFragment
-import com.limjuhyg.blueberry.views.custom.WidgetContainerActivity
+import com.limjuhyg.blueberry.views.custom.WidgetSettingActivity
 
 class WidgetListFragment : Fragment() {
     private var _binding: FragmentWidgetListBinding? = null
@@ -146,7 +146,7 @@ class WidgetListFragment : Fragment() {
                 val caption = binding.captionEditText.text.toString()
                 val data = binding.dataEditText.text.toString()
 
-                (activity as WidgetContainerActivity).createWidget(bitmapWidget, caption, data)
+                (activity as WidgetSettingActivity).createWidget(bitmapWidget, caption, data)
                 fragmentFinish()
             }
             else {
@@ -168,7 +168,7 @@ class WidgetListFragment : Fragment() {
 
     fun fragmentFinish() {
         editTextClear()
-        (activity as WidgetContainerActivity).refreshView()
+        (activity as WidgetSettingActivity).refreshView()
         removeFragment(this@WidgetListFragment)
     }
 

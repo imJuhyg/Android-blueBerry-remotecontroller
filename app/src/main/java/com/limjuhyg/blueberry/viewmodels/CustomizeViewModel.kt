@@ -6,14 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.limjuhyg.blueberry.models.CustomizeRepository
 import com.limjuhyg.blueberry.models.room.entities.Customize
-import com.limjuhyg.blueberry.models.room.entities.Widgets
+import com.limjuhyg.blueberry.models.room.entities.Widget
 import kotlinx.coroutines.launch
 
 class CustomizeViewModel(application: Application) : AndroidViewModel(application) {
     private val customizeRepository by lazy { CustomizeRepository.getInstance(application) }
     val customize by lazy { MutableLiveData<Customize>() }
     val customizeList by lazy { MutableLiveData<List<Customize>>() }
-    val widget by lazy { MutableLiveData<Widgets>() }
+    val widgets by lazy { MutableLiveData<List<Widget>>() }
 
     // 모든 커스터마이즈 조회
     fun getAllCustomize() {
@@ -58,23 +58,33 @@ class CustomizeViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     // 일부 위젯 조회
-    fun getWidget(customizeName: String) {
+    fun getWidgets(customizeName: String) {
         viewModelScope.launch {
-            widget.value = customizeRepository.getWidget(customizeName)
+            widgets.value = customizeRepository.getWidgets(customizeName)
         }
     }
 
     // 위젯 생성
-    fun insertWidget(widget: Widgets) {
+    fun insertWidget(widget: Widget) {
         viewModelScope.launch {
             customizeRepository.insertWidget(widget)
         }
     }
 
+    // 위젯 삭제
+    fun deleteWidget(customizeName: String) {
+        viewModelScope.launch {
+            customizeRepository.deleteWidget(customizeName)
+        }
+    }
+
     // 위젯 업데이트
-    fun updateWidget(customizeName: String, widget: Widgets) {
+    /*
+    fun updateWidget(customizeName: String, widget: Widget) {
         viewModelScope.launch {
             customizeRepository.updateWidget(customizeName, widget)
         }
     }
+
+     */
 }

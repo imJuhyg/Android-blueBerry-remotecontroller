@@ -50,11 +50,14 @@ class CustomWidget constructor(context: Context) : ConstraintLayout(context) {
         this.y = y
     }
 
+    /*
     fun getWidgetCoordination(): Point {
         val point = Point()
         point.set(this.x.toInt(), this.y.toInt())
         return point
     }
+
+     */
 
     fun setDataVisibility(visible: Boolean) {
         if(visible) dataTextView.visibility = View.VISIBLE

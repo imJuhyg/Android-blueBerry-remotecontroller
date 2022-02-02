@@ -1,9 +1,7 @@
 package com.limjuhyg.blueberry.dataclass
 
-import android.graphics.Point
 import com.limjuhyg.blueberry.customviews.CustomWidget
 import com.limjuhyg.blueberry.models.room.entities.Customize
-import com.limjuhyg.blueberry.models.room.entities.Widgets
 
 class TempCustomizeSettingData private constructor() {
     private var customizeName: String? = null
@@ -35,9 +33,9 @@ class TempCustomizeSettingData private constructor() {
         this.widgetList = widgetList
     }
 
-    fun getCustomize() = Customize(customizeName ?: "null", deviceName, deviceAddress)
-    // TODO getWidgetList() : ArrayList<Widgets> -> Entity Widgets 으로 가공하여 리턴
-    // TODO Type Converter -> bitmap
+    fun getWidgetList(): ArrayList<CustomWidget> = widgetList ?: ArrayList()
+
+    fun getCustomize() = Customize(customizeName!!, deviceName, deviceAddress)
 
     fun instanceClear() {
         instance = null

@@ -11,6 +11,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -96,7 +97,12 @@ class BluetoothChatActivity : AppCompatActivity() {
 
                     CONNECT_CLOSE -> {
                         if(showDialog) {
-                            val dialogView = layoutInflater.inflate(R.layout.custom_alert_dialog, null, false)
+                            val dialogView = layoutInflater.inflate(R.layout.custom_alert_dialog_ok, null, false)
+                            val title: TextView = dialogView.findViewById(R.id.title)
+                            val subtitle: TextView = dialogView.findViewById(R.id.subtitle)
+                            title.text = getString(R.string.socket_close_message)
+                            subtitle.text = getString(R.string.test_close_message)
+
                             val builder = AlertDialog.Builder(this@BluetoothChatActivity)
                             builder.setView(dialogView)
                             builder.setCancelable(false)
