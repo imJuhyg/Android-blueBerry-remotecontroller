@@ -50,14 +50,12 @@ class CustomWidget constructor(context: Context) : ConstraintLayout(context) {
         this.y = y
     }
 
-    /*
-    fun getWidgetCoordination(): Point {
-        val point = Point()
-        point.set(this.x.toInt(), this.y.toInt())
-        return point
+    fun setWidgetScale(scale: Float) {
+        this.scaleX = scale
+        this.scaleY = scale
     }
 
-     */
+    fun getWidgetScale() = this.scaleX
 
     fun setDataVisibility(visible: Boolean) {
         if(visible) dataTextView.visibility = View.VISIBLE
@@ -72,7 +70,4 @@ class CustomWidget constructor(context: Context) : ConstraintLayout(context) {
     fun setColorFilter(color: Int) {
         imageView.setColorFilter(ContextCompat.getColor(context, color))
     }
-
-    fun getWidgetWidth() = this.width
-    fun getWidgetHeight() = this.height
 }

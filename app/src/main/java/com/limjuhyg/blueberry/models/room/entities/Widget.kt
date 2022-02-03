@@ -22,6 +22,7 @@ data class Widget(
     @ColumnInfo var y: Float,
     @ColumnInfo var width: Int,
     @ColumnInfo var height: Int,
+    @ColumnInfo var scale: Float,
     @ColumnInfo var icon: Bitmap,
     @ColumnInfo var caption: String? = null,
     @ColumnInfo var data: String

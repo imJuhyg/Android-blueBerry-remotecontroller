@@ -35,7 +35,7 @@ class CustomizeNameSettingActivity : AppCompatActivity() {
         const val CUSTOMIZE_CREATE_MODE = 101
         const val CUSTOMIZE_MODIFICATION_MODE = 100
 
-        // Set customize name to load widget settings in case of modification mode
+        // Set existing customize name if modification mode
         var existCustomizeName: String? = null
     }
 
@@ -94,14 +94,19 @@ class CustomizeNameSettingActivity : AppCompatActivity() {
         binding.btnNext.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
                 keyboard.hideSoftInputFromWindow(binding.editText.windowToken, 0)
+                val customize: Customize? = customizeRepository.getCustomize(binding.editText.text.toString())
+
                 // Modification mode
                 if(mode == CUSTOMIZE_MODIFICATION_MODE) {
-                    startWidgetSettingActivity()
+                    // 변경하려는 이름이 이미 있을 경우
+                    if(customize != null && customize.customizeName != existCustomizeName) {
+                        Toast.makeText(this@CustomizeNameSettingActivity, "이미 생성된 커스텀 이름입니다", Toast.LENGTH_SHORT).show()
+                    }
+                    // 변경하려는 이름이 없거나 변경하지 않는 경우
+                    else startWidgetSettingActivity()
                 }
                 // Create mode
                 else if(mode == CUSTOMIZE_CREATE_MODE) {
-                    val customize: Customize? = customizeRepository.getCustomize(binding.editText.text.toString())
-
                     customize?.let {
                         Toast.makeText(this@CustomizeNameSettingActivity, "이미 생성된 커스텀 이름입니다", Toast.LENGTH_SHORT).show()
                     } ?: run {
@@ -138,7 +143,6 @@ class CustomizeNameSettingActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("CustomizeSettingAct", "onDestroy")
         tempCustomizeSettingData.instanceClear()
     }
 }

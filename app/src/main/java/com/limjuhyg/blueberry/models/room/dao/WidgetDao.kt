@@ -17,13 +17,11 @@ interface WidgetDao {
     fun insertWidget(widget: Widget)
 
     // 위젯 업데이트
-    /*
     @Query("UPDATE Widget " +
             "SET x = :x, y = :y, width = :width, height = :height, " +
-            "icon = :icon, caption = :caption, data = :data " +
+            "scale = :scale, icon = :icon, caption = :caption, data = :data " +
             "WHERE customizeName = :updateKey")
-    fun updateWidget(updateKey: String, x: Float, y: Float, width: Int, height: Int, icon: Bitmap, caption: String? = null, data: String)
-     */
+    fun updateWidget(updateKey: String, x: Float, y: Float, width: Int, height: Int, scale:Float, icon: Bitmap, caption: String? = null, data: String)
 
     // 위젯 삭제
     @Query("DELETE FROM Widget WHERE customizeName = :deleteKey")

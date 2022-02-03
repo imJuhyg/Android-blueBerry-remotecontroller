@@ -8,10 +8,7 @@ import android.graphics.Bitmap
 import android.graphics.Point
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewTreeObserver
+import android.view.*
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -104,13 +101,14 @@ class WidgetSettingActivity : AppCompatActivity() {
         }
 
         val widgetObserver = Observer<List<Widget>> {
-            // Add custom widget to customizeLayout
+            // Add existing widget to customizeLayout
             for(widget in it) {
                 val customWidget = CustomWidget(this).apply {
                     widget.caption?.let { caption -> setWidgetCaption(caption) } ?: run { setCaptionVisibility(false) }
                     setWidgetData(widget.data)
                     setColorFilter(R.color.darkGray)
                     setWidgetImageBitmap(widget.icon)
+                    setWidgetScale(widget.scale)
                     setWidgetCoordination(widget.x, widget.y)
                     setOnTouchListener(WidgetMotionEvent())
                 }
@@ -243,12 +241,12 @@ class WidgetSettingActivity : AppCompatActivity() {
         private var horizontalGuidelineInitRawY = 0f
         private var widgetInitRawX = 0f
         private var widgetInitRawY = 0f
-        private var widgetInitIntervalX = 0f
-        private var widgetInitIntervalY = 0f
-        private var widgetScale = 1f
+        private var lastPointerDistanceX = 0f
+        private var lastPointerDistanceY = 0f
         private var widgetModificationMode = MODIFICATION_NONE
         private var animator: AnimatorSet? = null
         private var isViewDeleteMode = false
+        private var lastWidgetScale = 1f
 
         override fun onTouch(view: View, event: MotionEvent): Boolean {
             val pointerCount = if(event.pointerCount > 2) 2 else event.pointerCount
@@ -260,6 +258,8 @@ class WidgetSettingActivity : AppCompatActivity() {
                 when(event.action and MotionEvent.ACTION_MASK) {
                     MotionEvent.ACTION_DOWN -> {
                         view.bringToFront()
+
+                        lastWidgetScale = view.scaleX // save current widget scale
 
                         // trashcan animation
                         ObjectAnimator.ofFloat(binding.trashcan, "alpha", 1.0f).apply { // 휴지통 보이기
@@ -278,14 +278,13 @@ class WidgetSettingActivity : AppCompatActivity() {
                     MotionEvent.ACTION_POINTER_DOWN -> {
                         if(pointerCount == 2) {
                             widgetModificationMode = MODIFICATION_SCALE
-                            widgetInitIntervalX = abs(event.getX(0) - event.getX(1))
-                            widgetInitIntervalY = abs(event.getY(0) - event.getY(1))
+                            lastPointerDistanceX = abs(event.getX(0) - event.getX(1))
+                            lastPointerDistanceY = abs(event.getY(0) - event.getY(1))
                         }
                     }
 
                     MotionEvent.ACTION_MOVE -> {
-                        // data visible
-                        view.setDataVisibility(true)
+                        view.setDataVisibility(true) // data visible
 
                         // widget translate
                         if(pointerCount == 1 && widgetModificationMode == MODIFICATION_TRANSLATE) {
@@ -315,25 +314,25 @@ class WidgetSettingActivity : AppCompatActivity() {
 
                         // widget scale
                         if(pointerCount == 2 && widgetModificationMode == MODIFICATION_SCALE) {
-                            val intervalX = abs(event.getX(0) - event.getX(1))
-                            val intervalY = abs(event.getY(0) - event.getY(1))
-                            if(intervalX > widgetInitIntervalX && intervalY > widgetInitIntervalY) { // 확대
+                            val pointerDistanceX = abs(event.getX(0) - event.getX(1))
+                            val pointerDistanceY = abs(event.getY(0) - event.getY(1))
+
+                            if(pointerDistanceX > lastPointerDistanceX && pointerDistanceY > lastPointerDistanceY) { // 확대
                                 view.scaleX *= 1.05f
                                 view.scaleY *= 1.05f
                             }
-                            else if(intervalX < widgetInitIntervalX && intervalY < widgetInitIntervalY) { // 축소
+                            else if(pointerDistanceX < lastPointerDistanceX && pointerDistanceY < lastPointerDistanceY) { // 축소
                                 view.scaleX *= 0.95f
                                 view.scaleY *= 0.95f
                             }
-                            widgetScale = view.scaleX // 현재 뷰 스케일 저장
                         }
 
                         // widget delete
                         if(widgetPivotX > trashcanTopLeftCoordinate.x && widgetPivotX < trashcanBottomRightCoordinate.x
-                            && widgetPivotY > trashcanTopLeftCoordinate.y && widgetPivotY < trashcanBottomRightCoordinate.y) { // 뷰가 휴지통 영역 내부일 때
+                            && widgetPivotY > trashcanTopLeftCoordinate.y && widgetPivotY < trashcanBottomRightCoordinate.y) {
+                            // 뷰가 휴지통 영역 내부일 때
                             if(!isViewDeleteMode) {
                                 isViewDeleteMode = true
-
                                 animator = AnimatorSet().apply {
                                     play(ObjectAnimator.ofFloat(view, "scaleX", 0.2f)).apply {
                                         with(ObjectAnimator.ofFloat(view, "scaleY", 0.2f))
@@ -346,12 +345,12 @@ class WidgetSettingActivity : AppCompatActivity() {
                             }
                         }
                         else {
+                            // 뷰가 휴지통 영역 내부였다가 벗어났을 때
                             if(isViewDeleteMode) {
                                 isViewDeleteMode = false
-
                                 animator = AnimatorSet().apply {
-                                    play(ObjectAnimator.ofFloat(view, "scaleX", widgetScale)).apply {
-                                        with(ObjectAnimator.ofFloat(view, "scaleY", widgetScale))
+                                    play(ObjectAnimator.ofFloat(view, "scaleX", lastWidgetScale)).apply {
+                                        with(ObjectAnimator.ofFloat(view, "scaleY", lastWidgetScale))
                                         with(ObjectAnimator.ofFloat(binding.trashcan, "scaleX", 1f))
                                         with(ObjectAnimator.ofFloat(binding.trashcan, "scaleY", 1f))
                                         duration = 100
@@ -430,10 +429,5 @@ class WidgetSettingActivity : AppCompatActivity() {
             }
             return true
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("debug", "WidgetsContainerActivity destroy")
     }
 }

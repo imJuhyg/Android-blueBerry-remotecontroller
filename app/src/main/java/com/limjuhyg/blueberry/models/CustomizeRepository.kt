@@ -65,14 +65,13 @@ class CustomizeRepository private constructor() {
     }
 
     // 위젯 업데이트
-    /*
     suspend fun updateWidget(customizeName: String, widget: Widget) = withContext(Dispatchers.IO) {
         localDatabase.widgetDao().updateWidget(
             customizeName, widget.x, widget.y,
-            widget.width, widget.height,
-            widget.icon, widget.caption, widget.data)
+            widget.width, widget.height, widget.scale,
+            widget.icon, widget.caption, widget.data
+        )
     }
-     */
 
     // 위젯 삭제
     suspend fun deleteWidget(customizeName: String) = withContext(Dispatchers.IO) {

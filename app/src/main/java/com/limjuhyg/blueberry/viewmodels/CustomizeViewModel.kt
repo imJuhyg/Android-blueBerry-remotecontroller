@@ -79,12 +79,9 @@ class CustomizeViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     // 위젯 업데이트
-    /*
     fun updateWidget(customizeName: String, widget: Widget) {
         viewModelScope.launch {
             customizeRepository.updateWidget(customizeName, widget)
         }
     }
-
-     */
 }
