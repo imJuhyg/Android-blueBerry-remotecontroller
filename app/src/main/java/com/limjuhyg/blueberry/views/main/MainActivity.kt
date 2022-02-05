@@ -25,6 +25,10 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
     private var pairedDevicesFragment: PairedDevicesFragment? = null
     private var moreFragment: MoreFragment? = null
 
+    companion object {
+        const val BLUETOOTH_PERMISSION_CODE = 1000
+    }
+
     // Test
     private val customizeViewModel by lazy { ViewModelProvider(this).get(CustomizeViewModel::class.java) }
 

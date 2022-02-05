@@ -1,10 +1,27 @@
 package com.limjuhyg.blueberry.views.scan
 
+import android.Manifest
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.view.animation.AnimationUtils
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +38,8 @@ class DeviceScanActivity : AppCompatActivity() {
     private lateinit var pairedDevices: ArrayList<BluetoothDevice>
     private val scannedDevices by lazy { ArrayList<BluetoothDevice>() }
     private var isPairingAvailable = true
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+    private var hasPermission: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,8 +48,59 @@ class DeviceScanActivity : AppCompatActivity() {
 
         overridePendingTransition(R.anim.to_top_from_bottom_1, R.anim.none)
 
+        // progress circle animation
+        val set1 = AnimatorSet().apply {
+            play(ObjectAnimator.ofFloat(binding.progressCircle3, "scaleX", 1.5f).apply {
+                duration = 750
+                repeatMode = ObjectAnimator.REVERSE
+                repeatCount = ObjectAnimator.INFINITE
+            }).with(ObjectAnimator.ofFloat(binding.progressCircle3, "scaleY", 1.5f).apply {
+                duration = 750
+                repeatMode = ObjectAnimator.REVERSE
+                repeatCount = ObjectAnimator.INFINITE
+            })
+        }
+        val set2 = AnimatorSet().apply {
+            play(ObjectAnimator.ofFloat(binding.progressCircle2, "scaleX", 1.5f).apply {
+                duration = 750
+                repeatMode = ObjectAnimator.REVERSE
+                repeatCount = ObjectAnimator.INFINITE
+            }).with(ObjectAnimator.ofFloat(binding.progressCircle2, "scaleY", 1.5f).apply {
+                duration = 750
+                repeatMode = ObjectAnimator.REVERSE
+                repeatCount = ObjectAnimator.INFINITE
+            }).after(325)
+        }
+
+        val set3 = AnimatorSet().apply {
+            play(ObjectAnimator.ofFloat(binding.progressCircle1, "scaleX", 1.5f).apply {
+                duration = 750
+                repeatMode = ObjectAnimator.REVERSE
+                repeatCount = ObjectAnimator.INFINITE
+            }).with(ObjectAnimator.ofFloat(binding.progressCircle1, "scaleY", 1.5f).apply {
+                duration = 750
+                repeatMode = ObjectAnimator.REVERSE
+                repeatCount = ObjectAnimator.INFINITE
+            }).after(700)
+        }
+
+        AnimatorSet().apply {
+            play(set1).with(set2).with(set3)
+            start()
+        }
+
         binding.deviceRecyclerView.layoutManager = LinearLayoutManager(this@DeviceScanActivity)
         binding.deviceRecyclerView.adapter = deviceRecyclerViewAdapter
+
+        // Check permission
+        requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if(isGranted) {
+                hasPermission = true
+                scanPairViewModel.startScan()
+            }
+            else showPermissionAlertDialog()
+        }
+        hasPermission = requestLocationPermission()
 
         // Observer
         // paired devices observer
@@ -51,11 +121,11 @@ class DeviceScanActivity : AppCompatActivity() {
         val discoveringObserver = Observer<Boolean> { isDiscovering ->
             // UI update
             if(isDiscovering) { // 검색중일 때
-                binding.progressBar.visibility = View.VISIBLE
-                binding.btnStopOrSearch.text = getString(R.string.stop)
+                binding.progressCircleGroup.visibility = View.VISIBLE
+                binding.btnStopOrFind.text = getString(R.string.stop)
             } else { // 검색중이 아닐 때 / 검색이 끝났을 때
-                binding.progressBar.visibility = View.GONE
-                binding.btnStopOrSearch.text = getString(R.string.search)
+                binding.progressCircleGroup.visibility = View.INVISIBLE
+                binding.btnStopOrFind.text = getString(R.string.find)
             }
         }
         scanPairViewModel.isDiscovering.observe(this, discoveringObserver)
@@ -66,12 +136,12 @@ class DeviceScanActivity : AppCompatActivity() {
             else {
                 binding.apply {
                     scanViewLayout.visibility = View.VISIBLE
-                    pairProcessLayout.visibility = View.GONE
+                    pairProcessLayout.visibility = View.INVISIBLE
                 }
             }
         }
         scanPairViewModel.isBonded.observe(this, pairDeviceObserver)
-        scanPairViewModel.startScan()
+        if(hasPermission) scanPairViewModel.startScan()
     }
 
     override fun onResume() {
@@ -79,13 +149,14 @@ class DeviceScanActivity : AppCompatActivity() {
 
         binding.apply {
             // Scan or Stop button
-            btnStopOrSearch.setOnClickListener {
+            btnStopOrFind.setOnClickListener {
                 // 검색중일 때 버튼을 누르면
-                if(btnStopOrSearch.text == getString(R.string.stop)) {
+                // TODO 중지 버튼 누르면 애니메이션 정지
+                if(btnStopOrFind.text == getString(R.string.stop)) {
                     scanPairViewModel.stopScan()
                 }
                 // 검색중이지 않을 때 버튼을 누르면
-                else if(btnStopOrSearch.text == getString(R.string.search)) {
+                else if(btnStopOrFind.text == getString(R.string.find)) {
                     scannedDevices.clear()
                     deviceRecyclerViewAdapter.clear()
                     scanPairViewModel.startScan()
@@ -115,6 +186,42 @@ class DeviceScanActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun requestLocationPermission(): Boolean {
+        return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { // more than api level 28
+            if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+                requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                false
+            } else true
+        } else {
+            if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+                requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+                false
+            } else true
+        }
+    }
+
+    private fun showPermissionAlertDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.custom_alert_dialog_ok, null, false)
+        val title: TextView = dialogView.findViewById(R.id.title)
+        val subtitle: TextView = dialogView.findViewById(R.id.subtitle)
+        title.text = getString(R.string.require_permission)
+        subtitle.text = getString(R.string.request_location_permission)
+
+        val builder = AlertDialog.Builder(this).apply {
+            setView(dialogView)
+            setCancelable(false)
+        }
+        val alertDialog = builder.create()
+        alertDialog.show()
+
+        val buttonOk: Button = dialogView.findViewById(R.id.btn_ok)
+        buttonOk.setOnClickListener {
+            alertDialog.dismiss()
+        }
     }
 
     override fun onDestroy() {
