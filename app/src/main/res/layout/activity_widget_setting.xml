@@ -3,7 +3,6 @@
     android:id="@+id/main_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/customWhite"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".views.custom.WidgetSettingActivity">
@@ -25,6 +24,7 @@
         android:layout_height="0dp"
         android:src="@drawable/icon_navigate_before_48"
         android:scaleType="fitCenter"
+        android:tint="@color/darkGray"
         android:background="@color/transparency"
         app:layout_constrainedWidth="true"
         app:layout_constraintWidth_percent="0.1"
@@ -99,6 +99,7 @@
         android:id="@+id/customize_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@color/whiteGray"
         app:layout_constraintTop_toBottomOf="@id/top_panel"
         app:layout_constraintBottom_toBottomOf="parent">
 

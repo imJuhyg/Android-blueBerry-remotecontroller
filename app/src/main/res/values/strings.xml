@@ -25,7 +25,7 @@
     <string name="connect_test">테스트</string>
     <string name="more">더보기</string>
     <string name="connect_fail">연결 실패</string>
-    <string name="connected_device">연결된 디바이스</string>
+    <string name="connect_info">연결 정보</string>
     <string name="next_step">다음단계</string>
     <string name="skip">건너뛰기</string>
     <string name="completion">완료</string>
@@ -40,7 +40,7 @@
     <string name="customize_delete_message_2">"삭제된 정보는 되돌릴 수 없습니다"</string>
     <string name="require_permission">권한이 허용되지 않았습니다</string>
     <string name="request_connect_permission">애플리케이션 설정에서 \'근처 기기\'권한을 허용해주세요</string>
-    <string name="request_location_permission">주변 기기를 찾기 위해서는 \'위치\'권한이 필요합니다</string>
+    <string name="request_location_permission">검색하기 위해서는 \'정확한 위치\'권한이 필요합니다</string>
     <string name="bluetooth_adapter_isnull">
         블루투스를 사용할 수 없는 디바이스입니다\n애플리케이션을 종료합니다
     </string>

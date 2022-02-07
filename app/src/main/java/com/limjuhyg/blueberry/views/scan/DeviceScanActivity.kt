@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.limjuhyg.blueberry.R
 import com.limjuhyg.blueberry.databinding.ActivityDeviceScanBinding
 import com.limjuhyg.blueberry.adapter.DeviceRecyclerViewAdapter
+import com.limjuhyg.blueberry.utils.ProgressCircleAnimator
 import com.limjuhyg.blueberry.utils.addDeviceItem
 import com.limjuhyg.blueberry.viewmodels.BluetoothScanPair
 
@@ -40,6 +41,8 @@ class DeviceScanActivity : AppCompatActivity() {
     private var isPairingAvailable = true
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private var hasPermission: Boolean = false
+    private var searchProgressAnimator: ProgressCircleAnimator? = null
+    private var pairingProgressAnimator: ProgressCircleAnimator? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,46 +51,18 @@ class DeviceScanActivity : AppCompatActivity() {
 
         overridePendingTransition(R.anim.to_top_from_bottom_1, R.anim.none)
 
-        // progress circle animation
-        val set1 = AnimatorSet().apply {
-            play(ObjectAnimator.ofFloat(binding.progressCircle3, "scaleX", 1.5f).apply {
-                duration = 750
-                repeatMode = ObjectAnimator.REVERSE
-                repeatCount = ObjectAnimator.INFINITE
-            }).with(ObjectAnimator.ofFloat(binding.progressCircle3, "scaleY", 1.5f).apply {
-                duration = 750
-                repeatMode = ObjectAnimator.REVERSE
-                repeatCount = ObjectAnimator.INFINITE
-            })
-        }
-        val set2 = AnimatorSet().apply {
-            play(ObjectAnimator.ofFloat(binding.progressCircle2, "scaleX", 1.5f).apply {
-                duration = 750
-                repeatMode = ObjectAnimator.REVERSE
-                repeatCount = ObjectAnimator.INFINITE
-            }).with(ObjectAnimator.ofFloat(binding.progressCircle2, "scaleY", 1.5f).apply {
-                duration = 750
-                repeatMode = ObjectAnimator.REVERSE
-                repeatCount = ObjectAnimator.INFINITE
-            }).after(325)
-        }
+        // Progress animation
+        searchProgressAnimator = ProgressCircleAnimator(
+            binding.progressCircle3,
+            binding.progressCircle2,
+            binding.progressCircle1, 750)
+        searchProgressAnimator!!.startAnimation()
 
-        val set3 = AnimatorSet().apply {
-            play(ObjectAnimator.ofFloat(binding.progressCircle1, "scaleX", 1.5f).apply {
-                duration = 750
-                repeatMode = ObjectAnimator.REVERSE
-                repeatCount = ObjectAnimator.INFINITE
-            }).with(ObjectAnimator.ofFloat(binding.progressCircle1, "scaleY", 1.5f).apply {
-                duration = 750
-                repeatMode = ObjectAnimator.REVERSE
-                repeatCount = ObjectAnimator.INFINITE
-            }).after(700)
-        }
-
-        AnimatorSet().apply {
-            play(set1).with(set2).with(set3)
-            start()
-        }
+        pairingProgressAnimator = ProgressCircleAnimator(
+            binding.pairingProgressCircle1,
+            binding.pairingProgressCircle2,
+            binding.pairingProgressCircle3, 500
+        )
 
         binding.deviceRecyclerView.layoutManager = LinearLayoutManager(this@DeviceScanActivity)
         binding.deviceRecyclerView.adapter = deviceRecyclerViewAdapter
@@ -149,14 +124,11 @@ class DeviceScanActivity : AppCompatActivity() {
 
         binding.apply {
             // Scan or Stop button
-            btnStopOrFind.setOnClickListener {
-                // 검색중일 때 버튼을 누르면
-                // TODO 중지 버튼 누르면 애니메이션 정지
+            btnStopOrFind.setOnClickListener { // 검색중일 때 버튼을 누르면
                 if(btnStopOrFind.text == getString(R.string.stop)) {
                     scanPairViewModel.stopScan()
                 }
-                // 검색중이지 않을 때 버튼을 누르면
-                else if(btnStopOrFind.text == getString(R.string.find)) {
+                else if(btnStopOrFind.text == getString(R.string.find)) { // 검색중이지 않을 때 버튼을 누르면
                     scannedDevices.clear()
                     deviceRecyclerViewAdapter.clear()
                     scanPairViewModel.startScan()
@@ -181,6 +153,7 @@ class DeviceScanActivity : AppCompatActivity() {
                     binding.apply {
                         scanViewLayout.visibility = View.GONE
                         pairProcessLayout.visibility = View.VISIBLE
+                        pairingProgressAnimator!!.startAnimation()
                     }
                     scanPairViewModel.requestPair(scannedDevices[position])
                 }
@@ -226,8 +199,11 @@ class DeviceScanActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-
         scannedDevices.clear()
         deviceRecyclerViewAdapter.clear()
+        searchProgressAnimator!!.cancelAnimation()
+        pairingProgressAnimator!!.cancelAnimation()
+        searchProgressAnimator = null
+        pairingProgressAnimator = null
     }
 }

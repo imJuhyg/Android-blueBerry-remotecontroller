@@ -20,7 +20,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:menu="@menu/bottom_nav_menu"
-        android:background="@color/white"
         app:itemBackground="@color/white"
         app:itemIconTint="@drawable/bottom_nav_button_color"
         app:itemTextColor="@drawable/bottom_nav_button_color"

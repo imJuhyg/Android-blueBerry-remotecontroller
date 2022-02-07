@@ -25,6 +25,7 @@
         android:layout_height="0dp"
         android:src="@drawable/icon_navigate_before_48"
         android:scaleType="fitCenter"
+        android:tint="@color/darkGray"
         android:background="@color/transparency"
         android:elevation="2dp"
         app:layout_constrainedWidth="true"
