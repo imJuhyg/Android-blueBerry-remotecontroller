@@ -82,7 +82,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         android:layout_marginStart="13dp"
-        android:gravity="bottom"
+        android:gravity="center_vertical"
         app:layout_constraintLeft_toRightOf="@id/device_image"
         app:layout_constraintTop_toTopOf="@id/device_image"/>
 

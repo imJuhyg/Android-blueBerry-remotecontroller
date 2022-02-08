@@ -29,6 +29,7 @@ class LoadActivity : AppCompatActivity() {
                     ActivityCompat.finishAffinity(this@LoadActivity)
                     exitProcess(0)
                 }
+                setCancelable(false)
                 show()
             }
         }

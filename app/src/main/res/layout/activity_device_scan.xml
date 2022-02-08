@@ -125,7 +125,7 @@
         android:id="@+id/pairing_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/try_pairing_message"
+        android:text="@string/try_pairing"
         android:textSize="18sp"
         android:gravity="center_horizontal"
         app:layout_constraintTop_toTopOf="parent"

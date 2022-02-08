@@ -17,6 +17,12 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.limjuhyg.blueberry.R
 import com.limjuhyg.blueberry.adapter.ChatRecyclerViewAdapter
+import com.limjuhyg.blueberry.applications.MainApplication.Companion.BUFFER_SIZE
+import com.limjuhyg.blueberry.applications.MainApplication.Companion.CONNECT_CLOSE
+import com.limjuhyg.blueberry.applications.MainApplication.Companion.CONNECT_FAIL
+import com.limjuhyg.blueberry.applications.MainApplication.Companion.CONNECT_SUCCESS
+import com.limjuhyg.blueberry.applications.MainApplication.Companion.MESSAGE_READ
+import com.limjuhyg.blueberry.applications.MainApplication.Companion.MESSAGE_WRITE
 import com.limjuhyg.blueberry.databinding.ActivityBluetoothChatBinding
 import com.limjuhyg.blueberry.rfcomm.client.ClientCommunicationThread
 import com.limjuhyg.blueberry.rfcomm.client.ClientConnectThread
@@ -32,15 +38,6 @@ class BluetoothChatActivity : AppCompatActivity() {
     private var communicationThread: ClientCommunicationThread? = null
     private var isButtonAccessible: Boolean = false
     private var showDialog: Boolean = true
-
-    companion object {
-        const val BUFFER_SIZE: Int = 1024
-        const val CONNECT_SUCCESS: Int = 1000
-        const val CONNECT_FAIL: Int = 1001
-        const val CONNECT_CLOSE: Int = 1002
-        const val MESSAGE_WRITE: Int = 0
-        const val MESSAGE_READ: Int = 1
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,7 +70,6 @@ class BluetoothChatActivity : AppCompatActivity() {
                             // Set remote panel
                             binding.apply {
                                 bluetoothDevice!!.name?.let { name ->
-                                    imageView.setImageDrawable(ContextCompat.getDrawable(this@BluetoothChatActivity, R.drawable.icon_remote_device_48))
                                     nameTextView.text = name
                                     addressTextView.text = bluetoothDevice!!.address
 
@@ -139,62 +135,58 @@ class BluetoothChatActivity : AppCompatActivity() {
         super.onResume()
 
         // Reconnect button listener
-        binding.apply {
-            btnReConnect.setOnClickListener {
-                connectFailLayout.visibility = View.GONE
-                connectProgressLayout.visibility = View.VISIBLE
+        binding.btnReConnect.setOnClickListener {
+            binding.connectFailLayout.visibility = View.GONE
+            binding.connectProgressLayout.visibility = View.VISIBLE
 
-                connectThread = ClientConnectThread(bluetoothDevice!!, messageHandler)
-                connectThread!!.start()
-            }
+            connectThread = ClientConnectThread(bluetoothDevice!!, messageHandler)
+            connectThread!!.start()
         }
 
         // 키보드 팝업시 자동 스크롤
-        binding.apply {
-            chatView.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
-                if(bottom < oldBottom) {
-                    if(chatRecyclerViewAdapter.itemCount > 0) {
-                        chatView.smoothScrollToPosition(chatRecyclerViewAdapter.itemCount-1)
-                    }
+        binding.chatView.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
+            if(bottom < oldBottom) {
+                if(chatRecyclerViewAdapter.itemCount > 0) {
+                    binding.chatView.smoothScrollToPosition(chatRecyclerViewAdapter.itemCount-1)
                 }
             }
         }
 
         // Change send button color
-        binding.apply {
-            editText.addTextChangedListener(object: TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
-                    text?.let {
-                        if(it.isNotEmpty()) {
-                            isButtonAccessible = true
-                            sendBtnImageView.visibility = View.GONE
-                            btnSend.visibility = View.VISIBLE
-                        }
-                        else {
-                            isButtonAccessible = false
-                            btnSend.visibility = View.GONE
-                            sendBtnImageView.visibility = View.VISIBLE
-                        }
+        binding.editText.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
+                text?.let {
+                    if(it.isNotEmpty()) {
+                        isButtonAccessible = true
+                        binding.sendBtnImageView.visibility = View.GONE
+                        binding.btnSend.visibility = View.VISIBLE
+                    }
+                    else {
+                        isButtonAccessible = false
+                        binding.btnSend.visibility = View.GONE
+                        binding.sendBtnImageView.visibility = View.VISIBLE
                     }
                 }
-                override fun afterTextChanged(s: Editable?) {}
-            })
-        }
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
 
         // Send message to remote device
-        binding.apply {
-            btnSend.setOnClickListener {
-                // Update chat view
-                if(isButtonAccessible) {
-                    val sendMessage = editText.text.toString()
-                    addChatItem(ChatRecyclerViewAdapter.DIRECTION_SEND, sendMessage, System.currentTimeMillis(), chatRecyclerViewAdapter)
+        binding.btnSend.setOnClickListener {
+            // Update chat view
+            if(isButtonAccessible) {
+                val sendMessage = binding.editText.text.toString()
+                addChatItem(ChatRecyclerViewAdapter.DIRECTION_SEND, sendMessage, System.currentTimeMillis(), chatRecyclerViewAdapter)
 
-                    editText.setText("")
-                    chatView.smoothScrollToPosition(chatRecyclerViewAdapter.itemCount-1) // 자동 스크롤
-                    communicationThread!!.write(sendMessage.toByteArray(Charsets.UTF_8))
-                }
+                binding.editText.setText("")
+                binding.chatView.smoothScrollToPosition(chatRecyclerViewAdapter.itemCount-1) // 자동 스크롤
+                communicationThread!!.write(sendMessage.toByteArray(Charsets.UTF_8))
             }
+        }
+
+        binding.btnFinish.setOnClickListener {
+            finish()
         }
     }
 

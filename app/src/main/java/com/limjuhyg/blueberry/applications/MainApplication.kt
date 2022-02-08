@@ -14,6 +14,14 @@ class MainApplication : Application() {
 
     companion object {
         lateinit var instance: MainApplication
+
+        // Communication code
+        const val BUFFER_SIZE: Int = 1024
+        const val CONNECT_SUCCESS: Int = 1000
+        const val CONNECT_FAIL: Int = 1001
+        const val CONNECT_CLOSE: Int = 1002
+        const val MESSAGE_WRITE: Int = 0
+        const val MESSAGE_READ: Int = 1
     }
 
     init {

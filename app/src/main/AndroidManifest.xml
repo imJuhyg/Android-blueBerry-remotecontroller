@@ -8,10 +8,8 @@
     <uses-permission
         android:name="android.permission.BLUETOOTH_ADMIN"
         android:maxSdkVersion="30" />
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- under api level 28 -->
-
     <!-- New bluetooth permission (Android 12) -->
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
@@ -25,6 +23,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BlueBerry">
+        <activity android:name=".views.custom.CustomizeCommunicationActivity"></activity>
         <activity android:name=".views.custom.CustomizeConnectSettingActivity" />
         <activity
             android:name=".views.custom.WidgetSettingActivity"

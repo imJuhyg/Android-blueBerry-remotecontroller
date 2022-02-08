@@ -2,6 +2,7 @@ package com.limjuhyg.blueberry.adapter
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,8 +35,8 @@ class CustomizeRecyclerViewAdapter(private val context: Context) : RecyclerView.
         val deviceImage: ImageView = view.findViewById(R.id.device_image)
         val deviceName: TextView = view.findViewById(R.id.device_name)
         val deviceAddress: TextView = view.findViewById(R.id.device_address)
-        val btnSetting: ImageButton = view.findViewById(R.id.btn_customize_setting_change) // TODO 연결재설정, 컴포넌트 리디자인
-        val btnDelete: ImageButton = view.findViewById(R.id.btn_customize_delete) // TODO delete시 데이터베이스에서 삭제
+        val btnSetting: ImageButton = view.findViewById(R.id.btn_customize_setting_change)
+        val btnDelete: ImageButton = view.findViewById(R.id.btn_customize_delete)
 
         init {
             view.setOnClickListener {
@@ -64,7 +65,7 @@ class CustomizeRecyclerViewAdapter(private val context: Context) : RecyclerView.
             deviceImage.setImageDrawable(item.image)
             customizeName.text = item.customizeName
             deviceName.text = item.deviceName
-            deviceAddress.text = item.deviceAddress
+            deviceAddress.text = item.deviceAddress ?: "연결정보 없음"
         }
 
         val animation = AnimationUtils.loadAnimation(context, R.anim.to_top_from_bottom_2)
@@ -78,7 +79,6 @@ class CustomizeRecyclerViewAdapter(private val context: Context) : RecyclerView.
     fun addItem(customizeName: String, deviceImage: Drawable?, deviceName: String?, deviceAddress: String?) {
         val item = CustomizeRecyclerViewItem(customizeName, deviceImage, deviceName, deviceAddress)
         customizeItems.add(item)
-        notifyDataSetChanged()
     }
 
     fun getItem(position: Int) = customizeItems[position]
@@ -86,7 +86,7 @@ class CustomizeRecyclerViewAdapter(private val context: Context) : RecyclerView.
     fun removeItem(position: Int) {
         customizeItems.removeAt(position)
         startOffsetValue = 0
-        notifyDataSetChanged()
+        notifyItemRemoved(position)
     }
 
     fun setOnViewClickListener(listener: OnViewClickListener) {

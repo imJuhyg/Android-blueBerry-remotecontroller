@@ -3,6 +3,9 @@ package com.limjuhyg.blueberry.rfcomm.client
 import android.bluetooth.BluetoothSocket
 import android.os.Handler
 import android.util.Log
+import com.limjuhyg.blueberry.applications.MainApplication.Companion.CONNECT_CLOSE
+import com.limjuhyg.blueberry.applications.MainApplication.Companion.MESSAGE_READ
+import com.limjuhyg.blueberry.applications.MainApplication.Companion.MESSAGE_WRITE
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -16,12 +19,6 @@ class ClientCommunicationThread(
     private val inputStream: InputStream = rfcommSocket.inputStream
     private val outputStream: OutputStream = rfcommSocket.outputStream
     private val readBuffer: ByteArray = ByteArray(bufferSize)
-
-    companion object {
-        const val CONNECT_CLOSE: Int = 1002
-        const val MESSAGE_WRITE: Int = 0
-        const val MESSAGE_READ: Int = 1
-    }
 
     // Read message
     override fun run() {

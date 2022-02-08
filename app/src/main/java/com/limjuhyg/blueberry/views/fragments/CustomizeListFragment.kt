@@ -19,6 +19,7 @@ import com.limjuhyg.blueberry.databinding.FragmentCustomizeListBinding
 import com.limjuhyg.blueberry.adapter.CustomizeRecyclerViewAdapter
 import com.limjuhyg.blueberry.models.room.entities.Customize
 import com.limjuhyg.blueberry.viewmodels.CustomizeViewModel
+import com.limjuhyg.blueberry.views.custom.CustomizeCommunicationActivity
 import com.limjuhyg.blueberry.views.custom.CustomizeNameSettingActivity
 import com.limjuhyg.blueberry.views.custom.CustomizeNameSettingActivity.Companion.CUSTOMIZE_CREATE_MODE
 import com.limjuhyg.blueberry.views.custom.CustomizeNameSettingActivity.Companion.CUSTOMIZE_MODIFICATION_MODE
@@ -52,11 +53,12 @@ class CustomizeListFragment : Fragment() {
                 customizeRecyclerViewAdapter!!.addItem(
                     customize.customizeName,
                     customize.deviceAddress?.let{ ContextCompat.getDrawable(requireContext(), R.drawable.icon_remote_device_48) }
-                        ?: run{ContextCompat.getDrawable(requireContext(), R.drawable.icon_device_unknown_48)},
+                        ?: run{ ContextCompat.getDrawable(requireContext(), R.drawable.icon_device_unknown_48)},
                     customize.deviceName,
-                    customize.deviceAddress ?: "연결정보 없음"
+                    customize.deviceAddress
                 )
             }
+            customizeRecyclerViewAdapter!!.notifyDataSetChanged()
             refreshView()
         }
         customizeViewModel.customizeList.observe(viewLifecycleOwner, customizeObserver)
@@ -65,6 +67,7 @@ class CustomizeListFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
+        binding.customizeRecyclerView.scrollToPosition(0)
         customizeViewModel.getAllCustomize()
 
         // Create custom
@@ -77,9 +80,11 @@ class CustomizeListFragment : Fragment() {
         // View click listener
         customizeRecyclerViewAdapter!!.setOnViewClickListener(object: CustomizeRecyclerViewAdapter.OnViewClickListener {
             override fun onViewClick(view: View, position: Int) {
-                Log.d("debug", view.id.toString())
-                // TODO 연결정보가 없으면 CustomizeConnectSetting Activity
-                // TODO 있으면 CustomizeConnectActivity
+                val selectedItem = customizeRecyclerViewAdapter!!.getItem(position)
+                val intent = Intent(requireContext(), CustomizeCommunicationActivity::class.java)
+                intent.putExtra("CUSTOMIZE_NAME", selectedItem.customizeName)
+                intent.putExtra("DEVICE_ADDRESS", selectedItem.deviceAddress)
+                startActivity(intent)
             }
         })
 

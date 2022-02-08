@@ -17,7 +17,7 @@
         android:id="@+id/text_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/try_connect_message"
+        android:text="@string/try_connect"
         android:textSize="18sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -181,8 +181,9 @@
         android:id="@+id/communication_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:elevation="1dp"
         app:constraint_referenced_ids="remote_device_panel,
-         image_view,
+         btn_finish,
          name_text_view,
          address_text_view,
          chat_view,
@@ -197,18 +198,23 @@
         android:id="@+id/remote_device_panel"
         android:layout_width="0dp"
         android:layout_height="70dp"
-        android:background="@drawable/bottom_stroke_gray"
+        android:background="@color/white"
+        android:layout_marginBottom="1dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/image_view"
+    <ImageButton
+        android:id="@+id/btn_finish"
         android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:padding="20dp"
+        android:layout_height="0dp"
+        android:padding="15dp"
+        android:src="@drawable/icon_delete_48"
+        android:scaleType="fitCenter"
+        android:tint="@color/darkGray"
+        android:background="@color/transparency"
         app:layout_constrainedWidth="true"
-        app:layout_constraintWidth_percent="0.2"
+        app:layout_constraintWidth_percent="0.15"
         app:layout_constraintLeft_toLeftOf="@id/remote_device_panel"
         app:layout_constraintTop_toTopOf="@id/remote_device_panel"
         app:layout_constraintBottom_toBottomOf="@id/remote_device_panel"/>
@@ -223,7 +229,7 @@
         app:layout_constrainedWidth="true"
         app:layout_constraintWidth_percent="0.8"
         app:layout_constraintTop_toTopOf="@id/remote_device_panel"
-        app:layout_constraintLeft_toRightOf="@id/image_view"/>
+        app:layout_constraintLeft_toRightOf="@id/btn_finish"/>
 
     <TextView
         android:id="@+id/address_text_view"
@@ -234,7 +240,7 @@
         android:paddingTop="2dp"
         app:layout_constrainedWidth="true"
         app:layout_constraintWidth_percent="0.8"
-        app:layout_constraintLeft_toRightOf="@id/image_view"
+        app:layout_constraintLeft_toRightOf="@id/btn_finish"
         app:layout_constraintTop_toBottomOf="@id/name_text_view"/>
 
     <androidx.recyclerview.widget.RecyclerView

@@ -5,6 +5,8 @@ import android.bluetooth.BluetoothSocket
 import android.os.Handler
 import android.util.Log
 import com.limjuhyg.blueberry.applications.MainApplication
+import com.limjuhyg.blueberry.applications.MainApplication.Companion.CONNECT_FAIL
+import com.limjuhyg.blueberry.applications.MainApplication.Companion.CONNECT_SUCCESS
 import java.io.IOException
 import java.util.*
 
@@ -13,11 +15,6 @@ class ClientConnectThread(private val bluetoothDevice: BluetoothDevice, private 
     private val rfcommSocket: BluetoothSocket by lazy {
         // SerialPortServiceClass
         bluetoothDevice.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"))
-    }
-
-    companion object {
-        const val CONNECT_SUCCESS: Int = 1000
-        const val CONNECT_FAIL: Int = 1001
     }
 
     override fun run() {
