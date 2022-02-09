@@ -37,15 +37,30 @@
     <TextView
         android:id="@+id/title_text_view"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:text="@string/connect_setting"
         android:textSize="16sp"
         android:textStyle="bold"
         android:elevation="2dp"
         android:gravity="center"
+        app:layout_constraintVertical_bias="0.5"
         app:layout_constraintLeft_toRightOf="@id/btn_before"
         app:layout_constraintTop_toTopOf="@id/top_panel"
         app:layout_constraintBottom_toBottomOf="@id/top_panel"/>
+
+    <TextView
+        android:id="@+id/device_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="현재 연결정보:"
+        android:textSize="10sp"
+        android:textColor="@color/darkGray"
+        android:gravity="center"
+        android:layout_marginTop="4dp"
+        android:elevation="2dp"
+        app:layout_constraintLeft_toLeftOf="@id/title_text_view"
+        app:layout_constraintTop_toBottomOf="@id/title_text_view"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/btn_skip"

@@ -1,6 +1,7 @@
 package com.limjuhyg.blueberry.models
 
 import android.app.Application
+import android.util.Log
 import androidx.room.Room
 import com.limjuhyg.blueberry.models.room.database.LocalDatabase
 import com.limjuhyg.blueberry.models.room.entities.Customize
@@ -11,7 +12,6 @@ import kotlinx.coroutines.withContext
 class CustomizeRepository private constructor() {
     companion object {
         private var instance: CustomizeRepository? = null
-        private lateinit var application: Application
         private lateinit var localDatabase: LocalDatabase
 
         fun getInstance(application: Application): CustomizeRepository =
@@ -43,16 +43,11 @@ class CustomizeRepository private constructor() {
         localDatabase.customizeDao().deleteCustomize(customizeName)
     }
 
-    // 커스터마이즈 이름 업데이트
-    suspend fun updateCustomizeName(customizeName: String, updateName: String) = withContext(Dispatchers.IO) {
-        localDatabase.customizeDao().updateCustomizeName(customizeName, updateName)
-    }
-
-    // 커스터마이즈 연결정보 업데이트
-    suspend fun updateCustomizeDevice(customizeName: String, updateDeviceName: String? = null, updateDeviceAddress: String)
-            = withContext(Dispatchers.IO) {
-        localDatabase.customizeDao().updateCustomizeDevice(customizeName, updateDeviceName, updateDeviceAddress)
-    }
+    // 커스터마이즈 업데이트
+    suspend fun updateCustomize(customizeName: String, updateName: String, updateDeviceName: String?, updateDeviceAddress: String?) =
+        withContext(Dispatchers.IO) {
+            localDatabase.customizeDao().updateCustomize(customizeName, updateName, updateDeviceName, updateDeviceAddress)
+        }
 
     // 위젯 조회
     suspend fun getWidgets(customizeName: String): List<Widget>? = withContext(Dispatchers.IO) {
@@ -62,15 +57,6 @@ class CustomizeRepository private constructor() {
     // 위젯 생성
     suspend fun insertWidget(widget: Widget) = withContext(Dispatchers.IO) {
         localDatabase.widgetDao().insertWidget(widget)
-    }
-
-    // 위젯 업데이트
-    suspend fun updateWidget(customizeName: String, widget: Widget) = withContext(Dispatchers.IO) {
-        localDatabase.widgetDao().updateWidget(
-            customizeName, widget.x, widget.y,
-            widget.width, widget.height, widget.scale,
-            widget.icon, widget.caption, widget.data
-        )
     }
 
     // 위젯 삭제

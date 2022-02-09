@@ -1,6 +1,7 @@
 package com.limjuhyg.blueberry.models.room.dao
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -15,13 +16,6 @@ interface WidgetDao {
     // 위젯 생성
     @Insert
     fun insertWidget(widget: Widget)
-
-    // 위젯 업데이트
-    @Query("UPDATE Widget " +
-            "SET x = :x, y = :y, width = :width, height = :height, " +
-            "scale = :scale, icon = :icon, caption = :caption, data = :data " +
-            "WHERE customizeName = :updateKey")
-    fun updateWidget(updateKey: String, x: Float, y: Float, width: Int, height: Int, scale:Float, icon: Bitmap, caption: String? = null, data: String)
 
     // 위젯 삭제
     @Query("DELETE FROM Widget WHERE customizeName = :deleteKey")

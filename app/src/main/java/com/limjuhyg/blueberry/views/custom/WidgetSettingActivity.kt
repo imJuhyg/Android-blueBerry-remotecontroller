@@ -23,7 +23,7 @@ import com.limjuhyg.blueberry.utils.pxToDp
 import com.limjuhyg.blueberry.viewmodels.CustomizeViewModel
 import com.limjuhyg.blueberry.views.custom.CustomizeNameSettingActivity.Companion.CUSTOMIZE_CREATE_MODE
 import com.limjuhyg.blueberry.views.custom.CustomizeNameSettingActivity.Companion.CUSTOMIZE_MODIFICATION_MODE
-import com.limjuhyg.blueberry.views.custom.CustomizeNameSettingActivity.Companion.existCustomizeName
+import com.limjuhyg.blueberry.views.custom.CustomizeNameSettingActivity.Companion.oldCustomizeName
 import com.limjuhyg.blueberry.views.fragments.WidgetListFragment
 import kotlin.math.abs
 
@@ -97,7 +97,7 @@ class WidgetSettingActivity : AppCompatActivity() {
         // Modification mode
         if(CustomizeNameSettingActivity.mode == CUSTOMIZE_MODIFICATION_MODE) {
             binding.shadowPanel.alpha = 0f
-            customizeViewModel.getWidgets(existCustomizeName!!) // Load custom widget from DB
+            customizeViewModel.getWidgets(oldCustomizeName!!) // Load custom widget from DB
         }
 
         val widgetObserver = Observer<List<Widget>> {
@@ -126,9 +126,7 @@ class WidgetSettingActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        binding.btnBefore.setOnClickListener {
-            finish()
-        }
+        binding.btnBefore.setOnClickListener { finish() }
 
         // Show WidgetListFragment
         binding.btnShowWidgetFragment.setOnClickListener {

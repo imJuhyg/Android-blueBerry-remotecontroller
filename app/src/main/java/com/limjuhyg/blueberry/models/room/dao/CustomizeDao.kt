@@ -1,5 +1,6 @@
 package com.limjuhyg.blueberry.models.room.dao
 
+import android.util.Log
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -23,11 +24,7 @@ interface CustomizeDao {
     @Query("DELETE FROM Customize WHERE customizeName =:deleteKey")
     fun deleteCustomize(deleteKey: String)
 
-    // 커스텀명 수정(cascade: Widgets 테이블 자동 업데이트)
-    @Query("UPDATE Customize SET customizeName =:customizeName WHERE customizeName =:updateKey")
-    fun updateCustomizeName(updateKey: String, customizeName: String)
-
-    // 커스텀 연결정보 수정
-    @Query("UPDATE Customize SET deviceName =:deviceName, deviceAddress =:deviceAddress WHERE customizeName =:updateKey")
-    fun updateCustomizeDevice(updateKey: String, deviceName: String? = null, deviceAddress: String)
+    // 커스텀 수정
+    @Query("UPDATE Customize SET customizeName =:customizeName, deviceName =:deviceName, deviceAddress =:deviceAddress WHERE customizeName =:updateKey")
+    fun updateCustomize(updateKey: String, customizeName: String, deviceName: String?, deviceAddress: String?)
 }

@@ -2,7 +2,7 @@ package com.limjuhyg.blueberry.views.custom
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.limjuhyg.blueberry.databinding.ActivityCustomizeConnectSettingBinding
@@ -13,7 +13,7 @@ import com.limjuhyg.blueberry.utils.addFragment
 import com.limjuhyg.blueberry.viewmodels.CustomizeViewModel
 import com.limjuhyg.blueberry.views.custom.CustomizeNameSettingActivity.Companion.CUSTOMIZE_CREATE_MODE
 import com.limjuhyg.blueberry.views.custom.CustomizeNameSettingActivity.Companion.CUSTOMIZE_MODIFICATION_MODE
-import com.limjuhyg.blueberry.views.custom.CustomizeNameSettingActivity.Companion.existCustomizeName
+import com.limjuhyg.blueberry.views.custom.CustomizeNameSettingActivity.Companion.oldCustomizeName
 import com.limjuhyg.blueberry.views.fragments.PairedDevicesFragment
 
 class CustomizeConnectSettingActivity : AppCompatActivity() {
@@ -22,6 +22,8 @@ class CustomizeConnectSettingActivity : AppCompatActivity() {
     private val customizeViewModel by lazy { ViewModelProvider(this).get(CustomizeViewModel::class.java) }
     private val pairedDevicesFragment by lazy { PairedDevicesFragment() }
     private var mode: Int? = null
+    private var oldDeviceName: String? = null
+    private var oldDeviceAddress: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,45 +31,81 @@ class CustomizeConnectSettingActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         mode = CustomizeNameSettingActivity.mode
+        if(mode == CUSTOMIZE_MODIFICATION_MODE) {
+            binding.deviceInfo.visibility = View.VISIBLE
+            customizeViewModel.getCustomize(oldCustomizeName!!)
+        }
 
         addFragment(binding.fragmentContainer.id, pairedDevicesFragment, false)
+
+        // Observers
+        val customizeObserver = Observer<Customize> {
+            oldDeviceName = it.deviceName
+            oldDeviceAddress = it.deviceAddress
+            binding.deviceInfo.append(" ${oldDeviceAddress ?: "없음"}") // 현재 연결정보 표시
+        }
+        customizeViewModel.customize.observe(this, customizeObserver)
+
+        val isCreatedObserver = Observer<Boolean> { finishAll() }
+        customizeViewModel.isCustomizeCreated.observe(this, isCreatedObserver)
+
+        val isModifiedObserver = Observer<Boolean> { finishAll() }
+        customizeViewModel.isCustomizeModified.observe(this, isModifiedObserver)
     }
 
     override fun onResume() {
         super.onResume()
 
-        binding.btnBefore.setOnClickListener {
-            finish()
-        }
+        binding.btnBefore.setOnClickListener { finish() }
 
         // (Skip button) Save only customize name, widgets
         binding.btnSkip.setOnClickListener {
             if(mode == CUSTOMIZE_CREATE_MODE) {
-                customizeViewModel.insertCustomize(tempCustomizeSettingData.getCustomize()) // Insert Customize in DB
-                val customizeName = tempCustomizeSettingData.getCustomize().customizeName // Get customize name from temp data class
-
-                insertWidgetToDatabase(customizeName)
+                val customizeName = tempCustomizeSettingData.getCustomize().customizeName
+                val customize = Customize(customizeName, null, null)
+                val widgets = createWidgetList(customizeName)
+                customizeViewModel.createCustomize(customize, widgets)
             }
 
             else if(mode == CUSTOMIZE_MODIFICATION_MODE) {
                 val newCustomizeName = tempCustomizeSettingData.getCustomize().customizeName
-                customizeViewModel.deleteWidget(existCustomizeName!!) // Delete exist widgets
-                customizeViewModel.updateCustomizeName(existCustomizeName!!, newCustomizeName) // Update customize name
-
-                insertWidgetToDatabase(newCustomizeName)
+                val widgets = createWidgetList(newCustomizeName)
+                customizeViewModel.modifyCustomize(
+                    oldCustomizeName!!,
+                    newCustomizeName,
+                    oldDeviceName,
+                    oldDeviceAddress,
+                    widgets
+                )
             }
-
-            // Finish customize create process
-            WidgetSettingActivity.activity.finish()
-            CustomizeNameSettingActivity.activity.finish()
-            finish()
         }
     }
 
-    private fun insertWidgetToDatabase(customizeName: String) {
+    // Called from PairedDevicesFragment
+    fun setBluetoothDevice(deviceName: String, deviceAddress: String) {
+        // Get customize name from temp data class
+        val customizeName = tempCustomizeSettingData.getCustomize().customizeName
+        val customize = Customize(customizeName, deviceName, deviceAddress)
+        val widgets = createWidgetList(customizeName)
+
+        if(mode == CUSTOMIZE_CREATE_MODE) {
+            customizeViewModel.createCustomize(customize, widgets)
+        }
+        else if(mode == CUSTOMIZE_MODIFICATION_MODE) {
+            customizeViewModel.modifyCustomize(
+                oldCustomizeName!!,
+                customizeName,
+                deviceName,
+                deviceAddress,
+                widgets
+            )
+        }
+    }
+
+    private fun createWidgetList(customizeName: String): ArrayList<Widget> {
         // Get widget settings from temp data class
         val userCreatedWidgets = tempCustomizeSettingData.getWidgetList()
-
+        val widgetList = ArrayList<Widget>()
         // Insert widgets
         for(userCreatedWidget in userCreatedWidgets) {
             val widget = Widget(
@@ -81,28 +119,12 @@ class CustomizeConnectSettingActivity : AppCompatActivity() {
                 userCreatedWidget.getWidgetCaption(),
                 userCreatedWidget.getWidgetData()
             )
-            customizeViewModel.insertWidget(widget)
+            widgetList.add(widget)
         }
+        return widgetList
     }
 
-    fun setBluetoothDevice(deviceName: String, deviceAddress: String) {
-        if(mode == CUSTOMIZE_CREATE_MODE) {
-            tempCustomizeSettingData.setDeviceInfo(deviceName, deviceAddress) // Set device information
-            customizeViewModel.insertCustomize(tempCustomizeSettingData.getCustomize()) // Insert Customize in DB
-            val customizeName = tempCustomizeSettingData.getCustomize().customizeName // Get customize name from temp data class
-
-            insertWidgetToDatabase(customizeName)
-        }
-        else if(mode == CUSTOMIZE_MODIFICATION_MODE) {
-            val newCustomizeName = tempCustomizeSettingData.getCustomize().customizeName
-            customizeViewModel.deleteWidget(existCustomizeName!!) // Delete exist widgets
-            customizeViewModel.updateCustomizeName(existCustomizeName!!, newCustomizeName) // Update customize name
-            customizeViewModel.updateCustomizeDevice(newCustomizeName, deviceName, deviceAddress) // Update customize device
-
-            insertWidgetToDatabase(newCustomizeName)
-        }
-
-        // Finish customize create process
+    private fun finishAll() {
         WidgetSettingActivity.activity.finish()
         CustomizeNameSettingActivity.activity.finish()
         finish()

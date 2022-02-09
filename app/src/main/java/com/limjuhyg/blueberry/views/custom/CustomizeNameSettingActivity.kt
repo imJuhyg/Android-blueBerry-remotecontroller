@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -36,7 +35,7 @@ class CustomizeNameSettingActivity : AppCompatActivity() {
         const val CUSTOMIZE_MODIFICATION_MODE = 100
 
         // Set existing customize name if modification mode
-        var existCustomizeName: String? = null
+        var oldCustomizeName: String? = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,9 +50,9 @@ class CustomizeNameSettingActivity : AppCompatActivity() {
         mode = intent.getIntExtra("MODE", -1)
         // Modification mode
         if(mode == CUSTOMIZE_MODIFICATION_MODE) {
-            existCustomizeName = intent.getStringExtra("CUSTOMIZE_NAME")
+            oldCustomizeName = intent.getStringExtra("CUSTOMIZE_NAME")
             binding.guidelineTextView.text = getString(R.string.revise_customize_name)
-            binding.editText.setText(existCustomizeName)
+            binding.editText.setText(oldCustomizeName)
             btnEditTextEnabled(true)
         }
 
@@ -90,7 +89,7 @@ class CustomizeNameSettingActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        // Next stage
+        // 다음 단계
         binding.btnNext.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
                 keyboard.hideSoftInputFromWindow(binding.editText.windowToken, 0)
@@ -99,7 +98,7 @@ class CustomizeNameSettingActivity : AppCompatActivity() {
                 // Modification mode
                 if(mode == CUSTOMIZE_MODIFICATION_MODE) {
                     // 변경하려는 이름이 이미 있을 경우
-                    if(customize != null && customize.customizeName != existCustomizeName) {
+                    if(customize != null && customize.customizeName != oldCustomizeName) {
                         Toast.makeText(this@CustomizeNameSettingActivity, "이미 생성된 커스텀 이름입니다", Toast.LENGTH_SHORT).show()
                     }
                     // 변경하려는 이름이 없거나 변경하지 않는 경우
