@@ -5,9 +5,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
     tools:context=".views.custom.CustomizeNameSettingActivity">
+
+    <ImageButton
+        android:id="@+id/btn_finish"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="15dp"
+        android:background="@color/transparency"
+        android:src="@drawable/icon_delete_48"
+        android:scaleType="fitCenter"
+        android:tint="@color/darkGray"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.1"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
     <Button
         android:id="@+id/btn_next"
@@ -50,8 +65,8 @@
         android:textSize="16sp"
         android:backgroundTint="@color/identityColor"
         android:gravity="center"
-        android:maxLength="12"
-        android:cursorVisible="false"
+        android:maxLength="20"
+        android:maxLines="1"
         app:layout_constrainedHeight="true"
         app:layout_constraintHeight_percent="0.1"
         app:layout_constrainedWidth="true"

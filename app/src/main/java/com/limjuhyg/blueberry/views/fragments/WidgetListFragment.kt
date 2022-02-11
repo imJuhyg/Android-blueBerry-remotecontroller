@@ -175,13 +175,13 @@ class WidgetListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         binding.widgetRecyclerView.adapter = null
+        widgetRecyclerViewAdapter?.clear()
         widgetRecyclerViewAdapter = null
         _binding = null
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("debug", "WidgetListFragment destroy")
         isFling = false
     }
 }

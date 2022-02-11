@@ -196,6 +196,7 @@ class PairedDevicesFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         binding.pairedDeviceRecyclerView.adapter = null
+        deviceRecyclerViewAdapter?.clear()
         deviceRecyclerViewAdapter = null
         _binding = null
     }

@@ -76,6 +76,7 @@ class CustomizeNameSettingActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        binding.btnFinish.setOnClickListener { finish() }
 
         // edit text changed listener
         binding.editText.addTextChangedListener(object: TextWatcher {
@@ -110,7 +111,6 @@ class CustomizeNameSettingActivity : AppCompatActivity() {
                         Toast.makeText(this@CustomizeNameSettingActivity, "이미 생성된 커스텀 이름입니다", Toast.LENGTH_SHORT).show()
                     } ?: run {
                         startWidgetSettingActivity()
-                        binding.editText.setText("")
                     }
                 }
             }

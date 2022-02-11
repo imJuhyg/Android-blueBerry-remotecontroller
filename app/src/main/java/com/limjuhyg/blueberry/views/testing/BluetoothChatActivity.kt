@@ -8,12 +8,14 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.text.Editable
+import android.text.SpannableString
 import android.text.TextWatcher
+import android.text.style.UnderlineSpan
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.limjuhyg.blueberry.R
 import com.limjuhyg.blueberry.adapter.ChatRecyclerViewAdapter
@@ -26,6 +28,7 @@ import com.limjuhyg.blueberry.applications.MainApplication.Companion.MESSAGE_WRI
 import com.limjuhyg.blueberry.databinding.ActivityBluetoothChatBinding
 import com.limjuhyg.blueberry.rfcomm.client.ClientCommunicationThread
 import com.limjuhyg.blueberry.rfcomm.client.ClientConnectThread
+import com.limjuhyg.blueberry.utils.ProgressCircleAnimator
 import com.limjuhyg.blueberry.utils.addChatItem
 import java.util.*
 
@@ -33,11 +36,12 @@ class BluetoothChatActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBluetoothChatBinding
     private var bluetoothDevice: BluetoothDevice? = null
     private lateinit var messageHandler: Handler
-    private val chatRecyclerViewAdapter by lazy { ChatRecyclerViewAdapter() }
+    private var chatRecyclerViewAdapter: ChatRecyclerViewAdapter? = null
     private var connectThread: ClientConnectThread? = null
     private var communicationThread: ClientCommunicationThread? = null
     private var isButtonAccessible: Boolean = false
     private var showDialog: Boolean = true
+    private var progressAnimator: ProgressCircleAnimator? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +49,12 @@ class BluetoothChatActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         overridePendingTransition(R.anim.to_top_from_bottom_1, R.anim.none)
+
+        progressAnimator = ProgressCircleAnimator(
+            binding.progressCircle1,
+            binding.progressCircle2,
+            binding.progressCircle3, 500)
+        progressAnimator?.startAnimation()
 
         bluetoothDevice = intent.getParcelableExtra("BLUETOOTH_DEVICE")
 
@@ -55,40 +65,35 @@ class BluetoothChatActivity : AppCompatActivity() {
 
                 when(msg.what) {
                     CONNECT_SUCCESS -> {
-                        binding.apply {
-                            val rfcommSocket = msg.obj as BluetoothSocket
+                        val rfcommSocket = msg.obj as BluetoothSocket
 
-                            connectProgressLayout.visibility = View.GONE
-                            communicationLayout.visibility = View.VISIBLE
+                        progressAnimator?.cancelAnimation()
+                        binding.connectProgressLayout.visibility = View.GONE
+                        binding.communicationLayout.visibility = View.VISIBLE
 
-                            // set chatView adapter
-                            binding.apply {
-                                chatView.layoutManager = LinearLayoutManager(this@BluetoothChatActivity)
-                                chatView.adapter = chatRecyclerViewAdapter
-                            }
+                        // Set chatView adapter
+                        chatRecyclerViewAdapter = ChatRecyclerViewAdapter()
+                        binding.chatView.layoutManager = LinearLayoutManager(this@BluetoothChatActivity)
+                        binding.chatView.adapter = chatRecyclerViewAdapter
 
-                            // Set remote panel
-                            binding.apply {
-                                bluetoothDevice!!.name?.let { name ->
-                                    nameTextView.text = name
-                                    addressTextView.text = bluetoothDevice!!.address
+                        // Set remote panel
+                        bluetoothDevice!!.name?.let { name ->
+                            binding.nameTextView.text = name
+                            binding.addressTextView.text = bluetoothDevice!!.address
 
-                                } ?: run {
-                                    nameTextView.text = getString(R.string.remote_device_name)
-                                    addressTextView.text = bluetoothDevice!!.address
-                                }
-                            }
-
-                            communicationThread = ClientCommunicationThread(rfcommSocket, messageHandler, BUFFER_SIZE)
-                            communicationThread!!.start()
+                        } ?: run {
+                            binding.nameTextView.text = getString(R.string.remote_device_name)
+                            binding.addressTextView.text = bluetoothDevice!!.address
                         }
+
+                        communicationThread = ClientCommunicationThread(rfcommSocket, messageHandler, BUFFER_SIZE)
+                        communicationThread!!.start()
                     }
 
                     CONNECT_FAIL -> {
-                        binding.apply {
-                            connectProgressLayout.visibility = View.GONE
-                            connectFailLayout.visibility = View.VISIBLE
-                        }
+                        progressAnimator?.cancelAnimation()
+                        binding.connectProgressLayout.visibility = View.GONE
+                        binding.connectFailLayout.visibility = View.VISIBLE
                     }
 
                     CONNECT_CLOSE -> {
@@ -116,8 +121,8 @@ class BluetoothChatActivity : AppCompatActivity() {
 
                     MESSAGE_READ -> {
                         val message = msg.obj as String
-                        addChatItem(ChatRecyclerViewAdapter.DIRECTION_RECEIVE, message, System.currentTimeMillis(), chatRecyclerViewAdapter)
-                        binding.chatView.smoothScrollToPosition(chatRecyclerViewAdapter.itemCount-1)
+                        addChatItem(ChatRecyclerViewAdapter.DIRECTION_RECEIVE, message, System.currentTimeMillis(), chatRecyclerViewAdapter!!)
+                        binding.chatView.smoothScrollToPosition(chatRecyclerViewAdapter!!.itemCount-1)
                     }
 
                     MESSAGE_WRITE -> {
@@ -135,7 +140,8 @@ class BluetoothChatActivity : AppCompatActivity() {
         super.onResume()
 
         // Reconnect button listener
-        binding.btnReConnect.setOnClickListener {
+        binding.btnReconnect.setOnClickListener {
+            progressAnimator?.startAnimation()
             binding.connectFailLayout.visibility = View.GONE
             binding.connectProgressLayout.visibility = View.VISIBLE
 
@@ -143,11 +149,13 @@ class BluetoothChatActivity : AppCompatActivity() {
             connectThread!!.start()
         }
 
+        binding.btnNaviBefore.setOnClickListener { finish() }
+
         // 키보드 팝업시 자동 스크롤
         binding.chatView.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
             if(bottom < oldBottom) {
-                if(chatRecyclerViewAdapter.itemCount > 0) {
-                    binding.chatView.smoothScrollToPosition(chatRecyclerViewAdapter.itemCount-1)
+                if(chatRecyclerViewAdapter!!.itemCount > 0) {
+                    binding.chatView.smoothScrollToPosition(chatRecyclerViewAdapter!!.itemCount-1)
                 }
             }
         }
@@ -177,10 +185,10 @@ class BluetoothChatActivity : AppCompatActivity() {
             // Update chat view
             if(isButtonAccessible) {
                 val sendMessage = binding.editText.text.toString()
-                addChatItem(ChatRecyclerViewAdapter.DIRECTION_SEND, sendMessage, System.currentTimeMillis(), chatRecyclerViewAdapter)
+                addChatItem(ChatRecyclerViewAdapter.DIRECTION_SEND, sendMessage, System.currentTimeMillis(), chatRecyclerViewAdapter!!)
 
                 binding.editText.setText("")
-                binding.chatView.smoothScrollToPosition(chatRecyclerViewAdapter.itemCount-1) // 자동 스크롤
+                binding.chatView.smoothScrollToPosition(chatRecyclerViewAdapter!!.itemCount-1) // 자동 스크롤
                 communicationThread!!.write(sendMessage.toByteArray(Charsets.UTF_8))
             }
         }
@@ -192,6 +200,10 @@ class BluetoothChatActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        progressAnimator?.cancelAnimation()
+        progressAnimator = null
+        chatRecyclerViewAdapter?.clear()
+        chatRecyclerViewAdapter = null
 
         connectThread?.let { thread ->
             if(!thread.isInterrupted) {

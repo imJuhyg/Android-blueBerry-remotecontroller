@@ -1,20 +1,13 @@
 package com.limjuhyg.blueberry.views.scan
 
 import android.Manifest
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
-import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -35,7 +28,7 @@ import com.limjuhyg.blueberry.viewmodels.BluetoothScanPair
 class DeviceScanActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDeviceScanBinding
     private val scanPairViewModel by lazy { ViewModelProvider(this).get(BluetoothScanPair::class.java) }
-    private val deviceRecyclerViewAdapter by lazy { DeviceRecyclerViewAdapter(this@DeviceScanActivity) }
+    private var deviceRecyclerViewAdapter: DeviceRecyclerViewAdapter? = null
     private lateinit var pairedDevices: ArrayList<BluetoothDevice>
     private val scannedDevices by lazy { ArrayList<BluetoothDevice>() }
     private var isPairingAvailable = true
@@ -56,7 +49,7 @@ class DeviceScanActivity : AppCompatActivity() {
             binding.progressCircle3,
             binding.progressCircle2,
             binding.progressCircle1, 750)
-        searchProgressAnimator!!.startAnimation()
+        searchProgressAnimator?.startAnimation()
 
         pairingProgressAnimator = ProgressCircleAnimator(
             binding.pairingProgressCircle1,
@@ -64,7 +57,8 @@ class DeviceScanActivity : AppCompatActivity() {
             binding.pairingProgressCircle3, 500
         )
 
-        binding.deviceRecyclerView.layoutManager = LinearLayoutManager(this@DeviceScanActivity)
+        deviceRecyclerViewAdapter = DeviceRecyclerViewAdapter(this)
+        binding.deviceRecyclerView.layoutManager = LinearLayoutManager(this)
         binding.deviceRecyclerView.adapter = deviceRecyclerViewAdapter
 
         // Check permission
@@ -88,7 +82,7 @@ class DeviceScanActivity : AppCompatActivity() {
         // scanned device observer
         val scanDeviceObserver = Observer<BluetoothDevice> { device ->
             scannedDevices.add(device)
-            addDeviceItem(device.name, device.address, this.deviceRecyclerViewAdapter)
+            addDeviceItem(device.name, device.address, this.deviceRecyclerViewAdapter!!)
         }
         scanPairViewModel.foundDevice.observe(this, scanDeviceObserver)
 
@@ -121,26 +115,25 @@ class DeviceScanActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        binding.btnFinish.setOnClickListener { finish() }
 
-        binding.apply {
-            // Scan or Stop button
-            btnStopOrFind.setOnClickListener { // 검색중일 때 버튼을 누르면
-                if(btnStopOrFind.text == getString(R.string.stop)) {
-                    scanPairViewModel.stopScan()
-                }
-                else if(btnStopOrFind.text == getString(R.string.find)) { // 검색중이지 않을 때 버튼을 누르면
-                    scannedDevices.clear()
-                    deviceRecyclerViewAdapter.clear()
-                    scanPairViewModel.startScan()
-                }
+        // Scan or Stop button
+        binding.btnStopOrFind.setOnClickListener { // 검색중일 때 버튼을 누르면
+            if(binding.btnStopOrFind.text == getString(R.string.stop)) {
+                scanPairViewModel.stopScan()
+            }
+            else if(binding.btnStopOrFind.text == getString(R.string.find)) { // 검색중이지 않을 때 버튼을 누르면
+                scannedDevices.clear()
+                deviceRecyclerViewAdapter!!.clear()
+                scanPairViewModel.startScan()
             }
         }
 
         // Pair process
-        deviceRecyclerViewAdapter.setOnItemClickListener(object: DeviceRecyclerViewAdapter.OnItemClickListener {
+        deviceRecyclerViewAdapter!!.setOnItemClickListener(object: DeviceRecyclerViewAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
                 isPairingAvailable = true
-                val selectedItem = deviceRecyclerViewAdapter.getItem(position)
+                val selectedItem = deviceRecyclerViewAdapter!!.getItem(position)
 
                 for(pairedDevice in pairedDevices) {
                     if(pairedDevice.address == selectedItem.address) {
@@ -153,7 +146,7 @@ class DeviceScanActivity : AppCompatActivity() {
                     binding.apply {
                         scanViewLayout.visibility = View.GONE
                         pairProcessLayout.visibility = View.VISIBLE
-                        pairingProgressAnimator!!.startAnimation()
+                        pairingProgressAnimator?.startAnimation()
                     }
                     scanPairViewModel.requestPair(scannedDevices[position])
                 }
@@ -200,9 +193,11 @@ class DeviceScanActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         scannedDevices.clear()
-        deviceRecyclerViewAdapter.clear()
-        searchProgressAnimator!!.cancelAnimation()
-        pairingProgressAnimator!!.cancelAnimation()
+        deviceRecyclerViewAdapter?.clear()
+        binding.deviceRecyclerView.adapter = null
+        deviceRecyclerViewAdapter = null
+        searchProgressAnimator?.cancelAnimation()
+        pairingProgressAnimator?.cancelAnimation()
         searchProgressAnimator = null
         pairingProgressAnimator = null
     }

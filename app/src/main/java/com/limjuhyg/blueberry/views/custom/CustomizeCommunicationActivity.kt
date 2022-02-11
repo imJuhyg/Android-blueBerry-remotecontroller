@@ -9,9 +9,14 @@ import android.os.Looper
 import android.os.Message
 import android.util.Log
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.limjuhyg.blueberry.R
+import com.limjuhyg.blueberry.adapter.LogRecyclerViewAdapter.Companion.TYPE_SEND
 import com.limjuhyg.blueberry.applications.MainApplication
 import com.limjuhyg.blueberry.applications.MainApplication.Companion.BUFFER_SIZE
 import com.limjuhyg.blueberry.applications.MainApplication.Companion.CONNECT_CLOSE
@@ -25,20 +30,36 @@ import com.limjuhyg.blueberry.models.room.entities.Widget
 import com.limjuhyg.blueberry.rfcomm.client.ClientCommunicationThread
 import com.limjuhyg.blueberry.rfcomm.client.ClientConnectThread
 import com.limjuhyg.blueberry.utils.ProgressCircleAnimator
+import com.limjuhyg.blueberry.utils.addFragment
+import com.limjuhyg.blueberry.utils.addFragmentWithAnimation
 import com.limjuhyg.blueberry.viewmodels.CustomizeViewModel
+import com.limjuhyg.blueberry.views.fragments.CommunicationLogFragment
 
 class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityCustomizeCommunicationBinding
     private lateinit var customizeName: String
+    private var deviceName: String? = null
     private var deviceAddress: String? = null
     private val bluetoothAdapter by lazy { MainApplication.instance.bluetoothAdapter }
     private lateinit var bluetoothDevice: BluetoothDevice
+    private val widgetList by lazy { ArrayList<CustomWidget>() }
     private var isBonded = false
     private val customizeViewModel by lazy { ViewModelProvider(this).get(CustomizeViewModel::class.java) }
     private lateinit var connectMessageHandler: Handler
     private lateinit var communicationMessageHandler: Handler
     private var connectThread: ClientConnectThread? = null
     private var communicationThread: ClientCommunicationThread? = null
+    private var progressAnimator: ProgressCircleAnimator? = null
+    private var showDialog: Boolean = true
+    private var isDataVisible: Boolean = false
+    private var isLogFirstClicked: Boolean = true
+    private var isLogVisible: Boolean = false
+    private val communicationLogFragment by lazy { CommunicationLogFragment() }
+
+    companion object {
+        const val DEFAULT_WARNING = 301
+        const val CONNECT_WARNING = 300
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,13 +67,14 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
         setContentView(binding.root)
 
         customizeName = intent.getStringExtra("CUSTOMIZE_NAME")!!
+        deviceName = intent.getStringExtra("DEVICE_NAME")
         deviceAddress = intent.getStringExtra("DEVICE_ADDRESS")
 
-        val progressAnimator = ProgressCircleAnimator(
+        progressAnimator = ProgressCircleAnimator(
             binding.progressCircle1,
             binding.progressCircle2,
             binding.progressCircle3, 500)
-        progressAnimator.startAnimation()
+        progressAnimator?.startAnimation()
 
         Handler(Looper.getMainLooper()).postDelayed( // 연결상태 확인 메시지 2초간 표시
             {
@@ -64,11 +86,11 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
                         }
                     }
                     if(!isBonded) { // 연결정보는 있지만 현재는 페어링되어있지 않은 경우
-                        progressAnimator.cancelAnimation()
-                        binding.checkConnectSettingGroup.visibility = View.GONE
-                        binding.checkFailGroup.visibility = View.VISIBLE
-                        binding.warningMessage1.text = getString(R.string.not_found_bonded_device)
-                        binding.warningMessage2.text = getString(R.string.not_found_bonded_device_explain)
+                        showWarningMessage(
+                            DEFAULT_WARNING,
+                            getString(R.string.not_found_bonded_device),
+                            getString(R.string.not_found_bonded_device_explain)
+                        )
                     }
 
                     if(isBonded) { // 디바이스 연결 요청
@@ -78,11 +100,11 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
                     }
 
                 } ?: run { // 연결정보가 없는 경우
-                    progressAnimator.cancelAnimation()
-                    binding.checkConnectSettingGroup.visibility = View.GONE
-                    binding.checkFailGroup.visibility = View.VISIBLE
-                    binding.warningMessage1.text = getString(R.string.fail_check_connect_setting)
-                    binding.warningMessage2.text = getString(R.string.fail_check_connect_setting_explain)
+                    showWarningMessage(
+                        DEFAULT_WARNING,
+                        getString(R.string.fail_check_connect_setting),
+                        getString(R.string.fail_check_connect_setting_explain)
+                    )
                 }
             }, 2000
         )
@@ -100,8 +122,7 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
                     setOnClickListener(this@CustomizeCommunicationActivity)
                 }
                 binding.communicationLayout.addView(customWidget, widget.width, widget.height)
-                Log.d("debug", "addview")
-                //customWidgetList.add(customWidget) // 필요 없을 듯?
+                widgetList.add(customWidget)
             }
         }
         customizeViewModel.widgets.observe(this, widgetObserver)
@@ -115,20 +136,35 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
                 when(msg.what) {
                     CONNECT_SUCCESS -> {
                         val rfcommSocket = msg.obj as BluetoothSocket
-                        progressAnimator.cancelAnimation()
+                        progressAnimator?.cancelAnimation()
+
+                        // Add Log fragment
+                        val bundle = Bundle()
+                        bundle.putString("DEVICE_NAME", deviceName ?: deviceAddress)
+                        communicationLogFragment.arguments = bundle
+
+                        addFragment(
+                            binding.fragmentContainer.id,
+                            communicationLogFragment,
+                            false
+                        )
+
                         binding.checkConnectSettingGroup.visibility = View.GONE
                         binding.communicationGroup.visibility = View.VISIBLE
                         binding.customizeNameTextView.text = customizeName // 이름 표시
                         customizeViewModel.getWidgets(customizeName) // 위젯 가져오기
+
                         // 스레드 실행
                         communicationThread = ClientCommunicationThread(rfcommSocket, communicationMessageHandler, BUFFER_SIZE)
                         communicationThread!!.start()
                     }
 
                     CONNECT_FAIL -> {
-                        Log.d("debug", "connect fail")
-                        progressAnimator.cancelAnimation()
-                        // TODO 연결실패
+                        showWarningMessage(
+                            CONNECT_WARNING,
+                            getString(R.string.connect_fail),
+                            getString(R.string.try_reconnect)
+                        )
                     }
                 }
             }
@@ -139,13 +175,35 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
                 super.handleMessage(msg)
                 when(msg.what) {
                     MESSAGE_READ -> {
-                        // TODO 커뮤니케이션 진행상황에 표시
+
                     }
+
                     MESSAGE_WRITE -> {
-                        // TODO 커뮤니케이션 진행상황에 표시
+                        val writtenMessage = msg.obj as String
+                        communicationLogFragment.addLogItem(TYPE_SEND, System.currentTimeMillis(), writtenMessage)
                     }
+
                     CONNECT_CLOSE -> {
-                        // TODO 연결이 끊기면 다이얼로그 메시지 표시하고 액티비티 종료
+                        if(showDialog) {
+                            val dialogView = layoutInflater.inflate(R.layout.custom_alert_dialog_ok, null, false)
+                            val title: TextView = dialogView.findViewById(R.id.title)
+                            val subtitle: TextView = dialogView.findViewById(R.id.subtitle)
+                            title.text = getString(R.string.socket_close_message)
+                            subtitle.text = getString(R.string.custom_close_message)
+
+                            val builder = AlertDialog.Builder(this@CustomizeCommunicationActivity)
+                            builder.setView(dialogView)
+                            builder.setCancelable(false)
+
+                            val alertDialog = builder.create()
+                            alertDialog.show()
+
+                            val button: Button = dialogView.findViewById(R.id.btn_ok)
+                            button.setOnClickListener {
+                                this@CustomizeCommunicationActivity.finish()
+                                alertDialog.dismiss()
+                            }
+                        }
                     }
                 }
             }
@@ -156,16 +214,82 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
         super.onResume()
         binding.btnFinish.setOnClickListener { finish() }
         binding.btnNaviBefore.setOnClickListener { finish() }
+
+        binding.btnReconnect.setOnClickListener {
+            progressAnimator?.startAnimation()
+            binding.checkWarningGroup.visibility = View.GONE
+            binding.checkWarningMessage3.visibility = View.GONE
+            binding.btnReconnect.visibility = View.GONE
+            binding.checkConnectSettingGroup.visibility = View.VISIBLE
+
+            connectThread = ClientConnectThread(bluetoothDevice, connectMessageHandler)
+            connectThread!!.start()
+        }
+
+        binding.btnVisibility.setOnClickListener { // 데이터 표시
+            if(!isDataVisible) {
+                isDataVisible = true
+                binding.btnVisibility.setColorFilter(ContextCompat.getColor(this, R.color.identityColor))
+
+                for(widget in widgetList) {
+                    widget.setDataVisibility(true)
+                }
+
+            } else {
+                isDataVisible = false
+                binding.btnVisibility.clearColorFilter()
+
+                for(widget in widgetList) {
+                    widget.setDataVisibility(false)
+                }
+            }
+        }
+
+        binding.btnCommunicationLog.setOnClickListener { // 커뮤니케이션 로그 표시
+            if(!isLogVisible) {
+                Log.d("Debug", "isLogVisible")
+                isLogVisible = true
+                binding.btnCommunicationLog.setColorFilter(ContextCompat.getColor(this, R.color.identityColor))
+                communicationLogFragment.show()
+
+            } else {
+                Log.d("Debug", "isNotLogVisible")
+                isLogVisible = false
+                binding.btnCommunicationLog.clearColorFilter()
+                communicationLogFragment.hide()
+            }
+        }
     }
 
     // Widget click listener
     override fun onClick(view: View?) {
         val widget = view as CustomWidget
-        Log.d("click", widget.getWidgetData())
+        communicationThread?.write(widget.getWidgetData().toByteArray(Charsets.UTF_8))
+    }
+
+    private fun showWarningMessage(warningType: Int, message1: String, message2: String) {
+        progressAnimator?.cancelAnimation()
+        binding.checkConnectSettingGroup.visibility = View.GONE
+
+        if(warningType == DEFAULT_WARNING) {
+            binding.btnReconnect.visibility = View.GONE
+            binding.checkWarningGroup.visibility = View.VISIBLE
+            binding.checkWarningMessage3.visibility = View.GONE
+
+        } else if(warningType == CONNECT_WARNING) {
+            binding.btnReconnect.visibility = View.VISIBLE
+            binding.checkWarningGroup.visibility = View.VISIBLE
+            binding.checkWarningMessage3.visibility = View.VISIBLE
+        }
+
+        binding.checkWarningMessage1.text = message1
+        binding.checkWarningMessage2.text = message2
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        progressAnimator?.cancelAnimation()
+        progressAnimator = null
 
         connectThread?.let { thread ->
             if(!thread.isInterrupted) {
@@ -179,5 +303,6 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
                 thread.cancel()
             }
         }
+        showDialog = false
     }
 }

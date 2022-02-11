@@ -50,7 +50,7 @@ class ClientCommunicationThread(
             outputStream.write(bytes)
 
             // 전송 성공 메시지
-            val message = messageHandler.obtainMessage(MESSAGE_WRITE)
+            val message = messageHandler.obtainMessage(MESSAGE_WRITE, String(bytes, Charsets.UTF_8))
             message.sendToTarget()
 
         } catch (e: IOException) {

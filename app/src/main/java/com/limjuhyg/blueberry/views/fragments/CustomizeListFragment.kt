@@ -83,6 +83,7 @@ class CustomizeListFragment : Fragment() {
                 val selectedItem = customizeRecyclerViewAdapter!!.getItem(position)
                 val intent = Intent(requireContext(), CustomizeCommunicationActivity::class.java)
                 intent.putExtra("CUSTOMIZE_NAME", selectedItem.customizeName)
+                intent.putExtra("DEVICE_NAME", selectedItem.deviceName)
                 intent.putExtra("DEVICE_ADDRESS", selectedItem.deviceAddress)
                 startActivity(intent)
             }
@@ -151,6 +152,7 @@ class CustomizeListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         binding.customizeRecyclerView.adapter = null
+        customizeRecyclerViewAdapter?.clear()
         customizeRecyclerViewAdapter = null
         _binding = null
     }
