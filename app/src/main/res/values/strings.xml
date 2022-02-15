@@ -70,6 +70,7 @@
         디바이스의 상태를 확인하고 연결을 다시 시도해 주세요
     </string>
     <string name="socket_close_message">디바이스와 연결이 끊어졌습니다</string>
+    <string name="socket_close_message_2">디바이스와 연결이 종료됩니다</string>
     <string name="test_close_message">테스트를 종료합니다</string>
     <string name="custom_close_message">커스텀모드를 종료합니다</string>
     <string name="troubleshooting"><u>문제해결</u></string>

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.Toast
 import com.google.android.material.navigation.NavigationBarView
 import com.limjuhyg.blueberry.R
 import com.limjuhyg.blueberry.databinding.ActivityMainBinding

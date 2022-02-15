@@ -2,15 +2,13 @@ package com.limjuhyg.blueberry.views.custom
 
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
+import android.os.*
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -52,9 +50,10 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
     private var progressAnimator: ProgressCircleAnimator? = null
     private var showDialog: Boolean = true
     private var isDataVisible: Boolean = false
-    private var isLogFirstClicked: Boolean = true
     private var isLogVisible: Boolean = false
+    private var isThreadStarted: Boolean = false
     private val communicationLogFragment by lazy { CommunicationLogFragment() }
+    private var startTime = SystemClock.elapsedRealtime()
 
     companion object {
         const val DEFAULT_WARNING = 301
@@ -78,33 +77,35 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
 
         Handler(Looper.getMainLooper()).postDelayed( // 연결상태 확인 메시지 2초간 표시
             {
-                deviceAddress?.let { // 연결정보가 있는 경우
-                    for(device in bluetoothAdapter!!.bondedDevices) {
-                        if(it == device.address) {
-                            isBonded = true
-                            bluetoothDevice = device
+                if(!isDestroyed) {
+                    deviceAddress?.let { // 연결정보가 있는 경우
+                        for(device in bluetoothAdapter!!.bondedDevices) {
+                            if(it == device.address) {
+                                isBonded = true
+                                bluetoothDevice = device
+                            }
                         }
-                    }
-                    if(!isBonded) { // 연결정보는 있지만 현재는 페어링되어있지 않은 경우
+                        if(!isBonded) { // 연결정보는 있지만 현재는 페어링되어있지 않은 경우
+                            showWarningMessage(
+                                DEFAULT_WARNING,
+                                getString(R.string.not_found_bonded_device),
+                                getString(R.string.not_found_bonded_device_explain)
+                            )
+                        }
+
+                        if(isBonded) { // 디바이스 연결 요청
+                            binding.textMessage.text = getString(R.string.try_connect)
+                            connectThread = ClientConnectThread(bluetoothDevice, connectMessageHandler)
+                            connectThread!!.start()
+                        }
+
+                    } ?: run { // 연결정보가 없는 경우
                         showWarningMessage(
                             DEFAULT_WARNING,
-                            getString(R.string.not_found_bonded_device),
-                            getString(R.string.not_found_bonded_device_explain)
+                            getString(R.string.fail_check_connect_setting),
+                            getString(R.string.fail_check_connect_setting_explain)
                         )
                     }
-
-                    if(isBonded) { // 디바이스 연결 요청
-                        binding.textMessage.text = getString(R.string.try_connect)
-                        connectThread = ClientConnectThread(bluetoothDevice, connectMessageHandler)
-                        connectThread!!.start()
-                    }
-
-                } ?: run { // 연결정보가 없는 경우
-                    showWarningMessage(
-                        DEFAULT_WARNING,
-                        getString(R.string.fail_check_connect_setting),
-                        getString(R.string.fail_check_connect_setting_explain)
-                    )
                 }
             }, 2000
         )
@@ -157,6 +158,7 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
                         // 스레드 실행
                         communicationThread = ClientCommunicationThread(rfcommSocket, communicationMessageHandler, BUFFER_SIZE)
                         communicationThread!!.start()
+                        isThreadStarted = true
                     }
 
                     CONNECT_FAIL -> {
@@ -247,17 +249,29 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
 
         binding.btnCommunicationLog.setOnClickListener { // 커뮤니케이션 로그 표시
             if(!isLogVisible) {
-                Log.d("Debug", "isLogVisible")
                 isLogVisible = true
                 binding.btnCommunicationLog.setColorFilter(ContextCompat.getColor(this, R.color.identityColor))
                 communicationLogFragment.show()
 
             } else {
-                Log.d("Debug", "isNotLogVisible")
                 isLogVisible = false
                 binding.btnCommunicationLog.clearColorFilter()
                 communicationLogFragment.hide()
             }
+        }
+    }
+
+    override fun onBackPressed() {
+        val endTime = SystemClock.elapsedRealtime()
+        if(isThreadStarted) {
+            if(endTime - startTime <= 2000) {
+                super.onBackPressed()
+            } else {
+                Toast.makeText(this, "한 번 더 누르면 종료됩니다", Toast.LENGTH_SHORT).show()
+                startTime = SystemClock.elapsedRealtime()
+            }
+        } else {
+            super.onBackPressed()
         }
     }
 

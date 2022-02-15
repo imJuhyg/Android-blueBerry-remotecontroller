@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import com.limjuhyg.blueberry.views.main.MainActivity
@@ -20,9 +21,7 @@ class LoadActivity : AppCompatActivity() {
         setContentView(R.layout.activity_load)
 
         // Check bluetooth adapter
-        MainApplication.instance.bluetoothAdapter?.let {
-            handler.postDelayed(launchActivity, 2000)
-        } ?: run {
+        MainApplication.instance.bluetoothAdapter ?: run {
             AlertDialog.Builder(this).apply {
                 setMessage(R.string.bluetooth_adapter_isnull)
                 setPositiveButton("확인") { _, _ ->
@@ -41,8 +40,16 @@ class LoadActivity : AppCompatActivity() {
         finish()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onResume() {
+        super.onResume()
+
+        MainApplication.instance.bluetoothAdapter?.let {
+            handler.postDelayed(launchActivity, 2000)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
         handler.removeCallbacks(launchActivity)
     }
 }
