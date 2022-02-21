@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whiteGray"
+    tools:context=".views.custom.SearchGoogleIconsActivity">
+
+    <View
+        android:id="@+id/background_panel"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/rounded_corners_white"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.09"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+     <EditText
+         android:id="@+id/search_edit_text"
+         android:layout_width="0dp"
+         android:layout_height="0dp"
+         android:background="@drawable/search_bar"
+         android:textSize="12sp"
+         android:paddingStart="40dp"
+         android:layout_marginTop="10dp"
+         android:layout_marginEnd="20dp"
+         android:layout_marginBottom="10dp"
+         android:imeOptions="actionSearch"
+         android:inputType="text"
+         android:privateImeOptions="defaultInputmode=english"
+         android:hint="@string/search_google_icons"
+         android:maxLength="35"
+         android:maxLines="1"
+         app:layout_constrainedWidth="true"
+         app:layout_constraintWidth_percent="0.8"
+         app:layout_constraintTop_toTopOf="@id/background_panel"
+         app:layout_constraintBottom_toBottomOf="@id/background_panel"
+         app:layout_constraintRight_toRightOf="parent"/>
+
+     <ImageView
+         android:id="@+id/edit_text_icon"
+         android:layout_width="0dp"
+         android:layout_height="0dp"
+         android:src="@drawable/icon_search_48"
+         android:tint="@color/identityColor"
+         android:paddingStart="5dp"
+         app:layout_constrainedWidth="true"
+         app:layout_constraintWidth_percent="0.085"
+         app:layout_constraintTop_toTopOf="@id/search_edit_text"
+         app:layout_constraintLeft_toLeftOf="@id/search_edit_text"
+         app:layout_constraintBottom_toBottomOf="@id/search_edit_text"/>
+
+    <ImageButton
+        android:id="@+id/btn_finish"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/icon_delete_48"
+        android:scaleType="fitCenter"
+        android:background="@color/transparency"
+        android:tint="@color/darkGray"
+        android:padding="3dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.1"
+        app:layout_constraintRight_toLeftOf="@id/search_edit_text"
+        app:layout_constraintLeft_toLeftOf="@id/background_panel"
+        app:layout_constraintTop_toTopOf="@id/search_edit_text"
+        app:layout_constraintBottom_toBottomOf="@id/search_edit_text"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/rounded_corners_white"
+        app:layout_constraintTop_toBottomOf="@id/search_edit_text"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

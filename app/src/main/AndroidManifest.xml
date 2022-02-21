@@ -28,19 +28,24 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".views.main.MainActivity" />
-        <activity android:name=".views.custom.CustomizeCommunicationActivity"/>
+        <activity android:name=".views.custom.CustomizeCommunicationActivity" />
         <activity android:name=".views.custom.CustomizeConnectSettingActivity" />
+        <activity android:name=".views.testing.BluetoothChatActivity" />
+        <activity android:name=".views.scan.DeviceScanActivity" />
         <activity
             android:name=".views.custom.WidgetSettingActivity"
             android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".views.custom.CustomizeNameSettingActivity"
             android:windowSoftInputMode="adjustNothing" />
-        <activity android:name=".views.testing.BluetoothChatActivity" />
-        <activity android:name=".views.scan.DeviceScanActivity" />
+        <activity
+            android:name=".views.custom.SearchGoogleIconsActivity"
+            android:windowSoftInputMode="adjustNothing"/>
     </application>
+
 </manifest>

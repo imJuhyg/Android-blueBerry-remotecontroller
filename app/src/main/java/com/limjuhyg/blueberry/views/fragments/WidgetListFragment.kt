@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
@@ -12,12 +13,17 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.firebase.storage.StorageReference
 import com.limjuhyg.blueberry.applications.MainApplication
 import com.limjuhyg.blueberry.adapter.WidgetRecyclerViewAdapter
 import com.limjuhyg.blueberry.databinding.FragmentWidgetListBinding
 import com.limjuhyg.blueberry.utils.addDefaultWidgetItems
 import com.limjuhyg.blueberry.utils.removeFragment
+import com.limjuhyg.blueberry.viewmodels.IconStorageViewModel
+import com.limjuhyg.blueberry.views.custom.SearchGoogleIconsActivity
 import com.limjuhyg.blueberry.views.custom.WidgetSettingActivity
 
 class WidgetListFragment : Fragment() {
@@ -122,16 +128,24 @@ class WidgetListFragment : Fragment() {
         // Widget click
         widgetRecyclerViewAdapter!!.setOnItemClickListener(object: WidgetRecyclerViewAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
-                val widgetItem = widgetRecyclerViewAdapter!!.getItem(position)
-                bitmapWidget = widgetItem.image
+                if(position == 0) {
+                    Log.d("debug", "google icons 검색")
+                    fragmentFinish()
+                    val intent = Intent(requireContext(), SearchGoogleIconsActivity::class.java)
+                    startActivity(intent)
 
-                binding.apply {
-                    widgetListGroup.visibility = View.GONE
-                    widgetSettingGroup.visibility = View.VISIBLE
-                    searchEditText.setText("")
-                    captionEditText.requestFocus()
-                    keyboard.hideSoftInputFromWindow(searchEditText.windowToken, 0)
-                    keyboard.showSoftInput(captionEditText, 0)
+                } else {
+                    val widgetItem = widgetRecyclerViewAdapter!!.getItem(position)
+                    bitmapWidget = widgetItem.image
+
+                    binding.apply {
+                        widgetListGroup.visibility = View.GONE
+                        widgetSettingGroup.visibility = View.VISIBLE
+                        //searchEditText.setText("")
+                        captionEditText.requestFocus()
+                        //keyboard.hideSoftInputFromWindow(searchEditText.windowToken, 0)
+                        keyboard.showSoftInput(captionEditText, 0)
+                    }
                 }
             }
         })
@@ -157,12 +171,12 @@ class WidgetListFragment : Fragment() {
 
     fun editTextClear() {
         binding.apply {
-            searchEditText.setText("")
+            //searchEditText.setText("")
             captionEditText.setText("")
             dataEditText.setText("")
             keyboard.hideSoftInputFromWindow(captionEditText.windowToken, 0)
             keyboard.hideSoftInputFromWindow(dataEditText.windowToken, 0)
-            keyboard.hideSoftInputFromWindow(searchEditText.windowToken, 0)
+            //keyboard.hideSoftInputFromWindow(searchEditText.windowToken, 0)
         }
     }
 

@@ -34,6 +34,7 @@ fun Fragment.addWidgetItem(bitmap: Bitmap, title: String, recyclerViewAdapter: W
 }
 fun Fragment.addDefaultWidgetItems(recyclerViewAdapter: WidgetRecyclerViewAdapter) {
     recyclerViewAdapter.apply {
+        addItemIgnoreNotify(BitmapFactory.decodeResource(requireContext().resources, R.drawable.icon_default_button_48)!!, "Google Icons 검색")
         addItemIgnoreNotify(BitmapFactory.decodeResource(requireContext().resources, R.drawable.icon_default_button_48)!!, "기본")
         addItemIgnoreNotify(BitmapFactory.decodeResource(requireContext().resources, R.drawable.icon_circle_button_48)!!, "원형")
         addItemIgnoreNotify(BitmapFactory.decodeResource(requireContext().resources, R.drawable.icon_play_48)!!, "재생")

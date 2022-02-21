@@ -11,6 +11,7 @@ import android.view.WindowManager
 class MainApplication : Application() {
     private val windowManager by lazy { getSystemService(Context.WINDOW_SERVICE) as WindowManager }
     var bluetoothAdapter: BluetoothAdapter? = null
+    var deviceDpi: String? = null
 
     companion object {
         lateinit var instance: MainApplication
@@ -32,6 +33,15 @@ class MainApplication : Application() {
         super.onCreate()
         // Set bluetooth adapter
         bluetoothAdapter = (getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager).adapter
+
+        // Set device dpi
+        deviceDpi = when(resources.displayMetrics.densityDpi) {
+            in 0 .. 160 -> "mdpi"
+            in 161 .. 240 -> "hdpi"
+            in 241 .. 320 -> "xhdpi"
+            in 321 .. 480 -> "xxhdpi"
+            else -> "xxxhdpi"
+        }
     }
 
     fun getWindowHeight(): Int {
