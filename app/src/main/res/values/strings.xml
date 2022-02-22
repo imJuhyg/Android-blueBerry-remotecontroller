@@ -53,6 +53,7 @@
     <string name="require_permission">권한이 허용되지 않았습니다</string>
     <string name="request_connect_permission">애플리케이션 설정에서 \'근처 기기\'권한을 허용해 주세요</string>
     <string name="request_location_permission">검색하기 위해서는 \'정확한 위치\'권한이 필요합니다</string>
+    <string name="error_network">네트워크 상태를 확인할 수 없습니다\n 네트워크 연결을 확인해 주세요 </string>
     <string name="bluetooth_adapter_isnull">
         블루투스를 사용할 수 없는 디바이스입니다\n애플리케이션을 종료합니다
     </string>

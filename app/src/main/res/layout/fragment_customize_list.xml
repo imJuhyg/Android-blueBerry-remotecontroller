@@ -22,7 +22,7 @@
         android:id="@+id/btn_add"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/transparency"
+        android:background="@color/transparent"
         android:src="@drawable/icon_add_48"
         android:scaleType="fitCenter"
         android:tint="@color/darkGray"
