@@ -48,6 +48,12 @@ class SearchGoogleIconsActivity : AppCompatActivity() {
             Handler(Looper.getMainLooper()).post {
                 ObjectAnimator.ofFloat(binding.topNetworkStateTextView, "y", topNetworkStateViewInitY).apply {
                     duration = 500
+                    addListener(object: AnimatorListenerAdapter() {
+                        override fun onAnimationEnd(animation: Animator?) {
+                            super.onAnimationEnd(animation)
+                            binding.topNetworkStateTextView.visibility = View.INVISIBLE
+                        }
+                    })
                     start()
                 }
             }
@@ -56,11 +62,11 @@ class SearchGoogleIconsActivity : AppCompatActivity() {
         override fun onLost(network: Network) {
             super.onLost(network)
             Handler(Looper.getMainLooper()).post {
+                binding.topNetworkStateTextView.visibility = View.VISIBLE
                 ObjectAnimator.ofFloat(binding.topNetworkStateTextView, "y", 0f).apply {
                     duration = 500
                     start()
                 }
-
             }
         }
     }
@@ -74,7 +80,6 @@ class SearchGoogleIconsActivity : AppCompatActivity() {
             override fun onGlobalLayout() {
                 binding.apply {
                     topNetworkStateViewInitY = topNetworkStateTextView.y - topNetworkStateTextView.height
-                    topNetworkStateTextView.y = topNetworkStateViewInitY
                 }
                 binding.mainLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
