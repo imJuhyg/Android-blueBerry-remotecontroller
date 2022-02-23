@@ -4,25 +4,23 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.app.Activity.RESULT_OK
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.firebase.storage.StorageReference
 import com.limjuhyg.blueberry.applications.MainApplication
 import com.limjuhyg.blueberry.adapter.WidgetRecyclerViewAdapter
 import com.limjuhyg.blueberry.databinding.FragmentWidgetListBinding
 import com.limjuhyg.blueberry.utils.addDefaultWidgetItems
 import com.limjuhyg.blueberry.utils.removeFragment
-import com.limjuhyg.blueberry.viewmodels.IconStorageViewModel
 import com.limjuhyg.blueberry.views.custom.SearchGoogleIconsActivity
 import com.limjuhyg.blueberry.views.custom.WidgetSettingActivity
 
@@ -37,8 +35,10 @@ class WidgetListFragment : Fragment() {
     private var mainLayoutTop: Int = 0
     private var mainLayoutBottom: Int = 0
     private var mainLayoutHeight: Int = 0
-    private lateinit var bitmapWidget: Bitmap
+    private var bitmapWidget: Bitmap? = null
+    private var googleIcon: Bitmap? = null
     private var isFling = false
+    private lateinit var activityLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentWidgetListBinding.inflate(layoutInflater)
@@ -53,6 +53,16 @@ class WidgetListFragment : Fragment() {
         // status bar 높이 구하기
         val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
         if(resourceId > 0) statusBarHeight = resources.getDimensionPixelSize(resourceId)
+
+        // Google Icons 에서 받아오기
+        activityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if(it.resultCode == RESULT_OK) {
+                val intent = it.data
+                bitmapWidget = null
+                googleIcon = intent?.getParcelableExtra("BITMAP")
+                showWidgetSettings()
+            }
+        }
 
         return binding.root
     }
@@ -129,23 +139,13 @@ class WidgetListFragment : Fragment() {
         widgetRecyclerViewAdapter!!.setOnItemClickListener(object: WidgetRecyclerViewAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
                 if(position == 0) {
-                    Log.d("debug", "google icons 검색")
-                    fragmentFinish()
                     val intent = Intent(requireContext(), SearchGoogleIconsActivity::class.java)
-                    startActivity(intent)
+                    activityLauncher.launch(intent)
 
                 } else {
                     val widgetItem = widgetRecyclerViewAdapter!!.getItem(position)
                     bitmapWidget = widgetItem.image
-
-                    binding.apply {
-                        widgetListGroup.visibility = View.GONE
-                        widgetSettingGroup.visibility = View.VISIBLE
-                        //searchEditText.setText("")
-                        captionEditText.requestFocus()
-                        //keyboard.hideSoftInputFromWindow(searchEditText.windowToken, 0)
-                        keyboard.showSoftInput(captionEditText, 0)
-                    }
+                    showWidgetSettings()
                 }
             }
         })
@@ -160,7 +160,7 @@ class WidgetListFragment : Fragment() {
                 val caption = binding.captionEditText.text.toString()
                 val data = binding.dataEditText.text.toString()
 
-                (activity as WidgetSettingActivity).createWidget(bitmapWidget, caption, data)
+                (activity as WidgetSettingActivity).createWidget(bitmapWidget ?: googleIcon!!, caption, data)
                 fragmentFinish()
             }
             else {
@@ -169,14 +169,21 @@ class WidgetListFragment : Fragment() {
         }
     }
 
+    private fun showWidgetSettings() {
+        binding.apply {
+            widgetListGroup.visibility = View.GONE
+            widgetSettingGroup.visibility = View.VISIBLE
+            captionEditText.requestFocus()
+            keyboard.showSoftInput(captionEditText, 0)
+        }
+    }
+
     fun editTextClear() {
         binding.apply {
-            //searchEditText.setText("")
             captionEditText.setText("")
             dataEditText.setText("")
             keyboard.hideSoftInputFromWindow(captionEditText.windowToken, 0)
             keyboard.hideSoftInputFromWindow(dataEditText.windowToken, 0)
-            //keyboard.hideSoftInputFromWindow(searchEditText.windowToken, 0)
         }
     }
 
@@ -197,5 +204,7 @@ class WidgetListFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         isFling = false
+        bitmapWidget = null
+        googleIcon = null
     }
 }

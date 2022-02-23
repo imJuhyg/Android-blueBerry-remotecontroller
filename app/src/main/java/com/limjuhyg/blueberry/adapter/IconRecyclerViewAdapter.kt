@@ -13,9 +13,21 @@ import com.limjuhyg.blueberry.adapter.items.IconRecyclerViewItem
 
 class IconRecyclerViewAdapter(private val context: Context) : RecyclerView.Adapter<IconRecyclerViewAdapter.ViewHolder>() {
     private val iconItems by lazy { ArrayList<IconRecyclerViewItem>() }
+    private lateinit var onItemClickListener: OnItemClickListener
+
+    interface OnItemClickListener {
+        fun onItemClick(view: ImageView, position: Int)
+    }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView: ImageView = view.findViewById(R.id.image_view)
+
+        init {
+            imageView.setOnClickListener {
+                val position = bindingAdapterPosition
+                if(position != RecyclerView.NO_POSITION) onItemClickListener.onItemClick(imageView, position)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -40,5 +52,9 @@ class IconRecyclerViewAdapter(private val context: Context) : RecyclerView.Adapt
     fun clearItem() {
         iconItems.clear()
         notifyDataSetChanged()
+    }
+
+    fun setItemClickListener(listener: OnItemClickListener) {
+        onItemClickListener = listener
     }
 }

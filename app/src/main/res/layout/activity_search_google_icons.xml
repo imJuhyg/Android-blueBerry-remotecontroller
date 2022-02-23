@@ -154,4 +154,21 @@
         app:layout_constraintTop_toBottomOf="@id/network_state_text_view"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/top_network_state_text_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/network_state_background"
+        android:text="네트워크를 감지할 수 없습니다"
+        android:textSize="12sp"
+        android:textColor="@color/customBlack"
+        android:gravity="center"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.04"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

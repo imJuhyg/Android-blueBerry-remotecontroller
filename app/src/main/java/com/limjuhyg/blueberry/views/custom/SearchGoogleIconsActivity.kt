@@ -1,16 +1,25 @@
 package com.limjuhyg.blueberry.views.custom
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.util.Log
 import android.view.View
+import android.view.ViewTreeObserver
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -23,6 +32,7 @@ import com.limjuhyg.blueberry.utils.getNetworkState
 import com.limjuhyg.blueberry.utils.registerNetworkCallback
 import com.limjuhyg.blueberry.utils.unregisterNetworkCallback
 import com.limjuhyg.blueberry.viewmodels.IconStorageViewModel
+import com.limjuhyg.blueberry.views.fragments.WidgetListFragment
 
 class SearchGoogleIconsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchGoogleIconsBinding
@@ -30,18 +40,28 @@ class SearchGoogleIconsActivity : AppCompatActivity() {
     private var iconRecyclerViewAdapter: IconRecyclerViewAdapter? = null
     private var progressAnimator: ProgressCircleAnimator? = null
     private var fileReferences: List<StorageReference>? = null
+    private var topNetworkStateViewInitY: Float = 0f
 
     private val networkCallback = object: ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
             super.onAvailable(network)
-            Log.d("debug", "onAvailable")
-            // TODO 네트워크 끊어짐 알림 메시지 숨기기
+            Handler(Looper.getMainLooper()).post {
+                ObjectAnimator.ofFloat(binding.topNetworkStateTextView, "y", topNetworkStateViewInitY).apply {
+                    duration = 500
+                    start()
+                }
+            }
         }
 
         override fun onLost(network: Network) {
             super.onLost(network)
-            Log.d("debug", "onLost")
-            // TODO 네트워크 끊어짐 알림 메시지 표시
+            Handler(Looper.getMainLooper()).post {
+                ObjectAnimator.ofFloat(binding.topNetworkStateTextView, "y", 0f).apply {
+                    duration = 500
+                    start()
+                }
+
+            }
         }
     }
 
@@ -49,6 +69,16 @@ class SearchGoogleIconsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchGoogleIconsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.mainLayout.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                binding.apply {
+                    topNetworkStateViewInitY = topNetworkStateTextView.y - topNetworkStateTextView.height
+                    topNetworkStateTextView.y = topNetworkStateViewInitY
+                }
+                binding.mainLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
 
         iconRecyclerViewAdapter = IconRecyclerViewAdapter(this)
         val gridLayoutManager = GridLayoutManager(this, 3)
@@ -163,6 +193,16 @@ class SearchGoogleIconsActivity : AppCompatActivity() {
             }
             true
         }
+
+        iconRecyclerViewAdapter!!.setItemClickListener(object: IconRecyclerViewAdapter.OnItemClickListener {
+            override fun onItemClick(view: ImageView, position: Int) {
+                val drawable: BitmapDrawable = view.drawable as BitmapDrawable
+                val bitmap = drawable.bitmap
+                val intent = intent.putExtra("BITMAP", bitmap)
+                setResult(RESULT_OK, intent)
+                finish()
+            }
+        })
     }
 
     override fun onStop() {
@@ -172,7 +212,6 @@ class SearchGoogleIconsActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-
         binding.iconRecyclerView.adapter = null
         iconRecyclerViewAdapter?.clearItem()
         iconRecyclerViewAdapter = null
