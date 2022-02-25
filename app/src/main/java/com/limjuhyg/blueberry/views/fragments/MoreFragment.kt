@@ -18,11 +18,11 @@ class MoreFragment : Fragment() {
     private val binding get() = _binding!!
     private val menuViewList by lazy { ArrayList<TextView>() }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentMoreBinding.inflate(layoutInflater, container, false)
 
         menuViewList.apply {
-            add(binding.howToUse)
+            add(binding.learning)
             add(binding.troubleshooting)
             add(binding.example)
             add(binding.contact)
@@ -34,7 +34,7 @@ class MoreFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        binding.howToUse.setOnClickListener { view ->
+        binding.learning.setOnClickListener { view ->
             setMenuTracerAnimation(view) // Animation
             setSelectedMenuColor(view) // Set text color
 

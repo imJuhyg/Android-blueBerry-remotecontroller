@@ -223,10 +223,17 @@
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <FrameLayout
-        android:id="@+id/fragment_container"
+        android:id="@+id/log_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constrainedHeight="true"
         app:layout_constraintHeight_percent="0.3"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <FrameLayout
+        android:id="@+id/connect_way_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:visibility="gone"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
