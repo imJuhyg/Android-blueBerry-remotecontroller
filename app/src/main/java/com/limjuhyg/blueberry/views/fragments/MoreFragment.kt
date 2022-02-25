@@ -1,60 +1,94 @@
 package com.limjuhyg.blueberry.views.fragments
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.limjuhyg.blueberry.R
+import com.limjuhyg.blueberry.databinding.FragmentMoreBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MoreFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MoreFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding: FragmentMoreBinding? = null
+    private val binding get() = _binding!!
+    private val menuViewList by lazy { ArrayList<TextView>() }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = FragmentMoreBinding.inflate(layoutInflater, container, false)
+
+        menuViewList.apply {
+            add(binding.howToUse)
+            add(binding.troubleshooting)
+            add(binding.example)
+            add(binding.contact)
+        }
+
+        return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        binding.howToUse.setOnClickListener { view ->
+            setMenuTracerAnimation(view) // Animation
+            setSelectedMenuColor(view) // Set text color
+
+        }
+        binding.troubleshooting.setOnClickListener { view ->
+            setMenuTracerAnimation(view) // Animation
+            setSelectedMenuColor(view) // Set text color
+
+        }
+        binding.example.setOnClickListener { view ->
+            setMenuTracerAnimation(view) // Animation
+            setSelectedMenuColor(view) // Set text color
+
+        }
+        binding.contact.setOnClickListener { view ->
+            setMenuTracerAnimation( view) // Animation
+            setSelectedMenuColor(view) // Set text color
+
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_more, container, false)
+    private fun setMenuTracerAnimation(view: View) {
+        val currentWidth = binding.menuTracer.width
+        val newWidth = view.width
+
+        val setPositionAnimator =
+            ObjectAnimator.ofFloat(binding.menuTracer, "x", view.x).setDuration(100)
+
+        val setWidthAnimator =
+            ValueAnimator.ofInt(currentWidth, newWidth).setDuration(100)
+
+        setWidthAnimator.addUpdateListener { animator ->
+            val animationValue: Int = animator.animatedValue as Int
+            val layoutParams = binding.menuTracer.layoutParams
+            layoutParams.width = animationValue
+            binding.menuTracer.layoutParams = layoutParams
+        }
+
+        AnimatorSet().apply {
+            play(setPositionAnimator).with(setWidthAnimator)
+            start()
+        }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MoreFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MoreFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun setSelectedMenuColor(view: View) {
+        val selectedView: TextView = view as TextView
+        for(menuView in menuViewList) {
+            menuView.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray))
+        }
+        selectedView.setTextColor(ContextCompat.getColor(requireContext(), R.color.customBlack))
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

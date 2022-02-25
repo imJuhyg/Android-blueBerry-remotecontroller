@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -31,7 +30,7 @@ import com.limjuhyg.blueberry.viewmodels.BluetoothScanPair
 import com.limjuhyg.blueberry.views.custom.CustomizeConnectSettingActivity
 import com.limjuhyg.blueberry.views.main.MainActivity
 import com.limjuhyg.blueberry.views.scan.DeviceScanActivity
-import com.limjuhyg.blueberry.views.testing.BluetoothChatActivity
+import com.limjuhyg.blueberry.views.chat.BluetoothChatActivity
 
 class PairedDevicesFragment : Fragment() {
     private var _binding: FragmentPairedDevicesBinding? = null

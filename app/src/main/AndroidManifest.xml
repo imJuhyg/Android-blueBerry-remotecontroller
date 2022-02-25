@@ -35,7 +35,7 @@
         <activity android:name=".views.main.MainActivity" />
         <activity android:name=".views.custom.CustomizeCommunicationActivity" />
         <activity android:name=".views.custom.CustomizeConnectSettingActivity" />
-        <activity android:name=".views.testing.BluetoothChatActivity" />
+        <activity android:name=".views.chat.BluetoothChatActivity" />
         <activity android:name=".views.scan.DeviceScanActivity" />
         <activity
             android:name=".views.custom.WidgetSettingActivity"

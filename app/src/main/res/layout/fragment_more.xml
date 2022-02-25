@@ -1,14 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.MoreFragment">
+    android:background="@color/whiteGray"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".views.fragments.MoreFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <View
+        android:id="@+id/title_frame"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.12"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/title"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@string/more"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:gravity="center_vertical"
+        android:layout_marginStart="28dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.7"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.12"
+        app:layout_constraintTop_toTopOf="@id/title_frame"
+        app:layout_constraintLeft_toLeftOf="@id/title_frame"/>
 
-</FrameLayout>
+    <View
+        android:id="@+id/menu_frame"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="14dp"
+        android:background="@drawable/rounded_corners_white"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintTop_toBottomOf="@id/title_frame"/>
+
+    <TextView
+        android:id="@+id/how_to_use"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="사용방법"
+        android:gravity="center"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintTop_toTopOf="@id/menu_frame"
+        app:layout_constraintLeft_toLeftOf="@id/menu_frame"
+        app:layout_constraintRight_toLeftOf="@id/troubleshooting"
+        app:layout_constraintBottom_toBottomOf="@id/menu_frame"/>
+
+    <TextView
+        android:id="@+id/troubleshooting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="문제해결"
+        android:textColor="@color/gray"
+        android:gravity="center"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintTop_toTopOf="@id/menu_frame"
+        app:layout_constraintLeft_toRightOf="@id/how_to_use"
+        app:layout_constraintRight_toLeftOf="@id/example"
+        app:layout_constraintBottom_toBottomOf="@id/menu_frame"/>
+
+    <TextView
+        android:id="@+id/example"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="예제"
+        android:textColor="@color/gray"
+        android:gravity="center"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintTop_toTopOf="@id/menu_frame"
+        app:layout_constraintLeft_toRightOf="@id/troubleshooting"
+        app:layout_constraintRight_toLeftOf="@id/contact"
+        app:layout_constraintBottom_toBottomOf="@id/menu_frame"/>
+
+    <TextView
+        android:id="@+id/contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="문의"
+        android:textColor="@color/gray"
+        android:gravity="center"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintTop_toTopOf="@id/menu_frame"
+        app:layout_constraintLeft_toRightOf="@id/example"
+        app:layout_constraintRight_toRightOf="@id/menu_frame"
+        app:layout_constraintBottom_toBottomOf="@id/menu_frame"/>
+
+    <View
+        android:id="@+id/menu_tracer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/menu_tracer"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.005"
+        app:layout_constraintLeft_toLeftOf="@id/how_to_use"
+        app:layout_constraintRight_toRightOf="@id/how_to_use"
+        app:layout_constraintTop_toBottomOf="@id/how_to_use"/>
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="14dp"
+        android:background="@drawable/rounded_corners_white"
+        app:layout_constraintTop_toBottomOf="@id/menu_frame"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
