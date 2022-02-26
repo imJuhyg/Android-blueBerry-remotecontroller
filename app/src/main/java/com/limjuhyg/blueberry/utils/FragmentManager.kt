@@ -55,6 +55,14 @@ fun Fragment.addChildFragment(fragmentContainer: Int, fragment: Fragment, addBac
     }
 }
 
+fun Fragment.showChildFragment(fragment: Fragment) {
+    childFragmentManager.beginTransaction().show(fragment).commit()
+}
+
+fun Fragment.hideChildFragment(fragment: Fragment) {
+    childFragmentManager.beginTransaction().hide(fragment).commit()
+}
+
 fun Fragment.addChildFragmentWithAnimation(fragmentContainer: Int, fragment: Fragment, enter: Int, exit: Int, addBackStack: Boolean) {
     if(addBackStack) {
         childFragmentManager.beginTransaction()

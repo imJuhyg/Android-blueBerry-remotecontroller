@@ -16,10 +16,6 @@ class MainApplication : Application() {
     companion object {
         lateinit var instance: MainApplication
 
-        // Connect way
-        const val TO_SERVER: Int = 200
-        const val FROM_CLIENT: Int = 201
-
         // Communication code
         const val BUFFER_SIZE: Int = 1024
         const val CONNECT_SUCCESS: Int = 1000

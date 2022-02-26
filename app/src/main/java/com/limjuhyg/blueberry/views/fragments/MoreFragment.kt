@@ -12,21 +12,28 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.limjuhyg.blueberry.R
 import com.limjuhyg.blueberry.databinding.FragmentMoreBinding
+import com.limjuhyg.blueberry.utils.addChildFragment
+import com.limjuhyg.blueberry.utils.hideChildFragment
+import com.limjuhyg.blueberry.utils.showChildFragment
 
 class MoreFragment : Fragment() {
     private var _binding: FragmentMoreBinding? = null
     private val binding get() = _binding!!
     private val menuViewList by lazy { ArrayList<TextView>() }
+    private val guidelineFragment by lazy { GuidelineFragment() }
+    private var troubleshootingFragment: TroubleshootingFragment? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentMoreBinding.inflate(layoutInflater, container, false)
 
         menuViewList.apply {
-            add(binding.learning)
+            add(binding.guideline)
             add(binding.troubleshooting)
             add(binding.example)
             add(binding.contact)
         }
+
+        addChildFragment(binding.fragmentContainer.id, guidelineFragment, false)
 
         return binding.root
     }
@@ -34,12 +41,14 @@ class MoreFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        binding.learning.setOnClickListener { view ->
+        binding.guideline.setOnClickListener { view ->
+            onMenuItemSelected(view)
             setMenuTracerAnimation(view) // Animation
             setSelectedMenuColor(view) // Set text color
 
         }
         binding.troubleshooting.setOnClickListener { view ->
+            onMenuItemSelected(view)
             setMenuTracerAnimation(view) // Animation
             setSelectedMenuColor(view) // Set text color
 
@@ -85,6 +94,22 @@ class MoreFragment : Fragment() {
             menuView.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray))
         }
         selectedView.setTextColor(ContextCompat.getColor(requireContext(), R.color.customBlack))
+    }
+
+    private fun onMenuItemSelected(view: View) {
+        for(fragment in childFragmentManager.fragments) hideChildFragment(fragment)
+        when(view.id) {
+            binding.guideline.id -> {
+                showChildFragment(guidelineFragment)
+            }
+
+            binding.troubleshooting.id -> {
+                troubleshootingFragment?.let { showChildFragment(troubleshootingFragment!!) } ?: run {
+                    troubleshootingFragment = TroubleshootingFragment()
+                    addChildFragment(binding.fragmentContainer.id, troubleshootingFragment!!, false)
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

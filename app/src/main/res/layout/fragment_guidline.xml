@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whiteGray"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".views.fragments.GuidelineFragment">
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/app_guideline_group"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="1dp"
+        android:elevation="1dp"
+        android:background="@drawable/rounded_corners_white"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintTop_toTopOf="parent"
+        app:constraint_referenced_ids="app_guideline_image, app_guideline_text"/>
+
+    <TextView
+        android:id="@+id/app_guideline_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="앱 사용 방법"
+        android:textStyle="bold"
+        android:layout_marginStart="15dp"
+        app:layout_constraintLeft_toLeftOf="@id/app_guideline_group"
+        app:layout_constraintTop_toTopOf="@id/app_guideline_group"
+        app:layout_constraintBottom_toBottomOf="@id/app_guideline_group"/>
+
+    <ImageView
+        android:id="@+id/app_guideline_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/icon_navigate_next_48"
+        android:scaleType="fitCenter"
+        android:tint="@color/darkGray"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.1"
+        app:layout_constraintRight_toRightOf="@id/app_guideline_group"
+        app:layout_constraintTop_toTopOf="@id/app_guideline_group"
+        app:layout_constraintBottom_toBottomOf="@id/app_guideline_group"/>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/raspberry_guideline_group"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+        android:elevation="1dp"
+        android:background="@drawable/rounded_corners_white"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintTop_toBottomOf="@id/app_guideline_group"
+        app:constraint_referenced_ids="raspberry_guideline_image, raspberry_guideline_text"/>
+
+    <TextView
+        android:id="@+id/raspberry_guideline_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="라즈베리파이와 통신하는 방법"
+        android:textStyle="bold"
+        android:layout_marginStart="15dp"
+        app:layout_constraintLeft_toLeftOf="@id/raspberry_guideline_group"
+        app:layout_constraintTop_toTopOf="@id/raspberry_guideline_group"
+        app:layout_constraintBottom_toBottomOf="@id/raspberry_guideline_group"/>
+
+    <ImageView
+        android:id="@+id/raspberry_guideline_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/icon_navigate_next_48"
+        android:scaleType="fitCenter"
+        android:tint="@color/darkGray"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.1"
+        app:layout_constraintRight_toRightOf="@id/raspberry_guideline_group"
+        app:layout_constraintTop_toTopOf="@id/raspberry_guideline_group"
+        app:layout_constraintBottom_toBottomOf="@id/raspberry_guideline_group"/>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/arduino_guideline_group"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+        android:elevation="1dp"
+        android:background="@drawable/rounded_corners_white"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintTop_toBottomOf="@id/raspberry_guideline_group"
+        app:constraint_referenced_ids="arduino_guideline_image, arduino_guideline_text"/>
+
+    <TextView
+        android:id="@+id/arduino_guideline_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="아두이노와 통신하는 방법"
+        android:textStyle="bold"
+        android:layout_marginStart="15dp"
+        app:layout_constraintLeft_toLeftOf="@id/arduino_guideline_group"
+        app:layout_constraintTop_toTopOf="@id/arduino_guideline_group"
+        app:layout_constraintBottom_toBottomOf="@id/arduino_guideline_group"/>
+
+    <ImageView
+        android:id="@+id/arduino_guideline_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/icon_navigate_next_48"
+        android:scaleType="fitCenter"
+        android:tint="@color/darkGray"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.1"
+        app:layout_constraintRight_toRightOf="@id/arduino_guideline_group"
+        app:layout_constraintTop_toTopOf="@id/arduino_guideline_group"
+        app:layout_constraintBottom_toBottomOf="@id/arduino_guideline_group"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

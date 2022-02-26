@@ -4,14 +4,12 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.os.*
 import androidx.appcompat.app.AppCompatActivity
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.limjuhyg.blueberry.R
@@ -21,21 +19,17 @@ import com.limjuhyg.blueberry.applications.MainApplication.Companion.BUFFER_SIZE
 import com.limjuhyg.blueberry.applications.MainApplication.Companion.CONNECT_CLOSE
 import com.limjuhyg.blueberry.applications.MainApplication.Companion.CONNECT_FAIL
 import com.limjuhyg.blueberry.applications.MainApplication.Companion.CONNECT_SUCCESS
-import com.limjuhyg.blueberry.applications.MainApplication.Companion.FROM_CLIENT
 import com.limjuhyg.blueberry.applications.MainApplication.Companion.MESSAGE_READ
 import com.limjuhyg.blueberry.applications.MainApplication.Companion.MESSAGE_WRITE
-import com.limjuhyg.blueberry.applications.MainApplication.Companion.TO_SERVER
 import com.limjuhyg.blueberry.customviews.CustomWidget
 import com.limjuhyg.blueberry.databinding.ActivityCustomizeCommunicationBinding
 import com.limjuhyg.blueberry.models.room.entities.Widget
-import com.limjuhyg.blueberry.rfcomm.client.ClientCommunicationThread
-import com.limjuhyg.blueberry.rfcomm.client.ClientConnectThread
+import com.limjuhyg.blueberry.rfcomm.CommunicationThread
+import com.limjuhyg.blueberry.rfcomm.ConnectThread
 import com.limjuhyg.blueberry.utils.ProgressCircleAnimator
 import com.limjuhyg.blueberry.utils.addFragment
-import com.limjuhyg.blueberry.utils.addFragmentWithAnimation
 import com.limjuhyg.blueberry.viewmodels.CustomizeViewModel
 import com.limjuhyg.blueberry.views.fragments.CommunicationLogFragment
-import com.limjuhyg.blueberry.views.fragments.ConnectWayFragment
 
 class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityCustomizeCommunicationBinding
@@ -49,14 +43,13 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
     private val customizeViewModel by lazy { ViewModelProvider(this).get(CustomizeViewModel::class.java) }
     private lateinit var connectMessageHandler: Handler
     private lateinit var communicationMessageHandler: Handler
-    private var connectThread: ClientConnectThread? = null
-    private var communicationThread: ClientCommunicationThread? = null
+    private var connectThread: ConnectThread? = null
+    private var communicationThread: CommunicationThread? = null
     private var progressAnimator: ProgressCircleAnimator? = null
     private var showDialog: Boolean = true
     private var isDataVisible: Boolean = false
     private var isLogVisible: Boolean = false
     private var isThreadStarted: Boolean = false
-    private val connectWayFragment by lazy { ConnectWayFragment() }
     private val communicationLogFragment by lazy { CommunicationLogFragment() }
     private var startTime = SystemClock.elapsedRealtime()
 
@@ -99,26 +92,10 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
                         }
 
                         if(isBonded) {
-                            // 연결 방식 선택
                             binding.textMessage.text = getString(R.string.try_connect)
-                            binding.connectWayFragmentContainer.visibility = View.VISIBLE
-
-                            addFragment(binding.connectWayFragmentContainer.id, connectWayFragment, false)
-                            supportFragmentManager.setFragmentResultListener("CONNECT_WAY_RESULT", this, { requestKey, result ->
-                                val connectWay = result.getInt("CONNECT_WAY")
-                                if(connectWay == TO_SERVER) {
-                                    binding.connectWayFragmentContainer.visibility = View.GONE
-
-                                    // 연결 요청
-                                    connectThread = ClientConnectThread(bluetoothDevice, connectMessageHandler)
-                                    connectThread!!.start()
-
-                                } else if(connectWay == FROM_CLIENT) {
-                                    binding.connectWayFragmentContainer.visibility = View.GONE
-
-                                    // TODO 연결 대기
-                                }
-                            })
+                            // 연결 요청
+                            connectThread = ConnectThread(bluetoothDevice, connectMessageHandler)
+                            connectThread!!.start()
                         }
 
                     } ?: run { // 연결정보가 없는 경우
@@ -178,7 +155,7 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
                         customizeViewModel.getWidgets(customizeName) // 위젯 가져오기
 
                         // 스레드 실행
-                        communicationThread = ClientCommunicationThread(rfcommSocket, communicationMessageHandler, BUFFER_SIZE)
+                        communicationThread = CommunicationThread(rfcommSocket, communicationMessageHandler, BUFFER_SIZE)
                         communicationThread!!.start()
                         isThreadStarted = true
                     }
@@ -246,7 +223,7 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
             binding.btnReconnect.visibility = View.GONE
             binding.checkConnectSettingGroup.visibility = View.VISIBLE
 
-            connectThread = ClientConnectThread(bluetoothDevice, connectMessageHandler)
+            connectThread = ConnectThread(bluetoothDevice, connectMessageHandler)
             connectThread!!.start()
         }
 

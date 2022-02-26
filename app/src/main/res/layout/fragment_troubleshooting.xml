@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whiteGray"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".views.fragments.TroubleshootingFragment">
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/case_raspberry_connect_fail_group"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="1dp"
+        android:elevation="1dp"
+        android:background="@drawable/rounded_corners_white"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintTop_toTopOf="parent"
+        app:constraint_referenced_ids="case_raspberry_connect_fail_image, case_raspberry_connect_fail_text"/>
+
+    <TextView
+        android:id="@+id/case_raspberry_connect_fail_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(라즈베리파이) 연결 실패"
+        android:textStyle="bold"
+        android:layout_marginStart="15dp"
+        app:layout_constraintLeft_toLeftOf="@id/case_raspberry_connect_fail_group"
+        app:layout_constraintTop_toTopOf="@id/case_raspberry_connect_fail_group"
+        app:layout_constraintBottom_toBottomOf="@id/case_raspberry_connect_fail_group"/>
+
+    <ImageView
+        android:id="@+id/case_raspberry_connect_fail_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/icon_navigate_next_48"
+        android:scaleType="fitCenter"
+        android:tint="@color/darkGray"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.1"
+        app:layout_constraintRight_toRightOf="@id/case_raspberry_connect_fail_group"
+        app:layout_constraintTop_toTopOf="@id/case_raspberry_connect_fail_group"
+        app:layout_constraintBottom_toBottomOf="@id/case_raspberry_connect_fail_group"/>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/case_arduino_connect_fail_group"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+        android:elevation="1dp"
+        android:background="@drawable/rounded_corners_white"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintTop_toBottomOf="@id/case_raspberry_connect_fail_group"
+        app:constraint_referenced_ids="case_arduino_connect_fail_image, case_arduino_connect_fail_text"/>
+
+    <TextView
+        android:id="@+id/case_arduino_connect_fail_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(아두이노) 연결실패"
+        android:textStyle="bold"
+        android:layout_marginStart="15dp"
+        app:layout_constraintLeft_toLeftOf="@id/case_arduino_connect_fail_group"
+        app:layout_constraintTop_toTopOf="@id/case_arduino_connect_fail_group"
+        app:layout_constraintBottom_toBottomOf="@id/case_arduino_connect_fail_group"/>
+
+    <ImageView
+        android:id="@+id/case_arduino_connect_fail_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/icon_navigate_next_48"
+        android:scaleType="fitCenter"
+        android:tint="@color/darkGray"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.1"
+        app:layout_constraintRight_toRightOf="@id/case_arduino_connect_fail_group"
+        app:layout_constraintTop_toTopOf="@id/case_arduino_connect_fail_group"
+        app:layout_constraintBottom_toBottomOf="@id/case_arduino_connect_fail_group"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,13 +6,11 @@ import android.os.*
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.FragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.limjuhyg.blueberry.R
 import com.limjuhyg.blueberry.adapter.ChatRecyclerViewAdapter
@@ -20,27 +18,22 @@ import com.limjuhyg.blueberry.applications.MainApplication.Companion.BUFFER_SIZE
 import com.limjuhyg.blueberry.applications.MainApplication.Companion.CONNECT_CLOSE
 import com.limjuhyg.blueberry.applications.MainApplication.Companion.CONNECT_FAIL
 import com.limjuhyg.blueberry.applications.MainApplication.Companion.CONNECT_SUCCESS
-import com.limjuhyg.blueberry.applications.MainApplication.Companion.FROM_CLIENT
 import com.limjuhyg.blueberry.applications.MainApplication.Companion.MESSAGE_READ
 import com.limjuhyg.blueberry.applications.MainApplication.Companion.MESSAGE_WRITE
-import com.limjuhyg.blueberry.applications.MainApplication.Companion.TO_SERVER
 import com.limjuhyg.blueberry.databinding.ActivityBluetoothChatBinding
-import com.limjuhyg.blueberry.rfcomm.client.ClientCommunicationThread
-import com.limjuhyg.blueberry.rfcomm.client.ClientConnectThread
+import com.limjuhyg.blueberry.rfcomm.CommunicationThread
+import com.limjuhyg.blueberry.rfcomm.ConnectThread
 import com.limjuhyg.blueberry.utils.ProgressCircleAnimator
 import com.limjuhyg.blueberry.utils.addChatItem
-import com.limjuhyg.blueberry.utils.addFragment
-import com.limjuhyg.blueberry.views.fragments.ConnectWayFragment
 import java.util.*
 
 class BluetoothChatActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBluetoothChatBinding
     private var bluetoothDevice: BluetoothDevice? = null
-    private val connectWayFragment by lazy { ConnectWayFragment() }
     private lateinit var messageHandler: Handler
     private var chatRecyclerViewAdapter: ChatRecyclerViewAdapter? = null
-    private var connectThread: ClientConnectThread? = null
-    private var communicationThread: ClientCommunicationThread? = null
+    private var connectThread: ConnectThread? = null
+    private var communicationThread: CommunicationThread? = null
     private var isButtonAccessible: Boolean = false
     private var showDialog: Boolean = true
     private var progressAnimator: ProgressCircleAnimator? = null
@@ -53,8 +46,6 @@ class BluetoothChatActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         overridePendingTransition(R.anim.to_top_from_bottom_1, R.anim.none)
-
-        addFragment(binding.fragmentContainer.id, connectWayFragment, false)
 
         progressAnimator = ProgressCircleAnimator(
             binding.progressCircle1,
@@ -92,7 +83,7 @@ class BluetoothChatActivity : AppCompatActivity() {
                             binding.addressTextView.text = bluetoothDevice!!.address
                         }
 
-                        communicationThread = ClientCommunicationThread(rfcommSocket, messageHandler, BUFFER_SIZE)
+                        communicationThread = CommunicationThread(rfcommSocket, messageHandler, BUFFER_SIZE)
                         communicationThread!!.start()
 
                         isThreadStarted = true
@@ -140,21 +131,6 @@ class BluetoothChatActivity : AppCompatActivity() {
             }
         }
 
-        // 연결 방식 선택
-        val fragmentResultListener = FragmentResultListener { requestKey, result ->
-            val connectWay = result.getInt("CONNECT_WAY")
-            if(connectWay == TO_SERVER) {
-                binding.fragmentContainer.visibility = View.GONE
-                connectThread = ClientConnectThread(bluetoothDevice!!, messageHandler)
-                connectThread!!.start()
-
-            } else if(connectWay == FROM_CLIENT) {
-                // TODO 연결 요청 받는 경우, server thread 호출
-                binding.fragmentContainer.visibility = View.GONE
-            }
-        }
-        supportFragmentManager.setFragmentResultListener("CONNECT_WAY_RESULT", this, fragmentResultListener)
-
         // Change send button color
         binding.editText.addTextChangedListener(object: TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -174,6 +150,9 @@ class BluetoothChatActivity : AppCompatActivity() {
             }
             override fun afterTextChanged(s: Editable?) {}
         })
+
+        connectThread = ConnectThread(bluetoothDevice!!, messageHandler)
+        connectThread!!.start()
     }
 
     override fun onResume() {
@@ -185,7 +164,7 @@ class BluetoothChatActivity : AppCompatActivity() {
             binding.connectFailLayout.visibility = View.GONE
             binding.connectProgressLayout.visibility = View.VISIBLE
 
-            connectThread = ClientConnectThread(bluetoothDevice!!, messageHandler)
+            connectThread = ConnectThread(bluetoothDevice!!, messageHandler)
             connectThread!!.start()
         }
 

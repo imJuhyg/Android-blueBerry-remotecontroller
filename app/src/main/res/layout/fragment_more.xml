@@ -45,7 +45,7 @@
         app:layout_constraintTop_toBottomOf="@id/title_frame"/>
 
     <TextView
-        android:id="@+id/learning"
+        android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="사용방법"
@@ -67,7 +67,7 @@
         app:layout_constrainedHeight="true"
         app:layout_constraintHeight_percent="0.05"
         app:layout_constraintTop_toTopOf="@id/menu_frame"
-        app:layout_constraintLeft_toRightOf="@id/learning"
+        app:layout_constraintLeft_toRightOf="@id/guideline"
         app:layout_constraintRight_toLeftOf="@id/example"
         app:layout_constraintBottom_toBottomOf="@id/menu_frame"/>
 
@@ -106,9 +106,9 @@
         android:background="@drawable/menu_tracer"
         app:layout_constrainedHeight="true"
         app:layout_constraintHeight_percent="0.005"
-        app:layout_constraintLeft_toLeftOf="@id/learning"
-        app:layout_constraintRight_toRightOf="@id/learning"
-        app:layout_constraintTop_toBottomOf="@id/learning"/>
+        app:layout_constraintLeft_toLeftOf="@id/guideline"
+        app:layout_constraintRight_toRightOf="@id/guideline"
+        app:layout_constraintTop_toBottomOf="@id/guideline"/>
 
     <FrameLayout
         android:id="@+id/fragment_container"
