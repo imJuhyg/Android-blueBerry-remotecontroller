@@ -69,7 +69,7 @@
         연결하려는 디바이스를 선택해 주세요
     </string>
     <string name="try_connect">연결 시도 중입니다</string>
-    <string name="try_pairing">페이링 요청 중입니다</string>
+    <string name="try_pairing">페어링 요청 중입니다</string>
     <string name="request_search_device">페어링된 디바이스가 없습니다\n 주변 디바이스를 검색해 주세요</string>
     <string name="connect_fail_explain">
         연결하려는 디바이스의 소켓이 열려있지 않을 수도 있습니다\n

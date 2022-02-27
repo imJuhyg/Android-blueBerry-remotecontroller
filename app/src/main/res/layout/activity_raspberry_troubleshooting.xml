@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.troubleshootings.RaspberryTroubleshootingActivity">
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/activity_title_group"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/identityColor"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/btn_close"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/icon_delete_48"
+        android:scaleType="fitCenter"
+        android:tint="@color/white"
+        android:background="@color/transparent"
+        android:padding="10dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.15"
+        app:layout_constraintLeft_toLeftOf="@id/activity_title_group"
+        app:layout_constraintTop_toTopOf="@id/activity_title_group"
+        app:layout_constraintBottom_toBottomOf="@id/activity_title_group"/>
+
+    <TextView
+        android:id="@+id/activity_title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(라즈베리파이) 연결 실패"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@id/activity_title_group"
+        app:layout_constraintRight_toRightOf="@id/activity_title_group"
+        app:layout_constraintTop_toTopOf="@id/activity_title_group"
+        app:layout_constraintBottom_toBottomOf="@id/activity_title_group"/>
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/whiteGray"
+        app:layout_constraintTop_toBottomOf="@id/activity_title_group"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp">
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/troubleshooting_1_group"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/rounded_corners_white"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/troubleshooting_1"/>
+
+            <TextView
+                android:id="@+id/troubleshooting_1_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="서버 소켓이 열리지 않았거나 \n서버 소켓이 아닌 경우"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                app:layout_constraintTop_toTopOf="@id/troubleshooting_1_group"
+                app:layout_constraintLeft_toLeftOf="@id/troubleshooting_1_group"/>
+
+            <TextView
+                android:id="@+id/troubleshooting_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/icon_dot"
+                android:gravity="center_vertical"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="15dp"
+                android:paddingBottom="15dp"
+                android:text="'서버 소켓'을 생성하고 연결을 위해 Listening상태인지 확인하세요."
+                app:layout_constraintTop_toBottomOf="@id/troubleshooting_1_title"
+                app:layout_constraintLeft_toLeftOf="@id/troubleshooting_1_group"
+                app:layout_constraintRight_toRightOf="@id/troubleshooting_1_group"/>
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/troubleshooting_2_group"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/rounded_corners_white"
+                app:layout_constraintTop_toBottomOf="@id/troubleshooting_1"
+                app:layout_constraintBottom_toBottomOf="@id/troubleshooting_2"/>
+
+            <TextView
+                android:id="@+id/troubleshooting_2_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="서비스 클래스 및 \nSPP프로파일이 설정되지 않은 경우"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                app:layout_constraintTop_toTopOf="@id/troubleshooting_2_group"
+                app:layout_constraintLeft_toLeftOf="@id/troubleshooting_2_group"/>
+
+            <TextView
+                android:id="@+id/troubleshooting_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/icon_dot"
+                android:gravity="center_vertical"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="15dp"
+                android:paddingBottom="15dp"
+                android:text="애플리케이션과 연결하기 위해서는 라즈베리파이에서 'Serial Port Class' 및 'Serial Port Profile'이 설정되어 있어야 합니다.
+pyBluez 라이브러리의 advertise_service api를 통해 서비스 클래스 및 프로파일을 설정해 주세요."
+                app:layout_constraintTop_toBottomOf="@id/troubleshooting_2_title"
+                app:layout_constraintLeft_toLeftOf="@id/troubleshooting_2_group"
+                app:layout_constraintRight_toRightOf="@id/troubleshooting_2_group"/>
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/troubleshooting_3_group"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/rounded_corners_white"
+                app:layout_constraintTop_toBottomOf="@id/troubleshooting_2"
+                app:layout_constraintBottom_toBottomOf="@id/troubleshooting_3"/>
+
+            <TextView
+                android:id="@+id/troubleshooting_3_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="UUID값이 일치하지 않을 경우"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                app:layout_constraintTop_toTopOf="@id/troubleshooting_3_group"
+                app:layout_constraintLeft_toLeftOf="@id/troubleshooting_3_group"/>
+
+            <TextView
+                android:id="@+id/troubleshooting_3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/icon_dot"
+                android:gravity="center_vertical"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="15dp"
+                android:paddingBottom="15dp"
+                android:text="애플리케이션의 UUID는 Serial Port Service Class의 UUID인 '00001101-0000-1000-8000-00805F9B34FB'으로 설정되어 있습니다. 연결 실패 오류가 계속 발생한다면 라즈베리파이에서 임의의 UUID가 아닌 Serial Port Service Class의 UUID로 설정해 주세요."
+                app:layout_constraintTop_toBottomOf="@id/troubleshooting_3_title"
+                app:layout_constraintLeft_toLeftOf="@id/troubleshooting_3_group"
+                app:layout_constraintRight_toRightOf="@id/troubleshooting_3_group"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

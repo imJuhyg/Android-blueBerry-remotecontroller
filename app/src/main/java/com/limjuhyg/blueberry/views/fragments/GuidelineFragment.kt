@@ -9,6 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.limjuhyg.blueberry.R
 import com.limjuhyg.blueberry.databinding.FragmentGuidlineBinding
+import com.limjuhyg.blueberry.views.guidelines.AppGuidelineActivity
+import com.limjuhyg.blueberry.views.guidelines.ArduinoGuidelineActivity
+import com.limjuhyg.blueberry.views.guidelines.RaspberryGuidelineActivity
 
 class GuidelineFragment : Fragment() {
     private var _binding: FragmentGuidlineBinding? = null
@@ -23,8 +26,17 @@ class GuidelineFragment : Fragment() {
         super.onResume()
 
         binding.appGuidelineGroup.setOnClickListener {
-            val uri = Uri.parse("https://github.com/imJuhyg/FirebaseStorage-multi-search-sample")
-            val intent = Intent(Intent.ACTION_VIEW, uri)
+            val intent = Intent(requireContext(), AppGuidelineActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.raspberryGuidelineGroup.setOnClickListener {
+            val intent = Intent(requireContext(), RaspberryGuidelineActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.arduinoGuidelineGroup.setOnClickListener {
+            val intent = Intent(requireContext(), ArduinoGuidelineActivity::class.java)
             startActivity(intent)
         }
     }

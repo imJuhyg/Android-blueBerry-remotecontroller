@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.guidelines.RaspberryGuidelineActivity">
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/activity_title_group"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/identityColor"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/btn_close"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/icon_delete_48"
+        android:scaleType="fitCenter"
+        android:tint="@color/white"
+        android:background="@color/transparent"
+        android:padding="10dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.15"
+        app:layout_constraintLeft_toLeftOf="@id/activity_title_group"
+        app:layout_constraintTop_toTopOf="@id/activity_title_group"
+        app:layout_constraintBottom_toBottomOf="@id/activity_title_group"/>
+
+    <TextView
+        android:id="@+id/activity_title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="라즈베리파이와 통신하는 방법"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@id/activity_title_group"
+        app:layout_constraintRight_toRightOf="@id/activity_title_group"
+        app:layout_constraintTop_toTopOf="@id/activity_title_group"
+        app:layout_constraintBottom_toBottomOf="@id/activity_title_group"/>
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/whiteGray"
+        app:layout_constraintTop_toBottomOf="@id/activity_title_group"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp">
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/target_group"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/rounded_corners_white"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/target_contents_2"/>
+
+            <TextView
+                android:id="@+id/target_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="대상"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                app:layout_constraintTop_toTopOf="@id/target_group"
+                app:layout_constraintLeft_toLeftOf="@id/target_group"/>
+
+            <TextView
+                android:id="@+id/target_contents_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/icon_dot"
+                android:gravity="center_vertical"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="15dp"
+                android:text="Bluetooth 4.0(Bluetooth Classic + LE) 또는 상위 버전의 모듈이 내장된 라즈베리파이 제품"
+                app:layout_constraintTop_toBottomOf="@id/target_title"
+                app:layout_constraintLeft_toLeftOf="@id/target_group"
+                app:layout_constraintRight_toRightOf="@id/target_group"/>
+
+            <TextView
+                android:id="@+id/target_contents_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/icon_dot"
+                android:gravity="center_vertical"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:paddingBottom="15dp"
+                android:text="Raspberry Pi 3 Model B, Raspberry Pi 3 Model B+, Raspberry Pi 4 Model B 등"
+                app:layout_constraintTop_toBottomOf="@id/target_contents_1"
+                app:layout_constraintLeft_toLeftOf="@id/target_group"
+                app:layout_constraintRight_toRightOf="@id/target_group"/>
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/setting_group"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/rounded_corners_white"
+                app:layout_constraintTop_toBottomOf="@id/target_contents_2"
+                app:layout_constraintBottom_toBottomOf="@id/github_image"/>
+
+            <TextView
+                android:id="@+id/setting_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="라즈베리파이 설정 및 통신"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                app:layout_constraintTop_toTopOf="@id/setting_group"
+                app:layout_constraintLeft_toLeftOf="@id/setting_group"/>
+
+            <TextView
+                android:id="@+id/setting_contents_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="15dp"
+                android:text="깃허브에서 샘플과 함께 확인하세요."
+                app:layout_constraintTop_toBottomOf="@id/setting_title"
+                app:layout_constraintLeft_toLeftOf="@id/setting_title"
+                app:layout_constraintRight_toRightOf="@id/setting_group"/>
+
+
+            <ImageView
+                android:id="@+id/github_image"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/img_github_logo"
+                android:scaleType="fitCenter"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintWidth_percent="0.25"
+                app:layout_constrainedHeight="true"
+                app:layout_constraintHeight_percent="0.25"
+                app:layout_constraintTop_toBottomOf="@id/setting_contents_1"
+                app:layout_constraintLeft_toLeftOf="@id/setting_contents_1"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

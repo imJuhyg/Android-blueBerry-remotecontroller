@@ -62,7 +62,7 @@
         android:id="@+id/case_arduino_connect_fail_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="(아두이노) 연결실패"
+        android:text="(아두이노) 연결 실패"
         android:textStyle="bold"
         android:layout_marginStart="15dp"
         app:layout_constraintLeft_toLeftOf="@id/case_arduino_connect_fail_group"

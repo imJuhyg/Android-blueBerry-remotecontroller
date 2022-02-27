@@ -22,6 +22,8 @@ class MoreFragment : Fragment() {
     private val menuViewList by lazy { ArrayList<TextView>() }
     private val guidelineFragment by lazy { GuidelineFragment() }
     private var troubleshootingFragment: TroubleshootingFragment? = null
+    private var sampleFragment: SampleFragment? = null
+    private var contactFragment: ContactFragment? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentMoreBinding.inflate(layoutInflater, container, false)
@@ -29,7 +31,7 @@ class MoreFragment : Fragment() {
         menuViewList.apply {
             add(binding.guideline)
             add(binding.troubleshooting)
-            add(binding.example)
+            add(binding.sample)
             add(binding.contact)
         }
 
@@ -53,15 +55,16 @@ class MoreFragment : Fragment() {
             setSelectedMenuColor(view) // Set text color
 
         }
-        binding.example.setOnClickListener { view ->
+        binding.sample.setOnClickListener { view ->
+            onMenuItemSelected(view)
             setMenuTracerAnimation(view) // Animation
             setSelectedMenuColor(view) // Set text color
 
         }
         binding.contact.setOnClickListener { view ->
+            onMenuItemSelected(view)
             setMenuTracerAnimation( view) // Animation
             setSelectedMenuColor(view) // Set text color
-
         }
     }
 
@@ -104,9 +107,23 @@ class MoreFragment : Fragment() {
             }
 
             binding.troubleshooting.id -> {
-                troubleshootingFragment?.let { showChildFragment(troubleshootingFragment!!) } ?: run {
+                troubleshootingFragment?.let { showChildFragment(it) } ?: run {
                     troubleshootingFragment = TroubleshootingFragment()
                     addChildFragment(binding.fragmentContainer.id, troubleshootingFragment!!, false)
+                }
+            }
+
+            binding.sample.id -> {
+                sampleFragment?.let { showChildFragment(it) } ?: run {
+                    sampleFragment = SampleFragment()
+                    addChildFragment(binding.fragmentContainer.id, sampleFragment!!, false)
+                }
+            }
+
+            binding.contact.id -> {
+                contactFragment?.let { showChildFragment(it) } ?: run {
+                    contactFragment = ContactFragment()
+                    addChildFragment(binding.fragmentContainer.id, contactFragment!!, false)
                 }
             }
         }
