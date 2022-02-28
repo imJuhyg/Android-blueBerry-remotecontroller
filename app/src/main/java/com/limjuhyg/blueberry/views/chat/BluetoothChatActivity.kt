@@ -6,6 +6,7 @@ import android.os.*
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -25,6 +26,9 @@ import com.limjuhyg.blueberry.rfcomm.CommunicationThread
 import com.limjuhyg.blueberry.rfcomm.ConnectThread
 import com.limjuhyg.blueberry.utils.ProgressCircleAnimator
 import com.limjuhyg.blueberry.utils.addChatItem
+import com.limjuhyg.blueberry.utils.addFragment
+import com.limjuhyg.blueberry.utils.addFragmentWithAnimation
+import com.limjuhyg.blueberry.views.fragments.TroubleshootingFragment
 import java.util.*
 
 class BluetoothChatActivity : AppCompatActivity() {
@@ -194,6 +198,17 @@ class BluetoothChatActivity : AppCompatActivity() {
 
         binding.btnFinish.setOnClickListener {
             finish()
+        }
+
+        // Troubleshooting
+        binding.textBtnTroubleshooting.setOnClickListener {
+            binding.btnReconnect.visibility = View.GONE
+            binding.troubleshootingGroup.visibility = View.VISIBLE
+            addFragmentWithAnimation(
+                binding.troubleshootingFragmentContainer.id,
+                TroubleshootingFragment(),
+                R.anim.to_left_from_right, R.anim.none,
+                false)
         }
     }
 

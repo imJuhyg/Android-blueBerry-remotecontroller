@@ -60,7 +60,7 @@
         android:id="@+id/connect_fail_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="warning_image, warning_message_1, warning_message_2, warning_message_3, btn_navi_before, btn_reconnect"
+        app:constraint_referenced_ids="warning_image, warning_message_1, warning_message_2, text_btn_troubleshooting, btn_navi_before, btn_reconnect"
         android:visibility="gone"/>
 
     <ImageView
@@ -100,7 +100,7 @@
         app:layout_constraintRight_toRightOf="parent"/>
 
     <TextView
-        android:id="@+id/warning_message_3"
+        android:id="@+id/text_btn_troubleshooting"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:text="@string/troubleshooting"
@@ -284,4 +284,24 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/edit_text"/>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/troubleshooting_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/whiteGray"
+        app:constraint_referenced_ids="troubleshooting_fragment_container"
+        android:visibility="gone"/>
+
+    <FrameLayout
+        android:id="@+id/troubleshooting_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.9"
+        app:layout_constraintTop_toTopOf="@id/troubleshooting_group"
+        app:layout_constraintLeft_toLeftOf="@id/troubleshooting_group"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

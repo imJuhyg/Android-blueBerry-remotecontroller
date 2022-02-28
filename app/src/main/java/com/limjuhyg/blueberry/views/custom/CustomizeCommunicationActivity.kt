@@ -3,6 +3,7 @@ package com.limjuhyg.blueberry.views.custom
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.os.*
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
@@ -28,8 +29,10 @@ import com.limjuhyg.blueberry.rfcomm.CommunicationThread
 import com.limjuhyg.blueberry.rfcomm.ConnectThread
 import com.limjuhyg.blueberry.utils.ProgressCircleAnimator
 import com.limjuhyg.blueberry.utils.addFragment
+import com.limjuhyg.blueberry.utils.addFragmentWithAnimation
 import com.limjuhyg.blueberry.viewmodels.CustomizeViewModel
 import com.limjuhyg.blueberry.views.fragments.CommunicationLogFragment
+import com.limjuhyg.blueberry.views.fragments.TroubleshootingFragment
 
 class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityCustomizeCommunicationBinding
@@ -219,7 +222,7 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
         binding.btnReconnect.setOnClickListener {
             progressAnimator?.startAnimation()
             binding.checkWarningGroup.visibility = View.GONE
-            binding.checkWarningMessage3.visibility = View.GONE
+            binding.textBtnTroubleshooting.visibility = View.GONE
             binding.btnReconnect.visibility = View.GONE
             binding.checkConnectSettingGroup.visibility = View.VISIBLE
 
@@ -258,6 +261,17 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
                 communicationLogFragment.hide()
             }
         }
+
+        // Troubleshooting
+        binding.textBtnTroubleshooting.setOnClickListener {
+            binding.btnReconnect.visibility = View.GONE
+            binding.troubleshootingGroup.visibility = View.VISIBLE
+            addFragmentWithAnimation(
+                binding.troubleshootingFragmentContainer.id,
+                TroubleshootingFragment(),
+                R.anim.to_left_from_right, R.anim.none,
+                false)
+        }
     }
 
     override fun onBackPressed() {
@@ -287,12 +301,12 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
         if(warningType == DEFAULT_WARNING) {
             binding.btnReconnect.visibility = View.GONE
             binding.checkWarningGroup.visibility = View.VISIBLE
-            binding.checkWarningMessage3.visibility = View.GONE
+            binding.textBtnTroubleshooting.visibility = View.GONE
 
         } else if(warningType == CONNECT_WARNING) {
             binding.btnReconnect.visibility = View.VISIBLE
             binding.checkWarningGroup.visibility = View.VISIBLE
-            binding.checkWarningMessage3.visibility = View.VISIBLE
+            binding.textBtnTroubleshooting.visibility = View.VISIBLE
         }
 
         binding.checkWarningMessage1.text = message1

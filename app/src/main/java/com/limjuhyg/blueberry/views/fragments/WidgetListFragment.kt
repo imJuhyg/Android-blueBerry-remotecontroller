@@ -9,6 +9,7 @@ import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -51,8 +52,7 @@ class WidgetListFragment : Fragment() {
         windowHeight = MainApplication.instance.getWindowHeight()
 
         // status bar 높이 구하기
-        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
-        if(resourceId > 0) statusBarHeight = resources.getDimensionPixelSize(resourceId)
+        statusBarHeight = MainApplication.instance.getStatusBarHeight()
 
         // Google Icons 에서 받아오기
         activityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -117,7 +117,12 @@ class WidgetListFragment : Fragment() {
 
             when(event.action) {
                 MotionEvent.ACTION_MOVE -> { // 위젯 리스트 움직이기
-                    binding.mainLayout.translationY = event.rawY - statusBarHeight - (windowHeight - mainLayoutHeight)
+                    val activityAppBarHeight = windowHeight - statusBarHeight - mainLayoutHeight
+                    // 터치 좌표 - 상태 바 높이 - 앱 바 높이
+                    val realRawY = event.rawY - statusBarHeight - activityAppBarHeight
+                    binding.mainLayout.translationY = realRawY
+
+                    //binding.mainLayout.translationY = event.rawY - statusBarHeight - (windowHeight - mainLayoutHeight)
 
                     if(binding.mainLayout.y < mainLayoutTop) {
                         binding.mainLayout.y = mainLayoutTop.toFloat()

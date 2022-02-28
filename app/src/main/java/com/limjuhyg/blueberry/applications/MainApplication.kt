@@ -44,6 +44,24 @@ class MainApplication : Application() {
         }
     }
 
+    fun getStatusBarHeight(): Int {
+        var statusBarHeight = 0
+        val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+        if(resourceId > 0)
+            statusBarHeight = resources.getDimensionPixelSize(resourceId)
+
+        return statusBarHeight
+    }
+
+    fun getBottomNavigationBarHeight(): Int {
+        var height = 0
+        val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+        if(resourceId > 0)
+            height = resources.getDimensionPixelSize(resourceId)
+
+        return height
+    }
+
     fun getWindowHeight(): Int {
         return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             windowManager.currentWindowMetrics.bounds.height()
