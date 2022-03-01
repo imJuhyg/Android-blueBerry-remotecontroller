@@ -123,8 +123,7 @@
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="15dp"
                 android:paddingBottom="15dp"
-                android:text="애플리케이션과 연결하기 위해서는 라즈베리파이에서 'Serial Port Class' 및 'Serial Port Profile'이 설정되어 있어야 합니다.
-pyBluez 라이브러리의 advertise_service api를 통해 서비스 클래스 및 프로파일을 설정해 주세요."
+                android:text="애플리케이션과 연결하기 위해서는 라즈베리파이에서 'Serial Port Class' 및 'Serial Port Profile'이 설정되어 있어야 합니다. pyBluez 라이브러리의 advertise_service api를 통해 서비스 클래스 및 프로파일을 설정해 주세요."
                 app:layout_constraintTop_toBottomOf="@id/troubleshooting_2_title"
                 app:layout_constraintLeft_toLeftOf="@id/troubleshooting_2_group"
                 app:layout_constraintRight_toRightOf="@id/troubleshooting_2_group"/>
@@ -142,7 +141,7 @@ pyBluez 라이브러리의 advertise_service api를 통해 서비스 클래스 �
                 android:id="@+id/troubleshooting_3_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="UUID값이 일치하지 않을 경우"
+                android:text="UUID값이 일치하지 않는 경우"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_marginTop="15dp"

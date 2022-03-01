@@ -23,33 +23,66 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BlueBerry">
-        <activity android:name=".views.troubleshootings.RaspberryTroubleshootingActivity"></activity>
-        <activity android:name=".views.guidelines.ArduinoGuidelineActivity" />
-        <activity android:name=".views.guidelines.RaspberryGuidelineActivity" />
-        <activity android:name=".views.guidelines.AppGuidelineActivity" />
         <activity
             android:name=".views.load.LoadActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".views.main.MainActivity" />
-        <activity android:name=".views.custom.CustomizeCommunicationActivity" />
-        <activity android:name=".views.custom.CustomizeConnectSettingActivity" />
-        <activity android:name=".views.chat.BluetoothChatActivity" />
-        <activity android:name=".views.scan.DeviceScanActivity" />
+        <activity
+            android:name=".views.troubleshootings.RaspberryTroubleshootingActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".views.guidelines.ArduinoGuidelineActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".views.guidelines.RaspberryGuidelineActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".views.guidelines.AppGuidelineActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".views.main.MainActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".views.custom.CustomizeCommunicationActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".views.custom.CustomizeConnectSettingActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".views.chat.BluetoothChatActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".views.scan.DeviceScanActivity"
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".views.custom.WidgetSettingActivity"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustNothing"
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".views.custom.CustomizeNameSettingActivity"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustNothing"
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".views.custom.SearchGoogleIconsActivity"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustNothing"
+            android:screenOrientation="portrait">
+        </activity>
     </application>
-
 </manifest>

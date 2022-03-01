@@ -3,7 +3,6 @@ package com.limjuhyg.blueberry.views.custom
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.os.*
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
@@ -280,7 +279,7 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
             if(endTime - startTime <= 2000) {
                 super.onBackPressed()
             } else {
-                Toast.makeText(this, "한 번 더 누르면 종료됩니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "한 번 더 누르면 종료됩니다", Toast.LENGTH_SHORT).show()
                 startTime = SystemClock.elapsedRealtime()
             }
         } else {

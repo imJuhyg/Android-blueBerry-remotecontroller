@@ -2,11 +2,9 @@ package com.limjuhyg.blueberry.adapter
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -67,11 +65,6 @@ class CustomizeRecyclerViewAdapter(private val context: Context) : RecyclerView.
             deviceName.text = item.deviceName
             deviceAddress.text = item.deviceAddress ?: "연결정보 없음"
         }
-
-        val animation = AnimationUtils.loadAnimation(context, R.anim.to_top_from_bottom_2)
-        startOffsetValue += 300
-        animation.startOffset = startOffsetValue
-        viewHolder.recyclerView.animation = animation
     }
 
     override fun getItemCount() = customizeItems.size
@@ -79,6 +72,7 @@ class CustomizeRecyclerViewAdapter(private val context: Context) : RecyclerView.
     fun addItem(customizeName: String, deviceImage: Drawable?, deviceName: String?, deviceAddress: String?) {
         val item = CustomizeRecyclerViewItem(customizeName, deviceImage, deviceName, deviceAddress)
         customizeItems.add(item)
+        notifyItemInserted(customizeItems.size-1)
     }
 
     fun getItem(position: Int) = customizeItems[position]

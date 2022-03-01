@@ -1,7 +1,5 @@
 package com.limjuhyg.blueberry.models.room.dao
 
-import android.graphics.Bitmap
-import android.util.Log
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query

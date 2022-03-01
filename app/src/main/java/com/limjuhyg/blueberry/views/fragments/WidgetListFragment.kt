@@ -9,7 +9,6 @@ import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -121,8 +120,6 @@ class WidgetListFragment : Fragment() {
                     // 터치 좌표 - 상태 바 높이 - 앱 바 높이
                     val realRawY = event.rawY - statusBarHeight - activityAppBarHeight
                     binding.mainLayout.translationY = realRawY
-
-                    //binding.mainLayout.translationY = event.rawY - statusBarHeight - (windowHeight - mainLayoutHeight)
 
                     if(binding.mainLayout.y < mainLayoutTop) {
                         binding.mainLayout.y = mainLayoutTop.toFloat()

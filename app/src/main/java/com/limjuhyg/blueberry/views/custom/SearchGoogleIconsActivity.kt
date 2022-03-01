@@ -4,17 +4,12 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.content.Context
-import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
-import android.net.ConnectivityManager
-import android.net.Network
-import android.net.Uri
+import android.net.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.os.Message
-import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.EditorInfo
@@ -29,10 +24,7 @@ import com.limjuhyg.blueberry.adapter.IconRecyclerViewAdapter
 import com.limjuhyg.blueberry.databinding.ActivitySearchGoogleIconsBinding
 import com.limjuhyg.blueberry.utils.ProgressCircleAnimator
 import com.limjuhyg.blueberry.utils.getNetworkState
-import com.limjuhyg.blueberry.utils.registerNetworkCallback
-import com.limjuhyg.blueberry.utils.unregisterNetworkCallback
 import com.limjuhyg.blueberry.viewmodels.IconStorageViewModel
-import com.limjuhyg.blueberry.views.fragments.WidgetListFragment
 
 class SearchGoogleIconsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchGoogleIconsBinding
@@ -41,11 +33,16 @@ class SearchGoogleIconsActivity : AppCompatActivity() {
     private var progressAnimator: ProgressCircleAnimator? = null
     private var fileReferences: List<StorageReference>? = null
     private var topNetworkStateViewInitY: Float = 0f
+    private val connectivityManager by lazy {
+        getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    }
+    private var onAvailableHandler: Handler? = Handler(Looper.getMainLooper())
+    private var onLostHandler: Handler? = Handler(Looper.getMainLooper())
 
     private val networkCallback = object: ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
             super.onAvailable(network)
-            Handler(Looper.getMainLooper()).post {
+            onAvailableHandler?.post {
                 ObjectAnimator.ofFloat(binding.topNetworkStateTextView, "y", topNetworkStateViewInitY).apply {
                     duration = 500
                     addListener(object: AnimatorListenerAdapter() {
@@ -61,7 +58,7 @@ class SearchGoogleIconsActivity : AppCompatActivity() {
 
         override fun onLost(network: Network) {
             super.onLost(network)
-            Handler(Looper.getMainLooper()).post {
+            onLostHandler?.post {
                 binding.topNetworkStateTextView.visibility = View.VISIBLE
                 ObjectAnimator.ofFloat(binding.topNetworkStateTextView, "y", 0f).apply {
                     duration = 500
@@ -131,7 +128,7 @@ class SearchGoogleIconsActivity : AppCompatActivity() {
         val iconUriListObserver = Observer<ArrayList<Uri>> { list ->
             iconRecyclerViewAdapter!!.clearItem()
             if(list.isEmpty()) {
-                Toast.makeText(this, "검색결과가 없습니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "검색결과가 없습니다", Toast.LENGTH_SHORT).show()
 
             } else {
                 for(uri in list) {
@@ -147,27 +144,6 @@ class SearchGoogleIconsActivity : AppCompatActivity() {
             binding.networkGroup.visibility = View.VISIBLE
         }
     }
-
-    /*
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if(hasFocus) hideSystemUI()
-    }
-
-    private fun hideSystemUI() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val controller: WindowInsetsController? = window.insetsController
-            controller?.hide(WindowInsets.Type.navigationBars())
-            controller?.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-
-        } else {
-            window.decorView.systemUiVisibility = (
-                View.SYSTEM_UI_FLAG_IMMERSIVE
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-            )
-        }
-    }
-    */
 
     override fun onResume() {
         super.onResume()
@@ -185,7 +161,7 @@ class SearchGoogleIconsActivity : AppCompatActivity() {
 
         binding.searchEditText.setOnEditorActionListener { textView, actionId, keyEvent ->
             if(textView.text.length < 2) {
-                Toast.makeText(this, "두 자 이상 입력해야 합니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "두 자 이상 입력해야 합니다.", Toast.LENGTH_SHORT).show()
 
             } else if(actionId == EditorInfo.IME_ACTION_SEARCH) {
                 fileReferences?.let { references ->
@@ -210,9 +186,17 @@ class SearchGoogleIconsActivity : AppCompatActivity() {
         })
     }
 
+    private fun registerNetworkCallback(networkCallback: ConnectivityManager.NetworkCallback) {
+        val networkRequest = NetworkRequest.Builder()
+            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .build()
+        connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
+    }
+
     override fun onStop() {
         super.onStop()
-        unregisterNetworkCallback(networkCallback)
+        connectivityManager.unregisterNetworkCallback(networkCallback)
     }
 
     override fun onDestroy() {
@@ -220,5 +204,11 @@ class SearchGoogleIconsActivity : AppCompatActivity() {
         binding.iconRecyclerView.adapter = null
         iconRecyclerViewAdapter?.clearItem()
         iconRecyclerViewAdapter = null
+        progressAnimator?.cancelAnimation()
+        progressAnimator = null
+        onAvailableHandler?.removeMessages(0)
+        onLostHandler?.removeMessages(0)
+        onAvailableHandler = null
+        onLostHandler = null
     }
 }

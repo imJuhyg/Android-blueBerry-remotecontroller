@@ -101,8 +101,8 @@
                 android:gravity="center_vertical"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
-                android:text="애플리케이션은 열린 소켓 서버에 연결 요청하도록 설계되어 있습니다.
-따라서 연결하려는 라즈베리파이 또는 아두이노에서 블루투스 시리얼 통신이 가능하도록 소켓 서버를 생성해야 합니다."
+                android:text="애플리케이션은 열린 서버 소켓에 연결 요청하도록 설계되어 있습니다.
+따라서 연결하려는 라즈베리파이 또는 아두이노에서 블루투스 시리얼 통신이 가능하도록 서버 소켓을 생성해야 합니다."
                 app:layout_constraintTop_toBottomOf="@id/basic_contents_1"
                 app:layout_constraintLeft_toLeftOf="@id/basic_group"
                 app:layout_constraintRight_toRightOf="@id/basic_group"/>
@@ -116,7 +116,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
                 android:paddingBottom="15dp"
-                android:text="소켓 서버를 생성하는 방법은 '더보기' > '예제'에서 확인할 수 있습니다."
+                android:text="서버 소켓을 생성하는 방법은 '더보기' > '예제'에서 확인할 수 있습니다."
                 app:layout_constraintTop_toBottomOf="@id/basic_contents_2"
                 app:layout_constraintLeft_toLeftOf="@id/basic_group"
                 app:layout_constraintRight_toRightOf="@id/basic_group"/>
@@ -151,7 +151,7 @@
                 android:gravity="center_vertical"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="15dp"
-                android:text="라즈베리파이 또는 아두이노와 통신을 진행하기 위해서는 먼저 기기 간에 페어링이 완료되어 있어야 합니다."
+                android:text="라즈베리파이 또는 아두이노와 연결하기 전에 먼저 서로가 페어링 되어 있어야 합니다."
                 app:layout_constraintTop_toBottomOf="@id/scan_pair_title"
                 app:layout_constraintLeft_toLeftOf="@id/scan_pair_group"
                 app:layout_constraintRight_toRightOf="@id/scan_pair_group"/>
@@ -165,7 +165,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
                 android:paddingBottom="15dp"
-                android:text="스캔 및 페어링 과정은 애플리케이션의 '테스트' > [돋보기]를 통해 진행할 수 있으며 휴대폰의 ‘설정’ > ‘연결’ > ‘블루투스’탭에서 진행해도 됩니다. 또한 라즈베리파이 또는 아두이노에서 페어링 요청을 보내도 됩니다."
+                android:text="스캔 및 페어링 과정은 애플리케이션의 '테스트' > [돋보기]를 통해 진행할 수 있으며 휴대폰의 ‘설정’ > ‘연결’ > ‘블루투스’탭에서 진행해도 됩니다. 또한 원격 디바이스에서 페어링 요청을 보내도 됩니다."
                 app:layout_constraintTop_toBottomOf="@id/scan_pair_contents_1"
                 app:layout_constraintLeft_toLeftOf="@id/scan_pair_group"
                 app:layout_constraintRight_toRightOf="@id/scan_pair_group"/>
@@ -214,9 +214,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
                 android:paddingBottom="15dp"
-                android:text="SPP는 RFCOMM 프로토콜을 사용하여 블루투스 장치 간의 데이터를 전송하는 방식을 정의합니다.
-따라서 연결하려는 라즈베리파이 또는 아두이노에서 RFCOMM 프로토콜을 위한 소켓을 생성해야 합니다.
-이 방법도 예제에서 쉽게 확인할 수 있습니다."
+                android:text="SPP는 RFCOMM 프로토콜을 사용하여 블루투스 장치 간의 데이터를 전송하는 방식을 정의합니다. 따라서 연결하려는 라즈베리파이 또는 아두이노에서 RFCOMM 프로토콜을 위한 소켓을 생성해야 합니다. 이 방법도 예제에서 쉽게 확인할 수 있습니다."
                 app:layout_constraintTop_toBottomOf="@id/communication_contents_1"
                 app:layout_constraintLeft_toLeftOf="@id/communication_group"
                 app:layout_constraintRight_toRightOf="@id/communication_group"/>
@@ -251,8 +249,7 @@
                 android:gravity="center_vertical"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="15dp"
-                android:text="
-SPP는 클래식 블루투스에 정의되어 있으므로 블루투스 모듈이 클래식 블루투스(블루투스 버전 1.0~2.1)로 사용 가능한 기기에서 모두 호환됩니다."
+                android:text="SPP는 클래식 블루투스에 정의되어 있으므로 블루투스 모듈이 클래식 블루투스(블루투스 버전 1.0~2.1)로 사용 가능한 기기에서 모두 호환됩니다."
                 app:layout_constraintTop_toBottomOf="@id/target_title"
                 app:layout_constraintLeft_toLeftOf="@id/target_group"
                 app:layout_constraintRight_toRightOf="@id/target_group"/>
@@ -266,9 +263,7 @@ SPP는 클래식 블루투스에 정의되어 있으므로 블루투스 모듈�
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
                 android:paddingBottom="15dp"
-                android:text="블루투스 4.0 버전(Bluetooth 4.0 + LE)부터는 클래식 블루투스를 포함하기 때문에
-블루투스 모듈이 내장된 대부분의 라즈베리파이 또는 아두이노 기기나 HC-06 모듈을 부착한 아두이노 기기와 호환 가능합니다.
-"
+                android:text="블루투스 4.0 버전(Bluetooth Classic + LE)부터는 클래식 블루투스를 포함하기 때문에 블루투스 모듈이 내장된 대부분의 라즈베리파이 또는 아두이노 기기나 HC-06 모듈을 부착한 아두이노 기기와 호환 가능합니다."
                 app:layout_constraintTop_toBottomOf="@id/target_contents_1"
                 app:layout_constraintLeft_toLeftOf="@id/target_group"
                 app:layout_constraintRight_toRightOf="@id/target_group"/>
@@ -328,7 +323,7 @@ SPP는 클래식 블루투스에 정의되어 있으므로 블루투스 모듈�
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
                 android:paddingBottom="15dp"
-                android:text="데이터 없이도 사용 가능한 기본 아이콘 및 'Google Icons'에서 제공하는 2천 가지 이상의 아이콘이 준비되어 있습니다. 나만의 리모컨을 직접 만들어 연결된 디바이스를 제어해 보세요."
+                android:text="데이터 없이도 사용 가능한 기본 아이콘 및 'Google Fonts'에서 제공하는 2천 가지 이상의 아이콘이 준비되어 있습니다. 나만의 리모컨을 직접 만들어 연결된 디바이스를 제어해 보세요."
                 app:layout_constraintTop_toBottomOf="@id/customize_title_image"
                 app:layout_constraintLeft_toLeftOf="@id/customize_group"
                 app:layout_constraintRight_toRightOf="@id/customize_group"/>

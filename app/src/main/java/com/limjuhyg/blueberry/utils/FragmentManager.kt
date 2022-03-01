@@ -2,7 +2,6 @@ package com.limjuhyg.blueberry.utils
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.limjuhyg.blueberry.R
 
 fun AppCompatActivity.addFragment(fragmentContainer: Int, fragment: Fragment, addBackStack: Boolean) {
     if(addBackStack) {

@@ -2,8 +2,6 @@ package com.limjuhyg.blueberry.views.guidelines
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.google.firebase.storage.FirebaseStorage
-import com.limjuhyg.blueberry.R
 import com.limjuhyg.blueberry.databinding.ActivityAppGuidelineBinding
 
 class AppGuidelineActivity : AppCompatActivity() {

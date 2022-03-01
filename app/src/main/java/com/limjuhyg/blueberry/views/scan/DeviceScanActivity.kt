@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -138,7 +137,7 @@ class DeviceScanActivity : AppCompatActivity() {
                 for(pairedDevice in pairedDevices) {
                     if(pairedDevice.address == selectedItem.address) {
                         isPairingAvailable = false
-                        Toast.makeText(this@DeviceScanActivity, getString(R.string.already_paired_device), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, getString(R.string.already_paired_device), Toast.LENGTH_SHORT).show()
                     }
                 }
 

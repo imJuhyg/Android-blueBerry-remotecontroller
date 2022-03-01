@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
@@ -25,7 +26,7 @@ import com.limjuhyg.blueberry.R
 import com.limjuhyg.blueberry.databinding.FragmentPairedDevicesBinding
 import com.limjuhyg.blueberry.adapter.DeviceRecyclerViewAdapter
 import com.limjuhyg.blueberry.applications.MainApplication
-import com.limjuhyg.blueberry.utils.addDeviceItemWithAnimation
+import com.limjuhyg.blueberry.utils.addDeviceItem
 import com.limjuhyg.blueberry.viewmodels.BluetoothScanPair
 import com.limjuhyg.blueberry.views.custom.CustomizeConnectSettingActivity
 import com.limjuhyg.blueberry.views.main.MainActivity
@@ -49,6 +50,8 @@ class PairedDevicesFragment : Fragment() {
 
         binding.pairedDeviceRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.pairedDeviceRecyclerView.adapter = deviceRecyclerViewAdapter
+        val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.to_top_from_bottom_2)
+        binding.pairedDeviceRecyclerView.animation = animation
 
         return binding.root
     }
@@ -80,7 +83,7 @@ class PairedDevicesFragment : Fragment() {
         val pairedDevicesObserver = Observer<ArrayList<BluetoothDevice>> {
             bluetoothDevices = it
             for(device in bluetoothDevices)
-                addDeviceItemWithAnimation(device.name, device.address, deviceRecyclerViewAdapter!!)
+                addDeviceItem(device.name, device.address, deviceRecyclerViewAdapter!!)
             refreshView()
         }
         scanPairViewModel.pairedDevices.observe(viewLifecycleOwner, pairedDevicesObserver)
@@ -130,7 +133,12 @@ class PairedDevicesFragment : Fragment() {
         // refresh button click event
         binding.btnRefresh.setOnClickListener {
             deviceRecyclerViewAdapter!!.clear()
-            if(hasPermission) scanPairViewModel.getPairedDevices()
+            if(hasPermission) {
+                scanPairViewModel.getPairedDevices()
+                val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.to_top_from_bottom_2)
+                binding.pairedDeviceRecyclerView.animation = animation
+            }
+
         }
     }
 

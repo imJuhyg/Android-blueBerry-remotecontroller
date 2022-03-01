@@ -2,13 +2,12 @@ package com.limjuhyg.blueberry.adapter
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.limjuhyg.blueberry.R
 import com.limjuhyg.blueberry.adapter.items.WidgetRecyclerViewItem
@@ -40,6 +39,9 @@ class WidgetRecyclerViewAdapter(private val context: Context) : RecyclerView.Ada
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val item = widgetItems[position]
+
+        if(position == 0) viewHolder.title.setTextColor(ContextCompat.getColor(context, R.color.identityColor))
+        else viewHolder.imageView.setColorFilter(ContextCompat.getColor(context, R.color.darkGray))
 
         viewHolder.imageView.setImageBitmap(item.image)
         viewHolder.title.text = item.title

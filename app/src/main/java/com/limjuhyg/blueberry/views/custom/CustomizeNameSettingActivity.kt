@@ -111,7 +111,7 @@ class CustomizeNameSettingActivity : AppCompatActivity() {
                 if(mode == CUSTOMIZE_MODIFICATION_MODE) {
                     // 변경하려는 이름이 이미 있을 경우
                     if(customize != null && customize.customizeName != oldCustomizeName) {
-                        Toast.makeText(this@CustomizeNameSettingActivity, "이미 생성된 커스텀 이름입니다", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "이미 생성된 커스텀 이름입니다", Toast.LENGTH_SHORT).show()
                     }
                     // 변경하려는 이름이 없거나 변경하지 않는 경우
                     else startWidgetSettingActivity()
@@ -119,7 +119,7 @@ class CustomizeNameSettingActivity : AppCompatActivity() {
                 // Create mode
                 else if(mode == CUSTOMIZE_CREATE_MODE) {
                     customize?.let {
-                        Toast.makeText(this@CustomizeNameSettingActivity, "이미 생성된 커스텀 이름입니다", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "이미 생성된 커스텀 이름입니다", Toast.LENGTH_SHORT).show()
                     } ?: run {
                         startWidgetSettingActivity()
                     }
@@ -147,7 +147,7 @@ class CustomizeNameSettingActivity : AppCompatActivity() {
         val customizeName = binding.editText.text.toString()
         tempCustomizeSettingData.setCustomizeName(customizeName)
 
-        val intent = Intent(this@CustomizeNameSettingActivity, WidgetSettingActivity::class.java)
+        val intent = Intent(applicationContext, WidgetSettingActivity::class.java)
         startActivity(intent)
     }
 

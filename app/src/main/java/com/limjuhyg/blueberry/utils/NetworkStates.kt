@@ -3,7 +3,6 @@ package com.limjuhyg.blueberry.utils
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.NetworkInfo
-import android.net.NetworkRequest
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -27,27 +26,4 @@ fun AppCompatActivity.getNetworkState(): Boolean {
         else if(activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) return true
     }
     return false
-}
-
-/* 네트워크 이벤트 수신 대기 */
-fun AppCompatActivity.registerNetworkCallback(networkCallback: ConnectivityManager.NetworkCallback) {
-    val connectivityManager = ContextCompat.getSystemService(
-        this,
-        ConnectivityManager::class.java
-    ) as ConnectivityManager
-
-    val networkRequest = NetworkRequest.Builder()
-        .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-        .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-        .build()
-    connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
-}
-
-fun AppCompatActivity.unregisterNetworkCallback(networkCallback: ConnectivityManager.NetworkCallback) {
-    val connectivityManager = ContextCompat.getSystemService(
-        this,
-        ConnectivityManager::class.java
-    ) as ConnectivityManager
-
-    connectivityManager.unregisterNetworkCallback(networkCallback)
 }

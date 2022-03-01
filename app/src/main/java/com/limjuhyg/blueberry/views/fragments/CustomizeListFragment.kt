@@ -1,5 +1,7 @@
 package com.limjuhyg.blueberry.views.fragments
 
+import android.animation.Animator
+import android.animation.ObjectAnimator
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
@@ -8,12 +10,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.limjuhyg.blueberry.R
 import com.limjuhyg.blueberry.databinding.FragmentCustomizeListBinding
 import com.limjuhyg.blueberry.adapter.CustomizeRecyclerViewAdapter
@@ -32,12 +38,14 @@ class CustomizeListFragment : Fragment() {
     private lateinit var customizeList: ArrayList<Customize>
     private var isButtonClickable = true
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCustomizeListBinding.inflate(inflater, container, false)
 
         customizeRecyclerViewAdapter = CustomizeRecyclerViewAdapter(requireContext())
-        binding.customizeRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.customizeRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.customizeRecyclerView.adapter = customizeRecyclerViewAdapter
+        val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.to_top_from_bottom_2)
+        binding.customizeRecyclerView.animation = animation
 
         return binding.root
     }
@@ -48,7 +56,7 @@ class CustomizeListFragment : Fragment() {
         // Load user customize
         val customizeObserver = Observer<List<Customize>> {
             customizeList = ArrayList(it)
-            customizeRecyclerViewAdapter!!.clear()
+            customizeRecyclerViewAdapter!!.clear() // 기존 뷰 삭제, animation offset 초기화
             for(customize in it) {
                 customizeRecyclerViewAdapter!!.addItem(
                     customize.customizeName,
@@ -58,7 +66,6 @@ class CustomizeListFragment : Fragment() {
                     customize.deviceAddress
                 )
             }
-            customizeRecyclerViewAdapter!!.notifyDataSetChanged()
             refreshView()
         }
         customizeViewModel.customizeList.observe(viewLifecycleOwner, customizeObserver)
@@ -72,7 +79,7 @@ class CustomizeListFragment : Fragment() {
 
         // Create custom
         binding.btnAdd.setOnClickListener {
-            val intent = Intent(context, CustomizeNameSettingActivity::class.java)
+            val intent = Intent(requireContext(), CustomizeNameSettingActivity::class.java)
             intent.putExtra("MODE", CUSTOMIZE_CREATE_MODE)
             startActivity(intent)
         }

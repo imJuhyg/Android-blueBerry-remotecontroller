@@ -7,14 +7,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageManager
-import android.util.Log
-import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.limjuhyg.blueberry.applications.MainApplication
-import java.util.jar.Manifest
 
 class BluetoothScanPair(application: Application) : AndroidViewModel(application) {
     val pairedDevices by lazy { MutableLiveData<ArrayList<BluetoothDevice>>() } // paired devices

@@ -134,7 +134,7 @@ class WidgetSettingActivity : AppCompatActivity() {
                 addWidgetListFragment()
             }
             else {
-                Toast.makeText(this, "최대 30개까지 생성할 수 있습니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "최대 30개까지 생성할 수 있습니다", Toast.LENGTH_SHORT).show()
             }
         }
 

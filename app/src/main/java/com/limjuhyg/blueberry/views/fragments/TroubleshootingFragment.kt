@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.limjuhyg.blueberry.R
 import com.limjuhyg.blueberry.databinding.FragmentTroubleshootingBinding
 import com.limjuhyg.blueberry.views.troubleshootings.RaspberryTroubleshootingActivity
 

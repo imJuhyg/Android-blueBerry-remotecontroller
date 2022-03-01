@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.limjuhyg.blueberry.R
 import com.limjuhyg.blueberry.databinding.FragmentSampleBinding
 
 class SampleFragment : Fragment() {

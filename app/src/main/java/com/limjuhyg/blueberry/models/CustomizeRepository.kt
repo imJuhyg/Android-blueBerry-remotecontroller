@@ -1,7 +1,6 @@
 package com.limjuhyg.blueberry.models
 
 import android.app.Application
-import android.util.Log
 import androidx.room.Room
 import com.limjuhyg.blueberry.models.room.database.LocalDatabase
 import com.limjuhyg.blueberry.models.room.entities.Customize

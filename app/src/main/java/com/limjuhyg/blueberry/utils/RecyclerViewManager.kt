@@ -2,7 +2,6 @@ package com.limjuhyg.blueberry.utils
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -17,10 +16,9 @@ fun AppCompatActivity.addDeviceItem(name: String?, address: String, recyclerView
         recyclerViewAdapter.addItem(ContextCompat.getDrawable(this, R.drawable.icon_remote_device_48), name ?: address, address)
 }
 
-// Device recycler view add item with animation (Fragment)
-fun Fragment.addDeviceItemWithAnimation(name: String?, address: String, recyclerViewAdapter: DeviceRecyclerViewAdapter) {
+fun Fragment.addDeviceItem(name: String?, address: String, recyclerViewAdapter: DeviceRecyclerViewAdapter) {
     if(recyclerViewAdapter.isNotExist(address))
-        recyclerViewAdapter.addItemWithAnimation(ContextCompat.getDrawable(requireContext(), R.drawable.icon_remote_device_48), name ?: address, address)
+        recyclerViewAdapter.addItem(ContextCompat.getDrawable(requireContext(), R.drawable.icon_remote_device_48), name ?: address, address)
 }
 
 // Chat recycler view add item (Activity)
@@ -34,7 +32,7 @@ fun Fragment.addWidgetItem(bitmap: Bitmap, title: String, recyclerViewAdapter: W
 }
 fun Fragment.addDefaultWidgetItems(recyclerViewAdapter: WidgetRecyclerViewAdapter) {
     recyclerViewAdapter.apply {
-        addItemIgnoreNotify(BitmapFactory.decodeResource(requireContext().resources, R.drawable.icon_default_button_48)!!, "Google Icons 검색")
+        addItemIgnoreNotify(BitmapFactory.decodeResource(requireContext().resources, R.drawable.google_fonts_logo)!!, "Google Icons")
         addItemIgnoreNotify(BitmapFactory.decodeResource(requireContext().resources, R.drawable.icon_default_button_48)!!, "기본")
         addItemIgnoreNotify(BitmapFactory.decodeResource(requireContext().resources, R.drawable.icon_circle_button_48)!!, "원형")
         addItemIgnoreNotify(BitmapFactory.decodeResource(requireContext().resources, R.drawable.icon_play_48)!!, "재생")

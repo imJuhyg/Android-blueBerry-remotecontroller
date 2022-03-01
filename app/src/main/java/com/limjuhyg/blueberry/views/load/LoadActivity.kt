@@ -1,11 +1,12 @@
 package com.limjuhyg.blueberry.views.load
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import com.limjuhyg.blueberry.views.main.MainActivity
@@ -19,6 +20,15 @@ class LoadActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_load)
+
+        // 버전 코드 표시
+        val versionCodeTextView: TextView = findViewById(R.id.version_code)
+        try {
+            val packageInfo = packageManager.getPackageInfo(packageName, 0)
+            versionCodeTextView.text = packageInfo.versionName
+        } catch (e: PackageManager.NameNotFoundException) {
+
+        }
 
         // Check bluetooth adapter
         MainApplication.instance.bluetoothAdapter ?: run {
@@ -44,7 +54,7 @@ class LoadActivity : AppCompatActivity() {
         super.onResume()
 
         MainApplication.instance.bluetoothAdapter?.let {
-            handler.postDelayed(launchActivity, 2000)
+            handler.postDelayed(launchActivity, 1500)
         }
     }
 

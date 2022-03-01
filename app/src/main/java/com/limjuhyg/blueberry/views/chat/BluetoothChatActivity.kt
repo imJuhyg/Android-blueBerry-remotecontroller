@@ -6,7 +6,6 @@ import android.os.*
 import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -26,7 +25,6 @@ import com.limjuhyg.blueberry.rfcomm.CommunicationThread
 import com.limjuhyg.blueberry.rfcomm.ConnectThread
 import com.limjuhyg.blueberry.utils.ProgressCircleAnimator
 import com.limjuhyg.blueberry.utils.addChatItem
-import com.limjuhyg.blueberry.utils.addFragment
 import com.limjuhyg.blueberry.utils.addFragmentWithAnimation
 import com.limjuhyg.blueberry.views.fragments.TroubleshootingFragment
 import java.util.*
@@ -218,7 +216,7 @@ class BluetoothChatActivity : AppCompatActivity() {
             if(endTime - startTime <= 2000) {
                 super.onBackPressed()
             } else {
-                Toast.makeText(this, "한 번 더 누르면 종료됩니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "한 번 더 누르면 종료됩니다", Toast.LENGTH_SHORT).show()
                 startTime = SystemClock.elapsedRealtime()
             }
         } else {

@@ -2,7 +2,6 @@ package com.limjuhyg.blueberry.customviews
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Point
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView

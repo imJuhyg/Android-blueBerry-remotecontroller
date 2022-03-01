@@ -1,13 +1,11 @@
 package com.limjuhyg.blueberry.views.fragments
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.limjuhyg.blueberry.R
 import com.limjuhyg.blueberry.databinding.FragmentGuidlineBinding
 import com.limjuhyg.blueberry.views.guidelines.AppGuidelineActivity
 import com.limjuhyg.blueberry.views.guidelines.ArduinoGuidelineActivity

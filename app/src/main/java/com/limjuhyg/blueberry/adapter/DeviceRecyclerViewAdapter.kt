@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -17,7 +16,6 @@ class DeviceRecyclerViewAdapter(private val context: Context) : RecyclerView.Ada
     private val deviceItems by lazy { ArrayList<DeviceRecyclerViewItem>() }
     private lateinit var onItemClickListener: OnItemClickListener
     private var startOffsetValue: Long = 0
-    private var isCalledAnimation: Boolean = false
 
     interface OnItemClickListener {
         fun onItemClick(view: View, position: Int)
@@ -48,13 +46,6 @@ class DeviceRecyclerViewAdapter(private val context: Context) : RecyclerView.Ada
         viewHolder.imageView.setImageDrawable(item.image)
         viewHolder.nameView.text = item.name
         viewHolder.addressView.text = item.address
-
-        if(isCalledAnimation) {
-            val animation = AnimationUtils.loadAnimation(context, R.anim.to_top_from_bottom_2)
-            startOffsetValue += 300
-            animation.startOffset = startOffsetValue
-            viewHolder.recyclerView.animation = animation
-        }
     }
 
     override fun getItemCount() = deviceItems.size
@@ -63,15 +54,7 @@ class DeviceRecyclerViewAdapter(private val context: Context) : RecyclerView.Ada
         onItemClickListener = listener
     }
 
-    fun addItemWithAnimation(image: Drawable?, name: String?, address: String) {
-        isCalledAnimation = true
-        val item = DeviceRecyclerViewItem(image, name, address)
-        deviceItems.add(item)
-        notifyDataSetChanged()
-    }
-
     fun addItem(image: Drawable?, name: String?, address: String) {
-        isCalledAnimation = false
         val item = DeviceRecyclerViewItem(image, name, address)
         deviceItems.add(item)
         notifyDataSetChanged()
