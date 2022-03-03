@@ -65,7 +65,7 @@
                 android:layout_height="0dp"
                 android:background="@drawable/rounded_corners_white"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="@id/target_contents_3"/>
+                app:layout_constraintBottom_toBottomOf="@id/target_contents_2"/>
 
             <TextView
                 android:id="@+id/target_title"
@@ -87,7 +87,7 @@
                 android:gravity="center_vertical"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="15dp"
-                android:text="Bluetooth 4.0(Bluetooth Classic + LE) 또는 상위 버전의 모듈이 내장된 아두이노 제품"
+                android:text="HC-05 또는 HC-06 모듈을 부착하여 시리얼 통신을 사용하는 모든 아두이노 제품"
                 app:layout_constraintTop_toBottomOf="@id/target_title"
                 app:layout_constraintLeft_toLeftOf="@id/target_group"
                 app:layout_constraintRight_toRightOf="@id/target_group"/>
@@ -98,25 +98,11 @@
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/icon_dot"
                 android:gravity="center_vertical"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="25dp"
                 android:layout_marginEnd="15dp"
                 android:paddingBottom="15dp"
-                android:text="Bluno, Arduino Nano 33 IoT, Arduino Nano 33 BLE, Arduino Nano 33 BLE Sense 등"
+                android:text="Bluetooth Low Energy(BLE)가 내장된 아두이노 제품 사용 불가(시리얼 통신 방식이 아니라면 사용이 불가능 합니다.)"
                 app:layout_constraintTop_toBottomOf="@id/target_contents_1"
-                app:layout_constraintLeft_toLeftOf="@id/target_group"
-                app:layout_constraintRight_toRightOf="@id/target_group"/>
-
-            <TextView
-                android:id="@+id/target_contents_3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/icon_dot"
-                android:gravity="center_vertical"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="15dp"
-                android:paddingBottom="15dp"
-                android:text="HC-05 또는 HC-06 모듈을 부착한 모든 아두이노 제품"
-                app:layout_constraintTop_toBottomOf="@id/target_contents_2"
                 app:layout_constraintLeft_toLeftOf="@id/target_group"
                 app:layout_constraintRight_toRightOf="@id/target_group"/>
 
@@ -126,7 +112,7 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/rounded_corners_white"
-                app:layout_constraintTop_toBottomOf="@id/target_contents_3"
+                app:layout_constraintTop_toBottomOf="@id/target_contents_2"
                 app:layout_constraintBottom_toBottomOf="@id/github_image"/>
 
             <TextView

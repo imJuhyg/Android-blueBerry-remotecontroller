@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.limjuhyg.blueberry.databinding.FragmentTroubleshootingBinding
+import com.limjuhyg.blueberry.views.troubleshootings.ArduinoTroubleshootingActivity
 import com.limjuhyg.blueberry.views.troubleshootings.RaspberryTroubleshootingActivity
 
 class TroubleshootingFragment : Fragment() {
@@ -23,6 +24,11 @@ class TroubleshootingFragment : Fragment() {
 
         binding.caseRaspberryConnectFailGroup.setOnClickListener {
             val intent = Intent(requireContext(), RaspberryTroubleshootingActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.caseArduinoTroubleshootingGroup.setOnClickListener {
+            val intent = Intent(requireContext(), ArduinoTroubleshootingActivity::class.java)
             startActivity(intent)
         }
     }

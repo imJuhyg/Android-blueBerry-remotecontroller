@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/device_recycler_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -28,19 +29,19 @@
 
     <TextView
         android:id="@+id/name_text_view"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
+        android:layout_width="280dp"
+        android:layout_height="51dp"
+        android:gravity="bottom"
         android:lines="1"
         android:maxLength="23"
-        android:gravity="bottom"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
         android:textSize="17sp"
         android:textStyle="bold"
         app:layout_constrainedWidth="true"
-        app:layout_constraintWidth_percent="0.675"
         app:layout_constraintLeft_toRightOf="@+id/image_view"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.675" />
 
     <TextView
         android:id="@+id/address_text_view"

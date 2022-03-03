@@ -60,7 +60,7 @@
         android:id="@+id/connect_fail_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="warning_image, warning_message_1, warning_message_2, text_btn_troubleshooting, btn_navi_before, btn_reconnect"
+        app:constraint_referenced_ids="warning_image, warning_message_1, warning_message_2, btn_navi_before, btn_reconnect"
         android:visibility="gone"/>
 
     <ImageView
@@ -98,21 +98,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
-
-    <TextView
-        android:id="@+id/text_btn_troubleshooting"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:text="@string/troubleshooting"
-        android:textColor="@color/identityColor"
-        android:textSize="14sp"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        app:layout_constrainedHeight="true"
-        app:layout_constraintHeight_percent="0.05"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/warning_message_2"/>
 
 
     <ImageButton

@@ -1,12 +1,14 @@
 package com.limjuhyg.blueberry.views.fragments
 
 import android.Manifest
+import android.app.Activity.RESULT_CANCELED
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +16,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -40,6 +43,7 @@ class PairedDevicesFragment : Fragment() {
     private val bluetoothAdapter by lazy { MainApplication.instance.bluetoothAdapter }
     private var deviceRecyclerViewAdapter: DeviceRecyclerViewAdapter? = null
     private lateinit var bluetoothDevices: ArrayList<BluetoothDevice>
+    private lateinit var requestBluetoothEnable: ActivityResultLauncher<Intent>
     private lateinit var requestMultiplePermissions : ActivityResultLauncher<Array<String>>
     private var hasPermission: Boolean = true
 
@@ -71,19 +75,28 @@ class PairedDevicesFragment : Fragment() {
                 }
             } else showPermissionAlertDialog()
         }
+
+        // Request bluetooth enable
+        requestBluetoothEnable = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if(it.resultCode == RESULT_CANCELED) {
+                Toast.makeText(requireContext(), "블루투스를 사용할 수 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
             hasPermission = requestBluetoothPermission()
 
         // Request bluetooth enable
         if(hasPermission && !bluetoothAdapter!!.isEnabled) {
             val intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            startActivity(intent)
+            requestBluetoothEnable.launch(intent)
         }
 
         val pairedDevicesObserver = Observer<ArrayList<BluetoothDevice>> {
             bluetoothDevices = it
-            for(device in bluetoothDevices)
+            for(device in bluetoothDevices) {
                 addDeviceItem(device.name, device.address, deviceRecyclerViewAdapter!!)
+            }
             refreshView()
         }
         scanPairViewModel.pairedDevices.observe(viewLifecycleOwner, pairedDevicesObserver)
@@ -133,12 +146,21 @@ class PairedDevicesFragment : Fragment() {
         // refresh button click event
         binding.btnRefresh.setOnClickListener {
             deviceRecyclerViewAdapter!!.clear()
-            if(hasPermission) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                hasPermission = checkPermission()
+            }
+
+            // Request bluetooth enable
+            if(hasPermission && !bluetoothAdapter!!.isEnabled) {
+                val intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+                requestBluetoothEnable.launch(intent)
+            }
+
+            else if(hasPermission) {
                 scanPairViewModel.getPairedDevices()
                 val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.to_top_from_bottom_2)
                 binding.pairedDeviceRecyclerView.animation = animation
             }
-
         }
     }
 
@@ -174,8 +196,22 @@ class PairedDevicesFragment : Fragment() {
         }
     }
 
-    // already permission has -> return true
-    // else -> return false
+    @RequiresApi(31)
+    private fun checkPermission(): Boolean { // 퍼미션이 있는지만 확인
+        val permissions = arrayOf(
+            Manifest.permission.BLUETOOTH_SCAN,
+            Manifest.permission.BLUETOOTH_CONNECT
+        )
+
+        for(permission in permissions) {
+            if(ContextCompat.checkSelfPermission(requireContext(), permission) != PackageManager.PERMISSION_GRANTED) {
+                return false
+            }
+        }
+
+        return true
+    }
+
     @RequiresApi(31)
     private fun requestBluetoothPermission(): Boolean {
         val permissions = arrayOf(

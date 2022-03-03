@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.troubleshootings.ArduinoTroubleshootingActivity">
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/activity_title_group"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/identityColor"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/btn_close"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/icon_delete_48"
+        android:scaleType="fitCenter"
+        android:tint="@color/white"
+        android:background="@color/transparent"
+        android:padding="10dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.15"
+        app:layout_constraintLeft_toLeftOf="@id/activity_title_group"
+        app:layout_constraintTop_toTopOf="@id/activity_title_group"
+        app:layout_constraintBottom_toBottomOf="@id/activity_title_group"/>
+
+    <TextView
+        android:id="@+id/activity_title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(아두이노) 문제 해결"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@id/activity_title_group"
+        app:layout_constraintRight_toRightOf="@id/activity_title_group"
+        app:layout_constraintTop_toTopOf="@id/activity_title_group"
+        app:layout_constraintBottom_toBottomOf="@id/activity_title_group"/>
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/whiteGray"
+        app:layout_constraintTop_toBottomOf="@id/activity_title_group"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp">
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/troubleshooting_1_group"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/rounded_corners_white"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/troubleshooting_1_5"/>
+
+            <TextView
+                android:id="@+id/troubleshooting_1_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="메시지 수신 및 송신이 안되는 경우"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                app:layout_constraintTop_toTopOf="@id/troubleshooting_1_group"
+                app:layout_constraintLeft_toLeftOf="@id/troubleshooting_1_group"/>
+
+            <TextView
+                android:id="@+id/troubleshooting_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/icon_dot"
+                android:gravity="center_vertical"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="15dp"
+                android:text="모듈과 아두이노의 TX 및 RX 연결이 잘못되었을 수도 있습니다. 모듈의 TX는 아두이노의 RX 핀에, 모듈의 RX는 아두이노의 TX 핀에 교차연결 되었는지 확인하세요."
+                app:layout_constraintTop_toBottomOf="@id/troubleshooting_1_title"
+                app:layout_constraintLeft_toLeftOf="@id/troubleshooting_1_group"
+                app:layout_constraintRight_toRightOf="@id/troubleshooting_1_group"/>
+
+            <TextView
+                android:id="@+id/troubleshooting_1_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/icon_dot"
+                android:gravity="center_vertical"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="15dp"
+                android:text="아두이노 메가 및 아두이노 메가 2560 제품의 RX 핀은 아래의 핀 번호만 지원합니다. 핀 번호를 올바르게 설정했는지 확인하세요."
+                app:layout_constraintTop_toBottomOf="@id/troubleshooting_1"
+                app:layout_constraintLeft_toLeftOf="@id/troubleshooting_1_group"
+                app:layout_constraintRight_toRightOf="@id/troubleshooting_1_group"/>
+
+            <TextView
+                android:id="@+id/troubleshooting_1_3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/icon_dot"
+                android:gravity="center_vertical"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="15dp"
+                android:text="10, 11, 12, 13, 50, 51, 52, 53, 62, 63, 64, 65, 66, 67, 68, 69"
+                app:layout_constraintTop_toBottomOf="@id/troubleshooting_1_2"
+                app:layout_constraintLeft_toLeftOf="@id/troubleshooting_1_group"
+                app:layout_constraintRight_toRightOf="@id/troubleshooting_1_group"/>
+
+            <TextView
+                android:id="@+id/troubleshooting_1_4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/icon_dot"
+                android:gravity="center_vertical"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="15dp"
+                android:text="아두이노 레오나르도 및 아두이노 마이크로 제품의 RX 핀은 아래의 핀 번호만 지원합니다. 핀 번호를 올바르게 설정했는지 확인하세요."
+                app:layout_constraintTop_toBottomOf="@id/troubleshooting_1_3"
+                app:layout_constraintLeft_toLeftOf="@id/troubleshooting_1_group"
+                app:layout_constraintRight_toRightOf="@id/troubleshooting_1_group"/>
+
+            <TextView
+                android:id="@+id/troubleshooting_1_5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/icon_dot"
+                android:gravity="center_vertical"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="15dp"
+                android:paddingBottom="15dp"
+                android:text="8, 9, 10, 11, 14 (MISO), 15 (SCK), 16 (MOSI)"
+                app:layout_constraintTop_toBottomOf="@id/troubleshooting_1_4"
+                app:layout_constraintLeft_toLeftOf="@id/troubleshooting_1_group"
+                app:layout_constraintRight_toRightOf="@id/troubleshooting_1_group"/>
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/troubleshooting_2_group"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/rounded_corners_white"
+                app:layout_constraintTop_toBottomOf="@id/troubleshooting_1_5"
+                app:layout_constraintBottom_toBottomOf="@id/troubleshooting_2"/>
+
+            <TextView
+                android:id="@+id/troubleshooting_2_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AT 모드 응답이 안되는 경우"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                app:layout_constraintTop_toTopOf="@id/troubleshooting_2_group"
+                app:layout_constraintLeft_toLeftOf="@id/troubleshooting_2_group"/>
+
+            <TextView
+                android:id="@+id/troubleshooting_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/icon_dot"
+                android:gravity="center_vertical"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="15dp"
+                android:paddingBottom="15dp"
+                android:text="HC-05 또는 HC-06 모듈은 AT 모드 사용 방법이 다릅니다. 자세한 사항은 깃허브 아두이노 샘플을 확인해 주세요."
+                app:layout_constraintTop_toBottomOf="@id/troubleshooting_2_title"
+                app:layout_constraintLeft_toLeftOf="@id/troubleshooting_2_group"
+                app:layout_constraintRight_toRightOf="@id/troubleshooting_2_group"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

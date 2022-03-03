@@ -45,7 +45,7 @@
         app:layout_constraintBottom_toBottomOf="@id/case_raspberry_connect_fail_group"/>
 
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/case_arduino_connect_fail_group"
+        android:id="@+id/case_arduino_troubleshooting_group"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="15dp"
@@ -56,21 +56,21 @@
         app:layout_constrainedHeight="true"
         app:layout_constraintHeight_percent="0.15"
         app:layout_constraintTop_toBottomOf="@id/case_raspberry_connect_fail_group"
-        app:constraint_referenced_ids="case_arduino_connect_fail_image, case_arduino_connect_fail_text"/>
+        app:constraint_referenced_ids="case_arduino_troubleshooting_image, case_arduino_troubleshooting_text"/>
 
     <TextView
-        android:id="@+id/case_arduino_connect_fail_text"
+        android:id="@+id/case_arduino_troubleshooting_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="(아두이노) 연결 실패"
+        android:text="(아두이노) 문제 해결"
         android:textStyle="bold"
         android:layout_marginStart="15dp"
-        app:layout_constraintLeft_toLeftOf="@id/case_arduino_connect_fail_group"
-        app:layout_constraintTop_toTopOf="@id/case_arduino_connect_fail_group"
-        app:layout_constraintBottom_toBottomOf="@id/case_arduino_connect_fail_group"/>
+        app:layout_constraintLeft_toLeftOf="@id/case_arduino_troubleshooting_group"
+        app:layout_constraintTop_toTopOf="@id/case_arduino_troubleshooting_group"
+        app:layout_constraintBottom_toBottomOf="@id/case_arduino_troubleshooting_group"/>
 
     <ImageView
-        android:id="@+id/case_arduino_connect_fail_image"
+        android:id="@+id/case_arduino_troubleshooting_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="15dp"
@@ -79,7 +79,7 @@
         android:tint="@color/darkGray"
         app:layout_constrainedWidth="true"
         app:layout_constraintWidth_percent="0.1"
-        app:layout_constraintRight_toRightOf="@id/case_arduino_connect_fail_group"
-        app:layout_constraintTop_toTopOf="@id/case_arduino_connect_fail_group"
-        app:layout_constraintBottom_toBottomOf="@id/case_arduino_connect_fail_group"/>
+        app:layout_constraintRight_toRightOf="@id/case_arduino_troubleshooting_group"
+        app:layout_constraintTop_toTopOf="@id/case_arduino_troubleshooting_group"
+        app:layout_constraintBottom_toBottomOf="@id/case_arduino_troubleshooting_group"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
