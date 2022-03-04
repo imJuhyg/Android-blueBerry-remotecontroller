@@ -12,4 +12,10 @@ class ArduinoTroubleshootingActivity : AppCompatActivity() {
         binding = ActivityArduinoTroubleshootingBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
+
+    override fun onResume() {
+        super.onResume()
+
+        binding.btnClose.setOnClickListener { finish() }
+    }
 }

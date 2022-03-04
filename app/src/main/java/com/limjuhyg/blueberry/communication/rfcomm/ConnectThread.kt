@@ -3,7 +3,6 @@ package com.limjuhyg.blueberry.communication.rfcomm
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.os.Handler
-import android.util.Log
 import com.limjuhyg.blueberry.applications.MainApplication
 import com.limjuhyg.blueberry.applications.MainApplication.Companion.CONNECT_FAIL
 import com.limjuhyg.blueberry.applications.MainApplication.Companion.CONNECT_SUCCESS
@@ -36,6 +35,6 @@ class ConnectThread(private val bluetoothDevice: BluetoothDevice, private val me
     }
 
     fun cancel() {
-        try { rfcommSocket.close() } catch (e: IOException) { Log.e("Raise IOException", "Connect Thread -> Fail socket close") }
+        try { rfcommSocket.close() } catch (e: IOException) { }
     }
 }

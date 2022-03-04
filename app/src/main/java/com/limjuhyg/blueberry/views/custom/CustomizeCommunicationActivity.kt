@@ -37,7 +37,6 @@ import com.limjuhyg.blueberry.utils.ProgressCircleAnimator
 import com.limjuhyg.blueberry.utils.addFragment
 import com.limjuhyg.blueberry.viewmodels.CustomizeViewModel
 import com.limjuhyg.blueberry.views.fragments.CommunicationLogFragment
-import android.util.Log
 
 class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityCustomizeCommunicationBinding

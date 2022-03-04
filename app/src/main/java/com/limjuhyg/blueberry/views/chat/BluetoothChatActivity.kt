@@ -34,8 +34,6 @@ import com.limjuhyg.blueberry.communication.rfcomm.CommunicationThread
 import com.limjuhyg.blueberry.communication.rfcomm.ConnectThread
 import com.limjuhyg.blueberry.utils.ProgressCircleAnimator
 import com.limjuhyg.blueberry.utils.addChatItem
-import com.limjuhyg.blueberry.utils.addFragmentWithAnimation
-import com.limjuhyg.blueberry.views.fragments.TroubleshootingFragment
 import java.lang.Exception
 import java.util.*
 
