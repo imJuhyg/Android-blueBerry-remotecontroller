@@ -1,0 +1,138 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "4f4e54efc2c3e32d06a4e7e5af3fae1a",
+    "entities": [
+      {
+        "tableName": "Customize",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`customizeName` TEXT NOT NULL, `deviceName` TEXT, `deviceAddress` TEXT, `orientation` TEXT NOT NULL, PRIMARY KEY(`customizeName`))",
+        "fields": [
+          {
+            "fieldPath": "customizeName",
+            "columnName": "customizeName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deviceName",
+            "columnName": "deviceName",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "deviceAddress",
+            "columnName": "deviceAddress",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "orientation",
+            "columnName": "orientation",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "customizeName"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "Widget",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`customizeName` TEXT NOT NULL, `x` REAL NOT NULL, `y` REAL NOT NULL, `width` INTEGER NOT NULL, `height` INTEGER NOT NULL, `scale` REAL NOT NULL, `icon` BLOB NOT NULL, `caption` TEXT, `data` TEXT NOT NULL, `widgetId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, FOREIGN KEY(`customizeName`) REFERENCES `Customize`(`customizeName`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "customizeName",
+            "columnName": "customizeName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "x",
+            "columnName": "x",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "y",
+            "columnName": "y",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "width",
+            "columnName": "width",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "height",
+            "columnName": "height",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "scale",
+            "columnName": "scale",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "icon",
+            "columnName": "icon",
+            "affinity": "BLOB",
+            "notNull": true
+          },
+          {
+            "fieldPath": "caption",
+            "columnName": "caption",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "data",
+            "columnName": "data",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "widgetId",
+            "columnName": "widgetId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "widgetId"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "Customize",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "customizeName"
+            ],
+            "referencedColumns": [
+              "customizeName"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4f4e54efc2c3e32d06a4e7e5af3fae1a')"
+    ]
+  }
+}

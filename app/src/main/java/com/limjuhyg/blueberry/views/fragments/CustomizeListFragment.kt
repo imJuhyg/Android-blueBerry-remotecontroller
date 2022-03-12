@@ -63,6 +63,16 @@ class CustomizeListFragment : Fragment() {
             refreshView()
         }
         customizeViewModel.customizeList.observe(viewLifecycleOwner, customizeObserver)
+
+        // Start communication activity
+        customizeViewModel.customize.observe(viewLifecycleOwner, { customize ->
+            val intent = Intent(requireContext(), CustomizeCommunicationActivity::class.java)
+            intent.putExtra("CUSTOMIZE_NAME", customize.customizeName)
+            intent.putExtra("DEVICE_NAME", customize.deviceName)
+            intent.putExtra("DEVICE_ADDRESS", customize.deviceAddress)
+            intent.putExtra("ORIENTATION", customize.orientation)
+            startActivity(intent)
+        })
     }
 
     override fun onResume() {
@@ -82,11 +92,8 @@ class CustomizeListFragment : Fragment() {
         customizeRecyclerViewAdapter!!.setOnViewClickListener(object: CustomizeRecyclerViewAdapter.OnViewClickListener {
             override fun onViewClick(view: View, position: Int) {
                 val selectedItem = customizeRecyclerViewAdapter!!.getItem(position)
-                val intent = Intent(requireContext(), CustomizeCommunicationActivity::class.java)
-                intent.putExtra("CUSTOMIZE_NAME", selectedItem.customizeName)
-                intent.putExtra("DEVICE_NAME", selectedItem.deviceName)
-                intent.putExtra("DEVICE_ADDRESS", selectedItem.deviceAddress)
-                startActivity(intent)
+                // Communication 액티비티 실행
+                customizeViewModel.getCustomize(selectedItem.customizeName)
             }
         })
 

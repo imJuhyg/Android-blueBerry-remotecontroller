@@ -32,6 +32,22 @@ fun AppCompatActivity.addFragmentWithAnimation(fragmentContainer: Int, fragment:
     }
 }
 
+fun AppCompatActivity.replaceFragmentWithAnimation(fragmentContainer: Int, fragment: Fragment, enter: Int, exit: Int, addBackStack: Boolean) {
+    if(addBackStack) {
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(enter, exit)
+            .replace(fragmentContainer, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+    else {
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(enter, exit)
+            .replace(fragmentContainer, fragment)
+            .commit()
+    }
+}
+
 fun AppCompatActivity.removeFragment(fragment: Fragment) {
     supportFragmentManager.beginTransaction()
         .remove(fragment)

@@ -11,21 +11,19 @@
         android:id="@+id/device_info_group"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@drawable/top_stroke_purple"
+        android:background="@drawable/top_stroke_gray"
         app:layout_constraintTop_toTopOf="@id/image_view"
         app:layout_constraintBottom_toBottomOf="@id/image_view"
         app:constraint_referenced_ids="image_view, device_name_text_view"/>
 
     <ImageView
         android:id="@+id/image_view"
-        android:layout_width="0dp"
+        android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@drawable/icon_remote_device_48"
         android:scaleType="fitCenter"
         android:tint="@color/identityColor"
         android:padding="10dp"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintWidth_percent="0.125"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -43,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:elevation="3dp"
-        android:background="@color/whiteGray"
+        android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@id/device_info_group"
         app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

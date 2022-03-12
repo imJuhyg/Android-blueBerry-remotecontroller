@@ -8,6 +8,7 @@ class TempCustomizeSettingData private constructor() {
     private var deviceName: String? = null
     private var deviceAddress: String? = null
     private var widgetList: ArrayList<CustomWidget>? = null
+    private var orientation: String? = null
 
     companion object {
         private var instance: TempCustomizeSettingData? = null
@@ -33,9 +34,15 @@ class TempCustomizeSettingData private constructor() {
         this.widgetList = widgetList
     }
 
+    fun setOrientation(orientation: String) {
+        this.orientation = orientation
+    }
+
+    fun getCustomizeName() = customizeName!!
+
     fun getWidgetList(): ArrayList<CustomWidget> = widgetList ?: ArrayList()
 
-    fun getCustomize() = Customize(customizeName!!, deviceName, deviceAddress)
+    fun getCustomize() = Customize(customizeName!!, deviceName, deviceAddress, orientation!!)
 
     fun instanceClear() {
         instance = null

@@ -43,10 +43,15 @@ class CustomizeRepository private constructor() {
     }
 
     // 커스터마이즈 업데이트
-    suspend fun updateCustomize(customizeName: String, updateName: String, updateDeviceName: String?, updateDeviceAddress: String?) =
+    suspend fun updateCustomize(customizeName: String, updateName: String, updateDeviceName: String?, updateDeviceAddress: String?, updateOrientation: String) =
         withContext(Dispatchers.IO) {
-            localDatabase.customizeDao().updateCustomize(customizeName, updateName, updateDeviceName, updateDeviceAddress)
+            localDatabase.customizeDao().updateCustomize(customizeName, updateName, updateDeviceName, updateDeviceAddress, updateOrientation)
         }
+
+    // 오리엔테이션 조회
+    suspend fun getOrientation(customizeName: String) = withContext(Dispatchers.IO) {
+        localDatabase.customizeDao().getOrientation(customizeName)
+    }
 
     // 위젯 조회
     suspend fun getWidgets(customizeName: String): List<Widget>? = withContext(Dispatchers.IO) {

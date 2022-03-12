@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.custom.CustomizeCommunicationActivity">
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/check_connect_setting_group"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:constraint_referenced_ids="text_message, progress_circle_1, progress_circle_2, progress_circle_3" />
+
+    <TextView
+        android:id="@+id/text_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/check_connect_setting"
+        android:textSize="18sp"
+        android:gravity="center"
+        app:layout_constraintVertical_bias="0.4"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <View
+        android:id="@+id/progress_circle_1"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:background="@drawable/progress_circle"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintRight_toLeftOf="@id/progress_circle_2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <View
+        android:id="@+id/progress_circle_2"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:background="@drawable/progress_circle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <View
+        android:id="@+id/progress_circle_3"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:background="@drawable/progress_circle"
+        android:layout_marginStart="10dp"
+        app:layout_constraintLeft_toRightOf="@id/progress_circle_2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/check_warning_group"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:constraint_referenced_ids="check_warning_image, check_warning_message_1, check_warning_message_2, btn_navi_before"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/check_warning_image"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:src="@drawable/icon_warning_48"
+        android:scaleType="fitCenter"
+        android:tint="@color/identityColor"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintVertical_bias="0.2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/check_warning_message_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="@color/darkGray"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/check_warning_image"/>
+
+    <TextView
+        android:id="@+id/check_warning_message_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:gravity="center"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/btn_navi_before"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/icon_navigate_before_48"
+        android:scaleType="fitCenter"
+        android:tint="@color/darkGray"
+        android:background="@color/transparent"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.1"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <Button
+        android:id="@+id/btn_reconnect"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@string/re_connect"
+        android:background="@drawable/button_rounded_corners_purple"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.125"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintVertical_bias="0.9"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"/>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/communication_group"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:elevation="1dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:constraint_referenced_ids="btn_finish, customize_name_text_view, btn_visibility, btn_communication_log, communication_layout, log_fragment_container"
+        android:visibility="gone"/>
+
+    <ImageButton
+        android:id="@+id/btn_finish"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/icon_delete_48"
+        android:padding="5dp"
+        android:scaleType="fitCenter"
+        android:tint="@color/darkGray"
+        android:background="@color/transparent"
+        android:layout_marginTop="15dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintTop_toTopOf="@id/communication_group"
+        app:layout_constraintLeft_toLeftOf="@id/communication_group"
+        app:layout_constraintRight_toRightOf="@id/communication_group"/>
+
+    <TextView
+        android:id="@+id/customize_name_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/btn_visibility"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/transparent"
+        android:src="@drawable/icon_visibility_48"
+        android:scaleType="fitCenter"
+        android:tint="@color/darkGray"
+        android:padding="5dp"
+        android:layout_marginTop="15dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintTop_toBottomOf="@id/btn_finish"
+        app:layout_constraintLeft_toLeftOf="@id/communication_group"
+        app:layout_constraintRight_toRightOf="@id/communication_group"/>
+
+    <ImageButton
+        android:id="@+id/btn_communication_log"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/transparent"
+        android:src="@drawable/icon_menu_communication_48"
+        android:scaleType="fitCenter"
+        android:tint="@color/darkGray"
+        android:padding="5dp"
+        android:layout_marginTop="10dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintTop_toBottomOf="@id/btn_visibility"
+        app:layout_constraintLeft_toLeftOf="@id/communication_group"
+        app:layout_constraintRight_toRightOf="@id/communication_group"/>
+
+    <FrameLayout
+        android:id="@+id/communication_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toRightOf="@id/communication_group"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <FrameLayout
+        android:id="@+id/log_fragment_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.45"
+        app:layout_constraintLeft_toRightOf="@id/communication_group"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/troubleshooting_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/whiteGray"
+        app:constraint_referenced_ids="troubleshooting_fragment_container"
+        android:visibility="gone"/>
+
+    <FrameLayout
+        android:id="@+id/troubleshooting_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.9"
+        app:layout_constraintTop_toTopOf="@id/troubleshooting_group"
+        app:layout_constraintLeft_toLeftOf="@id/troubleshooting_group"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

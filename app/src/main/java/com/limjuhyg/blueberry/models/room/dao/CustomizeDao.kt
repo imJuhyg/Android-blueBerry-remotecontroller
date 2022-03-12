@@ -15,6 +15,10 @@ interface CustomizeDao {
     @Query("SELECT * FROM Customize WHERE customizeName = :customizeName")
     fun getCustomize(customizeName: String): Customize?
 
+    // Orientation 조회
+    @Query("SELECT orientation FROM Customize WHERE customizeName = :customizeName")
+    fun getOrientation(customizeName: String): String
+
     // 커스터마이즈 생성
     @Insert
     fun insertCustomize(customize: Customize)
@@ -24,6 +28,6 @@ interface CustomizeDao {
     fun deleteCustomize(deleteKey: String)
 
     // 커스텀 수정
-    @Query("UPDATE Customize SET customizeName =:customizeName, deviceName =:deviceName, deviceAddress =:deviceAddress WHERE customizeName =:updateKey")
-    fun updateCustomize(updateKey: String, customizeName: String, deviceName: String?, deviceAddress: String?)
+    @Query("UPDATE Customize SET customizeName =:customizeName, deviceName =:deviceName, deviceAddress =:deviceAddress, orientation =:orientation WHERE customizeName =:updateKey")
+    fun updateCustomize(updateKey: String, customizeName: String, deviceName: String?, deviceAddress: String?, orientation: String)
 }

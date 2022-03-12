@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.graphics.drawable.BitmapDrawable
 import android.net.*
 import androidx.appcompat.app.AppCompatActivity
@@ -72,6 +73,11 @@ class SearchGoogleIconsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchGoogleIconsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val orientation = intent.getStringExtra("ORIENTATION")
+        if(orientation == "landscape") {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        }
 
         binding.mainLayout.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {

@@ -9,7 +9,10 @@ import com.limjuhyg.blueberry.models.room.dao.WidgetDao
 import com.limjuhyg.blueberry.models.room.entities.Customize
 import com.limjuhyg.blueberry.models.room.entities.Widget
 
-@Database(entities = [Customize::class, Widget::class], version = 1)
+@Database(
+    version = 1,
+    entities = [Customize::class, Widget::class]
+)
 @TypeConverters(Converters::class)
 abstract class LocalDatabase : RoomDatabase() {
     abstract fun customizeDao() : CustomizeDao

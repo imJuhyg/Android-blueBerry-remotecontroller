@@ -62,7 +62,7 @@ class MainApplication : Application() {
         return height
     }
 
-    fun getWindowHeight(): Int {
+    fun getWindowHeight(): Int { // 전체 화면 크기
         return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             windowManager.currentWindowMetrics.bounds.height()
         }

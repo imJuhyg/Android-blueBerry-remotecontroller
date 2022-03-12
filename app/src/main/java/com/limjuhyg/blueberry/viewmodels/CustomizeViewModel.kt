@@ -18,6 +18,7 @@ class CustomizeViewModel(application: Application) : AndroidViewModel(applicatio
     val widgets by lazy { MutableLiveData<List<Widget>>() }
     val isCustomizeCreated by lazy { MutableLiveData<Boolean>() }
     val isCustomizeModified by lazy { MutableLiveData<Boolean>() }
+    val orientation by lazy { MutableLiveData<String>() }
 
     // 커스터마이즈 생성
     fun createCustomize(customize: Customize, widgets: ArrayList<Widget>) {
@@ -34,7 +35,7 @@ class CustomizeViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     // 커스터마이즈 수정 순차 실행
-    fun modifyCustomize(oldCustomizeName: String, newCustomizeName: String, newDeviceName: String?, newDeviceAddress: String?, widgets: ArrayList<Widget>) {
+    fun modifyCustomize(oldCustomizeName: String, newCustomizeName: String, newDeviceName: String?, newDeviceAddress: String?, newOrientation: String, widgets: ArrayList<Widget>) {
         CoroutineScope(Dispatchers.Main).launch {
             launch { // Job 1 (delete widget)
                 customizeRepository.deleteWidget(oldCustomizeName)
@@ -44,7 +45,8 @@ class CustomizeViewModel(application: Application) : AndroidViewModel(applicatio
                 customizeRepository.updateCustomize(oldCustomizeName,
                     newCustomizeName,
                     newDeviceName,
-                    newDeviceAddress
+                    newDeviceAddress,
+                    newOrientation
                 )
             }.join()
 
@@ -66,6 +68,13 @@ class CustomizeViewModel(application: Application) : AndroidViewModel(applicatio
     fun getCustomize(customizeName: String) {
         viewModelScope.launch {
             customize.value = customizeRepository.getCustomize(customizeName)
+        }
+    }
+
+    // Orientation 조회
+    fun getOrientation(customizeName: String) {
+        viewModelScope.launch {
+            orientation.value = customizeRepository.getOrientation(customizeName)
         }
     }
 

@@ -4,22 +4,25 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Point
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.Group
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.limjuhyg.blueberry.R
 import com.limjuhyg.blueberry.customviews.CustomWidget
-import com.limjuhyg.blueberry.databinding.ActivityWidgetSettingBinding
 import com.limjuhyg.blueberry.dataclass.TempCustomizeSettingData
 import com.limjuhyg.blueberry.models.room.entities.Widget
-import com.limjuhyg.blueberry.utils.addFragmentWithAnimation
-import com.limjuhyg.blueberry.utils.pxToDp
+import com.limjuhyg.blueberry.utils.replaceFragmentWithAnimation
 import com.limjuhyg.blueberry.viewmodels.CustomizeViewModel
 import com.limjuhyg.blueberry.views.custom.CustomizeNameSettingActivity.Companion.CUSTOMIZE_CREATE_MODE
 import com.limjuhyg.blueberry.views.custom.CustomizeNameSettingActivity.Companion.CUSTOMIZE_MODIFICATION_MODE
@@ -29,11 +32,27 @@ import kotlin.math.abs
 
 @SuppressLint("ClickableViewAccessibility")
 class WidgetSettingActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityWidgetSettingBinding
+    private val mainLayout: ConstraintLayout by lazy { findViewById(R.id.main_layout) }
+    private val topPanel: Group by lazy { findViewById(R.id.top_panel) }
+    private val btnBefore: ImageButton by lazy { findViewById(R.id.btn_before) }
+    private val btnShowWidgetFragment: ImageButton by lazy { findViewById(R.id.btn_show_widget_fragment) }
+    private val btnVerticalGuideline: ImageButton by lazy { findViewById(R.id.btn_vertical_guideline) }
+    private val btnHorizontalGuideline: ImageButton by lazy { findViewById(R.id.btn_horizontal_guideline) }
+    private val btnRotation: ImageButton by lazy { findViewById(R.id.btn_rotation) }
+    private val btnNext: Button by lazy { findViewById(R.id.btn_next) }
+    private val customizeLayout: ConstraintLayout by lazy { findViewById(R.id.customize_layout) }
+    private val trashcan: ImageView by lazy { findViewById(R.id.trashcan) }
+    private val verticalGuideline: ConstraintLayout by lazy { findViewById(R.id.vertical_guideline) }
+    private val horizontalGuideline: ConstraintLayout by lazy { findViewById(R.id.horizontal_guideline) }
+    private val shadowPanel: View by lazy { findViewById(R.id.shadow_panel) }
+    private val fragmentContainer: FrameLayout by lazy { findViewById(R.id.fragment_container) }
+
     private val tempCustomizeSettingData by lazy { TempCustomizeSettingData.getInstance() }
     private val customizeViewModel by lazy { ViewModelProvider(this).get(CustomizeViewModel::class.java) }
     private var statusBarHeight = 0
-    private var topPanelHeight = 0
+    private var topPanelHeight = 0 // 세로 모드 전용
+    private var leftPanelWidth = 0 // 가로 모드 전용
+    private var leftSpaceWidth = 0
     private var verticalGuidelineDefaultCoordinate = 0f
     private var horizontalGuidelineDefaultCoordinate = 0f
     private var verticalGuidelinePivot = 0f
@@ -48,6 +67,7 @@ class WidgetSettingActivity : AppCompatActivity() {
     private var widgetCount: Int = 0
     private var isAddedVerticalGuideline: Boolean = false
     private var isAddedHorizontalGuideline: Boolean = false
+    var orientation: String = "portrait"
 
     companion object {
         lateinit var activity: WidgetSettingActivity
@@ -60,8 +80,14 @@ class WidgetSettingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityWidgetSettingBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
+        if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            orientation = "portrait"
+            setContentView(R.layout.activity_widget_setting)
+        } else {
+            orientation = "landscape"
+            setContentView(R.layout.activity_widget_setting_landscape)
+        }
 
         activity = this
         overridePendingTransition(R.anim.to_left_from_right, R.anim.none)
@@ -70,24 +96,41 @@ class WidgetSettingActivity : AppCompatActivity() {
         val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
         if(resourceId > 0) statusBarHeight = resources.getDimensionPixelSize(resourceId)
 
-        binding.apply {
-            mainLayout.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
+        mainLayout.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    leftPanelWidth = 0
                     topPanelHeight = topPanel.height // 상단 패널 높이
-                    widgetDefaultWidth = pxToDp(mainLayout.width/3).toInt() + 20 // 위젯 기본 가로 길이
-                    widgetDefaultHeight = pxToDp(mainLayout.height/3).toInt() // 위젯 기본 세로 길이
-                    widgetInitialCoordinate.set(customizeLayout.width/2-widgetDefaultWidth/2, customizeLayout.height/10) // 위젯 기본 좌표
-                    verticalGuidelineDefaultCoordinate = verticalGuideline.x // 수직 가이드라인 기본 좌표
-                    horizontalGuidelineDefaultCoordinate = horizontalGuideline.y // 수평 가이드라인 기본 좌표
-                    verticalGuidelinePivot = verticalGuideline.x + verticalGuideline.width/2 // 수직 가이드라인 x 중심점
-                    horizontalGuidelinePivot = horizontalGuideline.y + horizontalGuideline.height/2 // 수평 가이드라인 y 중심점
-                    trashcanTopLeftCoordinate.set(trashcan.x.toInt(), trashcan.y.toInt()) // 휴지통 상단 왼쪽 모서리 좌표
-                    trashcanBottomRightCoordinate.set(trashcan.x.toInt()+trashcan.width, trashcan.y.toInt()+trashcan.height) // 휴지통 하단 오른쪽 모서리 좌표
-
-                    mainLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                } else {
+                    leftSpaceWidth = statusBarHeight
+                    leftPanelWidth = topPanel.width
+                    topPanelHeight = 0 // 가로 모드일 경우
                 }
-            })
-        }
+
+                // 위젯 기본 가로 길이
+                widgetDefaultWidth = if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    mainLayout.width/5 // 세로모드
+                } else {
+                    mainLayout.width/7 // 가로모드
+                }
+                // 위젯 기본 세로 길이
+                widgetDefaultHeight = if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    mainLayout.height/7 // 세로모드
+                } else {
+                    mainLayout.height/5 // 가로모드
+                }
+
+                widgetInitialCoordinate.set(customizeLayout.width/2-widgetDefaultWidth/2, customizeLayout.height/10) // 위젯 기본 좌표
+                verticalGuidelineDefaultCoordinate = verticalGuideline.x // 수직 가이드라인 기본 좌표
+                horizontalGuidelineDefaultCoordinate = horizontalGuideline.y // 수평 가이드라인 기본 좌표
+                verticalGuidelinePivot = verticalGuideline.x + verticalGuideline.width/2 // 수직 가이드라인 x 중심점
+                horizontalGuidelinePivot = horizontalGuideline.y + horizontalGuideline.height/2 // 수평 가이드라인 y 중심점
+                trashcanTopLeftCoordinate.set(trashcan.x.toInt(), trashcan.y.toInt()) // 휴지통 상단 왼쪽 모서리 좌표
+                trashcanBottomRightCoordinate.set(trashcan.x.toInt()+trashcan.width, trashcan.y.toInt()+trashcan.height) // 휴지통 하단 오른쪽 모서리 좌표
+
+                mainLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
 
         // Create mode
         if(CustomizeNameSettingActivity.mode == CUSTOMIZE_CREATE_MODE) {
@@ -96,40 +139,48 @@ class WidgetSettingActivity : AppCompatActivity() {
 
         // Modification mode
         if(CustomizeNameSettingActivity.mode == CUSTOMIZE_MODIFICATION_MODE) {
-            binding.shadowPanel.alpha = 0f
+            shadowPanel.alpha = 0f
+            btnRotation.visibility = View.GONE
+            customizeViewModel.getOrientation(oldCustomizeName!!) // 화면 전환
             customizeViewModel.getWidgets(oldCustomizeName!!) // Load custom widget from DB
         }
 
+        customizeViewModel.orientation.observe(this, { orientation ->
+            if(orientation == "landscape") requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        })
+
         val widgetObserver = Observer<List<Widget>> {
             // Add existing widget to customizeLayout
-            for(widget in it) {
-                val customWidget = CustomWidget(this).apply {
-                    widget.caption?.let { caption -> setWidgetCaption(caption) } ?: run { setCaptionVisibility(false) }
-                    setWidgetData(widget.data)
-                    setColorFilter(R.color.darkGray)
-                    setWidgetImageBitmap(widget.icon)
-                    setWidgetScale(widget.scale)
-                    setWidgetCoordination(widget.x, widget.y)
-                    setOnTouchListener(WidgetMotionEvent())
+            if(widgetCount == 0) {
+                for(widget in it) {
+                    val customWidget = CustomWidget(this).apply {
+                        widget.caption?.let { caption -> setWidgetCaption(caption) } ?: run { setCaptionVisibility(false) }
+                        setWidgetData(widget.data)
+                        setColorFilter(R.color.darkGray)
+                        setWidgetImageBitmap(widget.icon)
+                        setWidgetScale(widget.scale)
+                        setWidgetCoordination(widget.x, widget.y)
+                        setOnTouchListener(WidgetMotionEvent())
+                    }
+                    customizeLayout.addView(customWidget, widget.width, widget.height)
+                    customWidgetList.add(customWidget)
+                    ++widgetCount
                 }
-                binding.customizeLayout.addView(customWidget, widget.width, widget.height)
-                customWidgetList.add(customWidget)
-                ++widgetCount
             }
         }
         customizeViewModel.widgets.observe(this, widgetObserver)
 
-        binding.verticalGuideline.setOnTouchListener(WidgetMotionEvent())
-        binding.horizontalGuideline.setOnTouchListener(WidgetMotionEvent())
+        verticalGuideline.setOnTouchListener(WidgetMotionEvent())
+        horizontalGuideline.setOnTouchListener(WidgetMotionEvent())
     }
 
     override fun onResume() {
         super.onResume()
 
-        binding.btnBefore.setOnClickListener { finish() }
+        btnBefore.setOnClickListener { finish() }
 
         // Show WidgetListFragment
-        binding.btnShowWidgetFragment.setOnClickListener {
+        btnShowWidgetFragment.setOnClickListener {
             if(widgetCount < 30) {
                 addWidgetListFragment()
             }
@@ -139,80 +190,112 @@ class WidgetSettingActivity : AppCompatActivity() {
         }
 
         // Show(Hide) vertical guideline
-        binding.btnVerticalGuideline.setOnClickListener {
+        btnVerticalGuideline.setOnClickListener {
             if(!isAddedVerticalGuideline) {
                 isAddedVerticalGuideline = true
-                binding.verticalGuideline.x = verticalGuidelineDefaultCoordinate
-                binding.verticalGuideline.y = 0f
-                verticalGuidelinePivot = binding.verticalGuideline.x + binding.verticalGuideline.width/2
-                binding.verticalGuideline.visibility = View.VISIBLE
-                binding.btnVerticalGuideline.setColorFilter(ContextCompat.getColor(this, R.color.identityColor))
+                verticalGuideline.x = verticalGuidelineDefaultCoordinate
+                verticalGuideline.y = 0f
+                verticalGuidelinePivot = verticalGuideline.x + verticalGuideline.width/2
+                verticalGuideline.visibility = View.VISIBLE
+                btnVerticalGuideline.setColorFilter(ContextCompat.getColor(this, R.color.identityColor))
             }
             else {
                 isAddedVerticalGuideline = false
-                binding.verticalGuideline.visibility = View.INVISIBLE
-                binding.btnVerticalGuideline.clearColorFilter()
+                verticalGuideline.visibility = View.INVISIBLE
+                btnVerticalGuideline.clearColorFilter()
             }
         }
 
         // Show(Hide) horizontal guideline
-        binding.btnHorizontalGuideline.setOnClickListener {
+        btnHorizontalGuideline.setOnClickListener {
             if(!isAddedHorizontalGuideline) {
                 isAddedHorizontalGuideline = true
-                binding.horizontalGuideline.x = 0f
-                binding.horizontalGuideline.y = horizontalGuidelineDefaultCoordinate
-                horizontalGuidelinePivot = binding.horizontalGuideline.y + binding.horizontalGuideline.height/2
-                binding.horizontalGuideline.visibility = View.VISIBLE
-                binding.btnHorizontalGuideline.setColorFilter(ContextCompat.getColor(this, R.color.identityColor))
+                horizontalGuideline.x = 0f
+                horizontalGuideline.y = horizontalGuidelineDefaultCoordinate
+                horizontalGuidelinePivot = horizontalGuideline.y + horizontalGuideline.height/2
+                horizontalGuideline.visibility = View.VISIBLE
+                btnHorizontalGuideline.setColorFilter(ContextCompat.getColor(this, R.color.identityColor))
             }
             else {
                 isAddedHorizontalGuideline = false
-                binding.horizontalGuideline.visibility = View.INVISIBLE
-                binding.btnHorizontalGuideline.clearColorFilter()
+                horizontalGuideline.visibility = View.INVISIBLE
+                btnHorizontalGuideline.clearColorFilter()
             }
         }
 
         // btn next
-        binding.btnNext.setOnClickListener {
+        btnNext.setOnClickListener {
+            if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                tempCustomizeSettingData.setOrientation("portrait")
+            } else {
+                tempCustomizeSettingData.setOrientation("landscape")
+            }
             tempCustomizeSettingData.setWidgetList(customWidgetList)
             val intent = Intent(this, CustomizeConnectSettingActivity::class.java)
             startActivity(intent)
         }
+
+        // rotation
+        btnRotation.setOnClickListener {
+            val dialogView = layoutInflater.inflate(R.layout.custom_alert_dialog_ok_cancel, null, false)
+            val title: TextView = dialogView.findViewById(R.id.title)
+            val subtitle: TextView = dialogView.findViewById(R.id.subtitle)
+            title.text = "설정된 데이터가 모두 지워집니다"
+            subtitle.text = "화면전환하시겠습니까?"
+
+            val builder = AlertDialog.Builder(this)
+            builder.setView(dialogView)
+            builder.setCancelable(false)
+
+            val alertDialog = builder.create()
+            alertDialog.show()
+
+            val okButton: Button = dialogView.findViewById(R.id.btn_ok)
+            val cancelButton: Button = dialogView.findViewById(R.id.btn_cancel)
+            okButton.setOnClickListener {
+                requestedOrientation = if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE // 가로 모드로 변경
+                } else {
+                    ActivityInfo.SCREEN_ORIENTATION_PORTRAIT // 세로 모드로 변경
+                }
+                alertDialog.dismiss()
+            }
+            cancelButton.setOnClickListener {
+                alertDialog.dismiss()
+            }
+        }
     }
 
     private fun enableTopPanel(boolean: Boolean) {
-        binding.apply {
-            btnBefore.isEnabled = boolean
-            btnShowWidgetFragment.isEnabled = boolean
-            btnVerticalGuideline.isEnabled = boolean
-            btnHorizontalGuideline.isEnabled = boolean
-            btnNext.isEnabled = boolean
-        }
+        btnBefore.isEnabled = boolean
+        btnShowWidgetFragment.isEnabled = boolean
+        btnVerticalGuideline.isEnabled = boolean
+        btnHorizontalGuideline.isEnabled = boolean
+        btnNext.isEnabled = boolean
+        btnRotation.isEnabled = boolean
     }
 
     private fun addWidgetListFragment() {
         // shadow panel animation
-        ObjectAnimator.ofFloat(binding.shadowPanel, "alpha", 0.5f).apply {
+        ObjectAnimator.ofFloat(shadowPanel, "alpha", 0.5f).apply {
             duration = 250
             start()
         }
 
-        binding.btnShowWidgetFragment.setColorFilter(ContextCompat.getColor(this, R.color.identityColor))
+        btnShowWidgetFragment.setColorFilter(ContextCompat.getColor(this, R.color.identityColor))
         enableTopPanel(false)
         // add fragment
-        addFragmentWithAnimation(binding.fragmentContainer.id, widgetListFragment, R.anim.to_top_from_bottom_1, R.anim.none, false)
+        replaceFragmentWithAnimation(fragmentContainer.id, widgetListFragment, R.anim.to_top_from_bottom_1, R.anim.none, false)
     }
 
     fun refreshView() {
-        binding.apply {
-            enableTopPanel(true)
-            btnShowWidgetFragment.clearColorFilter()
+        enableTopPanel(true)
+        btnShowWidgetFragment.clearColorFilter()
 
-            // shadow panel animation
-            ObjectAnimator.ofFloat(binding.shadowPanel, "alpha", 0.0f).apply {
-                duration = 250
-                start()
-            }
+        // shadow panel animation
+        ObjectAnimator.ofFloat(shadowPanel, "alpha", 0.0f).apply {
+            duration = 250
+            start()
         }
     }
 
@@ -229,7 +312,7 @@ class WidgetSettingActivity : AppCompatActivity() {
             setOnTouchListener(WidgetMotionEvent())
         }
 
-        binding.customizeLayout.addView(customWidget, widgetDefaultWidth, widgetDefaultHeight)
+        customizeLayout.addView(customWidget, widgetDefaultWidth, widgetDefaultHeight)
         customWidgetList.add(customWidget)
         ++widgetCount
     }
@@ -260,7 +343,7 @@ class WidgetSettingActivity : AppCompatActivity() {
                         lastWidgetScale = view.scaleX // save current widget scale
 
                         // trashcan animation
-                        ObjectAnimator.ofFloat(binding.trashcan, "alpha", 1.0f).apply { // 휴지통 보이기
+                        ObjectAnimator.ofFloat(trashcan, "alpha", 1.0f).apply { // 휴지통 보이기
                             duration = 250
                             start()
                         }
@@ -294,19 +377,15 @@ class WidgetSettingActivity : AppCompatActivity() {
 
                         // widget-guideline attach
                         if(pointerCount == 1 && isAddedVerticalGuideline) {
-                            binding.apply {
-                                when(event.rawX) {
-                                    in verticalGuideline.x .. (verticalGuideline.x + verticalGuideline.width)
-                                    -> view.x = verticalGuidelinePivot - view.width / 2
-                                }
+                            when(event.rawX-(leftPanelWidth+leftSpaceWidth)) {
+                                in verticalGuideline.x .. (verticalGuideline.x + verticalGuideline.width)
+                                -> view.x = verticalGuidelinePivot - view.width / 2
                             }
                         }
                         if(pointerCount == 1 && isAddedHorizontalGuideline) {
-                            binding.apply {
-                                when(event.rawY-(topPanelHeight+statusBarHeight)) {
-                                    in horizontalGuideline.y .. horizontalGuideline.y+horizontalGuideline.height
-                                    -> view.y = horizontalGuidelinePivot - view.height/2
-                                }
+                            when(event.rawY-(topPanelHeight+statusBarHeight)) {
+                                in horizontalGuideline.y .. horizontalGuideline.y+horizontalGuideline.height
+                                -> view.y = horizontalGuidelinePivot - view.height/2
                             }
                         }
 
@@ -334,8 +413,8 @@ class WidgetSettingActivity : AppCompatActivity() {
                                 animator = AnimatorSet().apply {
                                     play(ObjectAnimator.ofFloat(view, "scaleX", 0.2f)).apply {
                                         with(ObjectAnimator.ofFloat(view, "scaleY", 0.2f))
-                                        with(ObjectAnimator.ofFloat(binding.trashcan, "scaleX", 1.75f))
-                                        with(ObjectAnimator.ofFloat(binding.trashcan, "scaleY", 1.75f))
+                                        with(ObjectAnimator.ofFloat(trashcan, "scaleX", 1.75f))
+                                        with(ObjectAnimator.ofFloat(trashcan, "scaleY", 1.75f))
                                     }
                                     duration = 100
                                     start()
@@ -349,8 +428,8 @@ class WidgetSettingActivity : AppCompatActivity() {
                                 animator = AnimatorSet().apply {
                                     play(ObjectAnimator.ofFloat(view, "scaleX", lastWidgetScale)).apply {
                                         with(ObjectAnimator.ofFloat(view, "scaleY", lastWidgetScale))
-                                        with(ObjectAnimator.ofFloat(binding.trashcan, "scaleX", 1f))
-                                        with(ObjectAnimator.ofFloat(binding.trashcan, "scaleY", 1f))
+                                        with(ObjectAnimator.ofFloat(trashcan, "scaleX", 1f))
+                                        with(ObjectAnimator.ofFloat(trashcan, "scaleY", 1f))
                                         duration = 100
                                         start()
                                     }
@@ -364,19 +443,19 @@ class WidgetSettingActivity : AppCompatActivity() {
 
                         if(isViewDeleteMode) {
                             --widgetCount
-                            binding.customizeLayout.removeView(view)
+                            customizeLayout.removeView(view)
                             customWidgetList.remove(view)
 
                             animator = AnimatorSet().apply {
-                                play(ObjectAnimator.ofFloat(binding.trashcan, "scaleX", 1f)).apply {
-                                    with(ObjectAnimator.ofFloat(binding.trashcan, "scaleY", 1f))
+                                play(ObjectAnimator.ofFloat(trashcan, "scaleX", 1f)).apply {
+                                    with(ObjectAnimator.ofFloat(trashcan, "scaleY", 1f))
                                     duration = 100
                                     start()
                                 }
                             }
                         }
 
-                        ObjectAnimator.ofFloat(binding.trashcan, "alpha", 0.0f).apply { // 휴지통 감추기
+                        ObjectAnimator.ofFloat(trashcan, "alpha", 0.0f).apply { // 휴지통 감추기
                             duration = 250
                             start()
                         }
@@ -388,40 +467,36 @@ class WidgetSettingActivity : AppCompatActivity() {
 
             // guidelines
             // vertical
-            else if(view.id == binding.verticalGuideline.id) {
+            else if(view.id == verticalGuideline.id) {
                 when(event.action) {
                     MotionEvent.ACTION_DOWN -> {
                         // initial touch coordinate
                         verticalGuidelineInitRawX = event.rawX
                     }
                     MotionEvent.ACTION_MOVE -> {
-                        binding.apply {
-                            // guideline translate
-                            verticalGuideline.x += (event.rawX - verticalGuidelineInitRawX)
-                            verticalGuidelineInitRawX = event.rawX
+                        // guideline translate
+                        verticalGuideline.x += (event.rawX - verticalGuidelineInitRawX)
+                        verticalGuidelineInitRawX = event.rawX
 
-                            // set guideline pivot
-                            verticalGuidelinePivot = verticalGuideline.x + verticalGuideline.width/2
-                        }
+                        // set guideline pivot
+                        verticalGuidelinePivot = verticalGuideline.x + verticalGuideline.width/2
                     }
                 }
             }
             // horizontal
-            else if(view.id == binding.horizontalGuideline.id) {
+            else if(view.id == horizontalGuideline.id) {
                 when(event.action) {
                     MotionEvent.ACTION_DOWN -> {
                         // initial touch coordinate
                         horizontalGuidelineInitRawY = event.rawY
                     }
                     MotionEvent.ACTION_MOVE -> {
-                        binding.apply {
-                            // guideline translate
-                            horizontalGuideline.y += (event.rawY - horizontalGuidelineInitRawY)
-                            horizontalGuidelineInitRawY = event.rawY
+                        // guideline translate
+                        horizontalGuideline.y += (event.rawY - horizontalGuidelineInitRawY)
+                        horizontalGuidelineInitRawY = event.rawY
 
-                            // set guideline pivot
-                            horizontalGuidelinePivot = horizontalGuideline.y + horizontalGuideline.height/2
-                        }
+                        // set guideline pivot
+                        horizontalGuidelinePivot = horizontalGuideline.y + horizontalGuideline.height/2
                     }
                 }
             }

@@ -11,17 +11,15 @@
     <View
         android:id="@+id/background_panel"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="65dp"
         android:layout_margin="10dp"
         android:background="@drawable/rounded_corners_white"
-        app:layout_constrainedHeight="true"
-        app:layout_constraintHeight_percent="0.09"
         app:layout_constraintTop_toTopOf="parent"/>
 
      <EditText
          android:id="@+id/search_edit_text"
          android:layout_width="0dp"
-         android:layout_height="0dp"
+         android:layout_height="45dp"
          android:background="@drawable/search_bar"
          android:textSize="12sp"
          android:paddingStart="40dp"
@@ -42,28 +40,24 @@
 
      <ImageView
          android:id="@+id/edit_text_icon"
-         android:layout_width="0dp"
-         android:layout_height="0dp"
+         android:layout_width="40dp"
+         android:layout_height="40dp"
          android:src="@drawable/icon_search_48"
          android:tint="@color/identityColor"
          android:paddingStart="5dp"
-         app:layout_constrainedWidth="true"
-         app:layout_constraintWidth_percent="0.085"
          app:layout_constraintTop_toTopOf="@id/search_edit_text"
          app:layout_constraintLeft_toLeftOf="@id/search_edit_text"
          app:layout_constraintBottom_toBottomOf="@id/search_edit_text"/>
 
     <ImageButton
         android:id="@+id/btn_finish"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:src="@drawable/icon_delete_48"
         android:scaleType="fitCenter"
         android:background="@color/transparent"
         android:tint="@color/darkGray"
         android:padding="3dp"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintWidth_percent="0.1"
         app:layout_constraintRight_toLeftOf="@id/search_edit_text"
         app:layout_constraintLeft_toLeftOf="@id/background_panel"
         app:layout_constraintTop_toTopOf="@id/search_edit_text"
@@ -139,18 +133,14 @@
 
     <ImageButton
         android:id="@+id/btn_refresh"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:src="@drawable/icon_refresh_48"
         android:scaleType="fitCenter"
         android:tint="@color/identityColor"
         android:background="@color/transparent"
         android:padding="5dp"
         android:layout_marginTop="10dp"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintWidth_percent="0.1"
-        app:layout_constrainedHeight="true"
-        app:layout_constraintHeight_percent="0.075"
         app:layout_constraintTop_toBottomOf="@id/network_state_text_view"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>

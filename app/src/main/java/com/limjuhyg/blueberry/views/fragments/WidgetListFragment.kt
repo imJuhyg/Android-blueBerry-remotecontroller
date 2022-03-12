@@ -140,8 +140,10 @@ class WidgetListFragment : Fragment() {
         // Widget click
         widgetRecyclerViewAdapter!!.setOnItemClickListener(object: WidgetRecyclerViewAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
-                if(position == 0) {
+                if(position == 0) { // Google icons
+                    val parentActivity = activity as WidgetSettingActivity
                     val intent = Intent(requireContext(), SearchGoogleIconsActivity::class.java)
+                    intent.putExtra("ORIENTATION", parentActivity.orientation)
                     activityLauncher.launch(intent)
 
                 } else {

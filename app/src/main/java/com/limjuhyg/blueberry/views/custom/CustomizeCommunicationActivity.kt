@@ -5,17 +5,17 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.*
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.constraintlayout.widget.Group
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -29,7 +29,6 @@ import com.limjuhyg.blueberry.applications.MainApplication.Companion.CONNECT_SUC
 import com.limjuhyg.blueberry.applications.MainApplication.Companion.MESSAGE_READ
 import com.limjuhyg.blueberry.applications.MainApplication.Companion.MESSAGE_WRITE
 import com.limjuhyg.blueberry.customviews.CustomWidget
-import com.limjuhyg.blueberry.databinding.ActivityCustomizeCommunicationBinding
 import com.limjuhyg.blueberry.models.room.entities.Widget
 import com.limjuhyg.blueberry.communication.rfcomm.CommunicationThread
 import com.limjuhyg.blueberry.communication.rfcomm.ConnectThread
@@ -39,10 +38,31 @@ import com.limjuhyg.blueberry.viewmodels.CustomizeViewModel
 import com.limjuhyg.blueberry.views.fragments.CommunicationLogFragment
 
 class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener {
-    private lateinit var binding: ActivityCustomizeCommunicationBinding
+    private val checkConnectSettingGroup: Group by lazy { findViewById(R.id.check_connect_setting_group) }
+    private val textMessage: TextView by lazy { findViewById(R.id.text_message) }
+    private val progressCircle1: View by lazy { findViewById(R.id.progress_circle_1) }
+    private val progressCircle2: View by lazy { findViewById(R.id.progress_circle_2) }
+    private val progressCircle3: View by lazy { findViewById(R.id.progress_circle_3) }
+    private val checkWarningGroup: Group by lazy { findViewById(R.id.check_warning_group) }
+    private val checkWarningImage: ImageView by lazy { findViewById(R.id.check_warning_image) }
+    private val checkWarningMessage1: TextView by lazy { findViewById(R.id.check_warning_message_1) }
+    private val checkWarningMessage2: TextView by lazy { findViewById(R.id.check_warning_message_2) }
+    private val btnNaviBefore: ImageButton by lazy { findViewById(R.id.btn_navi_before) }
+    private val btnReconnect: Button by lazy { findViewById(R.id.btn_reconnect) }
+    private val communicationGroup: Group by lazy { findViewById(R.id.communication_group) }
+    private val btnFinish: ImageButton by lazy { findViewById(R.id.btn_finish) }
+    private val customizeNameTextView: TextView by lazy { findViewById(R.id.customize_name_text_view) }
+    private val btnVisibility: ImageButton by lazy { findViewById(R.id.btn_visibility) }
+    private val btnCommunicationLog: ImageButton by lazy { findViewById(R.id.btn_communication_log) }
+    private val communicationLayout: FrameLayout by lazy { findViewById(R.id.communication_layout) }
+    private val logFragmentContainer: FrameLayout by lazy { findViewById(R.id.log_fragment_container) }
+    private val troubleshootingGroup: Group by lazy { findViewById(R.id.troubleshooting_group) }
+    private val troubleshootingFragmentContainer: FrameLayout by lazy { findViewById(R.id.troubleshooting_fragment_container) }
+
     private lateinit var customizeName: String
     private var deviceName: String? = null
     private var deviceAddress: String? = null
+    private lateinit var orientation: String
     private lateinit var requestBluetoothEnable: ActivityResultLauncher<Intent>
     private val bluetoothAdapter by lazy { MainApplication.instance.bluetoothAdapter }
     private lateinit var bluetoothDevice: BluetoothDevice
@@ -69,17 +89,20 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityCustomizeCommunicationBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
+        orientation = intent.getStringExtra("ORIENTATION")!!
+        if(orientation == "landscape") {
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            setContentView(R.layout.activity_customize_communication_landscape)
+        } else {
+            setContentView(R.layout.activity_customize_communication)
+        }
 
         customizeName = intent.getStringExtra("CUSTOMIZE_NAME")!!
         deviceName = intent.getStringExtra("DEVICE_NAME")
         deviceAddress = intent.getStringExtra("DEVICE_ADDRESS")
 
-        progressAnimator = ProgressCircleAnimator(
-            binding.progressCircle1,
-            binding.progressCircle2,
-            binding.progressCircle3, 500)
+        progressAnimator = ProgressCircleAnimator(progressCircle1, progressCircle2, progressCircle3, 500)
         progressAnimator?.startAnimation()
 
         // Request bluetooth enable
@@ -105,7 +128,7 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
                     setWidgetCoordination(widget.x, widget.y)
                     setOnClickListener(this@CustomizeCommunicationActivity)
                 }
-                binding.communicationLayout.addView(customWidget, widget.width, widget.height)
+                communicationLayout.addView(customWidget, widget.width, widget.height)
                 widgetList.add(customWidget)
             }
         }
@@ -126,16 +149,11 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
                         val bundle = Bundle()
                         bundle.putString("DEVICE_NAME", deviceName ?: deviceAddress)
                         communicationLogFragment.arguments = bundle
+                        addFragment(logFragmentContainer.id, communicationLogFragment, false)
 
-                        addFragment(
-                            binding.logFragmentContainer.id,
-                            communicationLogFragment,
-                            false
-                        )
-
-                        binding.checkConnectSettingGroup.visibility = View.GONE
-                        binding.communicationGroup.visibility = View.VISIBLE
-                        binding.customizeNameTextView.text = customizeName // 이름 표시
+                        checkConnectSettingGroup.visibility = View.GONE
+                        communicationGroup.visibility = View.VISIBLE
+                        customizeNameTextView.text = customizeName // 이름 표시
                         customizeViewModel.getWidgets(customizeName) // 위젯 가져오기
 
                         // 스레드 실행
@@ -215,23 +233,23 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
 
     override fun onResume() {
         super.onResume()
-        binding.btnFinish.setOnClickListener { finish() }
-        binding.btnNaviBefore.setOnClickListener { finish() }
+        btnFinish.setOnClickListener { finish() }
+        btnNaviBefore.setOnClickListener { finish() }
 
-        binding.btnReconnect.setOnClickListener {
+        btnReconnect.setOnClickListener {
             progressAnimator?.startAnimation()
-            binding.checkWarningGroup.visibility = View.GONE
-            binding.btnReconnect.visibility = View.GONE
-            binding.checkConnectSettingGroup.visibility = View.VISIBLE
+            checkWarningGroup.visibility = View.GONE
+            btnReconnect.visibility = View.GONE
+            checkConnectSettingGroup.visibility = View.VISIBLE
 
             connectThread = ConnectThread(bluetoothDevice, connectMessageHandler)
             connectThread!!.start()
         }
 
-        binding.btnVisibility.setOnClickListener { // 데이터 표시
+        btnVisibility.setOnClickListener { // 데이터 표시
             if(!isDataVisible) {
                 isDataVisible = true
-                binding.btnVisibility.setColorFilter(ContextCompat.getColor(this, R.color.identityColor))
+                btnVisibility.setColorFilter(ContextCompat.getColor(this, R.color.identityColor))
 
                 for(widget in widgetList) {
                     widget.setDataVisibility(true)
@@ -239,7 +257,7 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
 
             } else {
                 isDataVisible = false
-                binding.btnVisibility.clearColorFilter()
+                btnVisibility.clearColorFilter()
 
                 for(widget in widgetList) {
                     widget.setDataVisibility(false)
@@ -247,15 +265,15 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
             }
         }
 
-        binding.btnCommunicationLog.setOnClickListener { // 커뮤니케이션 로그 표시
+        btnCommunicationLog.setOnClickListener { // 커뮤니케이션 로그 표시
             if(!isLogVisible) {
                 isLogVisible = true
-                binding.btnCommunicationLog.setColorFilter(ContextCompat.getColor(this, R.color.identityColor))
+                btnCommunicationLog.setColorFilter(ContextCompat.getColor(this, R.color.identityColor))
                 communicationLogFragment.show()
 
             } else {
                 isLogVisible = false
-                binding.btnCommunicationLog.clearColorFilter()
+                btnCommunicationLog.clearColorFilter()
                 communicationLogFragment.hide()
             }
         }
@@ -325,7 +343,7 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
                         }
 
                         if(isBonded) {
-                            binding.textMessage.text = getString(R.string.try_connect)
+                            textMessage.text = getString(R.string.try_connect)
 
                             connectThread = ConnectThread(bluetoothDevice, connectMessageHandler)
                             connectThread!!.start()
@@ -366,19 +384,19 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
 
     private fun showWarningMessage(warningType: Int, message1: String, message2: String) {
         progressAnimator?.cancelAnimation()
-        binding.checkConnectSettingGroup.visibility = View.GONE
+        checkConnectSettingGroup.visibility = View.GONE
 
         if(warningType == DEFAULT_WARNING) {
-            binding.btnReconnect.visibility = View.GONE
-            binding.checkWarningGroup.visibility = View.VISIBLE
+            btnReconnect.visibility = View.GONE
+            checkWarningGroup.visibility = View.VISIBLE
 
         } else if(warningType == CONNECT_WARNING) {
-            binding.btnReconnect.visibility = View.VISIBLE
-            binding.checkWarningGroup.visibility = View.VISIBLE
+            btnReconnect.visibility = View.VISIBLE
+            checkWarningGroup.visibility = View.VISIBLE
         }
 
-        binding.checkWarningMessage1.text = message1
-        binding.checkWarningMessage2.text = message2
+        checkWarningMessage1.text = message1
+        checkWarningMessage2.text = message2
     }
 
     override fun onDestroy() {

@@ -50,7 +50,8 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".views.custom.CustomizeCommunicationActivity"
-            android:screenOrientation="portrait"/>
+            android:configChanges="orientation|keyboard|screenSize"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".views.custom.CustomizeConnectSettingActivity"
             android:screenOrientation="portrait"/>
@@ -71,6 +72,7 @@
         <activity
             android:name=".views.custom.SearchGoogleIconsActivity"
             android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboard|screenSize"
             android:windowSoftInputMode="adjustNothing"/>
         <activity
             android:name=".views.troubleshootings.ArduinoTroubleshootingActivity"

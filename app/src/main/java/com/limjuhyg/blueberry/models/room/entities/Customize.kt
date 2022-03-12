@@ -8,5 +8,6 @@ import androidx.room.PrimaryKey
 data class Customize(
     @PrimaryKey var customizeName: String,
     @ColumnInfo var deviceName: String? = null,
-    @ColumnInfo var deviceAddress: String? = null
+    @ColumnInfo var deviceAddress: String? = null,
+    @ColumnInfo var orientation: String
 )

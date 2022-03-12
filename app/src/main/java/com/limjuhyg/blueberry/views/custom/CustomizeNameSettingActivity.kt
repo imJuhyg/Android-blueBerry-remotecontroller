@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 class CustomizeNameSettingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCustomizeNameSettingBinding
     private val tempCustomizeSettingData by lazy { TempCustomizeSettingData.getInstance() }
-    private val customizeRepository by lazy { CustomizeRepository.getInstance(application) }
+    private val customizeRepository by lazy { CustomizeRepository.getInstance(application) } // TODO 왜 Repository 로 바로 접근?
     private val keyboard by lazy { getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager}
     private var editTextInitY = 0f
 

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".views.custom.WidgetSettingActivity">
+    
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/top_panel"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/btn_before"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/icon_navigate_before_48"
+        android:scaleType="fitCenter"
+        android:tint="@color/darkGray"
+        android:background="@color/transparent"
+        android:layout_marginTop="15dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintLeft_toLeftOf="@id/top_panel"
+        app:layout_constraintRight_toRightOf="@id/top_panel"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageButton
+        android:id="@+id/btn_show_widget_fragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/icon_widgets_48"
+        android:scaleType="fitCenter"
+        android:background="@color/transparent"
+        android:tint="@color/darkGray"
+        android:padding="5dp"
+        android:layout_marginTop="15dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintLeft_toLeftOf="@id/top_panel"
+        app:layout_constraintRight_toRightOf="@id/top_panel"
+        app:layout_constraintTop_toBottomOf="@id/btn_before"/>
+
+    <ImageButton
+        android:id="@+id/btn_vertical_guideline"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/icon_vertical_guideline"
+        android:scaleType="fitCenter"
+        android:background="@color/transparent"
+        android:tint="@color/darkGray"
+        android:padding="5dp"
+        android:layout_marginTop="10dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintLeft_toLeftOf="@id/top_panel"
+        app:layout_constraintRight_toRightOf="@id/top_panel"
+        app:layout_constraintTop_toBottomOf="@id/btn_show_widget_fragment"/>
+
+    <ImageButton
+        android:id="@+id/btn_horizontal_guideline"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/icon_horizontal_guideline"
+        android:scaleType="fitCenter"
+        android:background="@color/transparent"
+        android:tint="@color/darkGray"
+        android:padding="5dp"
+        android:layout_marginTop="10dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintLeft_toLeftOf="@id/top_panel"
+        app:layout_constraintRight_toRightOf="@id/top_panel"
+        app:layout_constraintTop_toBottomOf="@id/btn_vertical_guideline"/>
+
+    <ImageButton
+        android:id="@+id/btn_rotation"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/icon_screen_rotation_48"
+        android:scaleType="fitCenter"
+        android:background="@color/transparent"
+        android:tint="@color/darkGray"
+        android:padding="5dp"
+        android:layout_marginTop="10dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintTop_toBottomOf="@id/btn_horizontal_guideline"
+        app:layout_constraintLeft_toLeftOf="@id/top_panel"
+        app:layout_constraintRight_toRightOf="@id/top_panel"/>
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="@string/next_step"
+        android:textColor="@color/identityColor"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:textSize="12sp"
+        android:background="@drawable/button_rounded_corners_purple"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.1"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!-- Customize layout -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/customize_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/whiteGray"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/top_panel"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- 휴지통 -->
+        <ImageView
+            android:id="@+id/trashcan"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/icon_trashcan_48"
+            android:alpha="0.0"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintWidth_percent="0.1"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintVertical_bias="0.975"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <!-- 수직 안내선 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/vertical_guideline"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintWidth_percent="0.075"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:visibility="invisible">
+
+            <ImageView
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:src="@color/identityColor"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- 수평 안내선 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/horizontal_guideline"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintHeight_percent="0.125"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:src="@color/identityColor"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Widget list fragment container -->
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/fragment_container_group"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:elevation="5dp"
+        app:constraint_referenced_ids="shadow_panel, fragment_container"/>
+
+    <!-- shadow -->
+    <View
+        android:id="@+id/shadow_panel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:alpha="0.5"/>
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_percent="0.6"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
