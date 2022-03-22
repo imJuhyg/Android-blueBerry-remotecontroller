@@ -65,6 +65,7 @@
         android:textSize="16sp"
         android:backgroundTint="@color/identityColor"
         android:gravity="center"
+        android:inputType="text"
         android:maxLength="20"
         android:maxLines="1"
         app:layout_constrainedHeight="true"

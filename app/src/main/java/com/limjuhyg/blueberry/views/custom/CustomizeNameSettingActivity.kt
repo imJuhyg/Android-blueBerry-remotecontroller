@@ -7,16 +7,20 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.limjuhyg.blueberry.applications.MainApplication
 import com.limjuhyg.blueberry.R
 import com.limjuhyg.blueberry.databinding.ActivityCustomizeNameSettingBinding
 import com.limjuhyg.blueberry.dataclass.TempCustomizeSettingData
 import com.limjuhyg.blueberry.models.CustomizeRepository
 import com.limjuhyg.blueberry.models.room.entities.Customize
+import com.limjuhyg.blueberry.viewmodels.CustomizeViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,7 +28,7 @@ import kotlinx.coroutines.launch
 class CustomizeNameSettingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCustomizeNameSettingBinding
     private val tempCustomizeSettingData by lazy { TempCustomizeSettingData.getInstance() }
-    private val customizeRepository by lazy { CustomizeRepository.getInstance(application) } // TODO 왜 Repository 로 바로 접근?
+    private val customizeViewModel by lazy { ViewModelProvider(this).get(CustomizeViewModel::class.java) }
     private val keyboard by lazy { getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager}
     private var editTextInitY = 0f
 
@@ -83,6 +87,28 @@ class CustomizeNameSettingActivity : AppCompatActivity() {
             })
             start()
         }
+
+        // Customize Observer
+        val customizeObserver = Observer<Customize> { customize ->
+            // Modification mode
+            if(mode == CUSTOMIZE_MODIFICATION_MODE) {
+                // 변경하려는 이름이 이미 있을 경우
+                if(customize != null && customize.customizeName != oldCustomizeName) {
+                    Toast.makeText(applicationContext, "이미 생성된 커스텀 이름입니다", Toast.LENGTH_SHORT).show()
+                }
+                // 변경하려는 이름이 없거나 변경하지 않는 경우 다음 액티비티
+                else startWidgetSettingActivity()
+            }
+            // Create mode
+            else if(mode == CUSTOMIZE_CREATE_MODE) {
+                customize?.let {
+                    Toast.makeText(applicationContext, "이미 생성된 커스텀 이름입니다", Toast.LENGTH_SHORT).show()
+                } ?: run {
+                    startWidgetSettingActivity()
+                }
+            }
+        }
+        customizeViewModel.customize.observe(this, customizeObserver)
     }
 
     override fun onResume() {
@@ -101,30 +127,12 @@ class CustomizeNameSettingActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        // 다음 단계
+        // 이름 중복 확인 후 다음 단계
         binding.btnNext.setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch {
-                keyboard.hideSoftInputFromWindow(binding.editText.windowToken, 0)
-                val customize: Customize? = customizeRepository.getCustomize(binding.editText.text.toString())
+            keyboard.hideSoftInputFromWindow(binding.editText.windowToken, 0)
 
-                // Modification mode
-                if(mode == CUSTOMIZE_MODIFICATION_MODE) {
-                    // 변경하려는 이름이 이미 있을 경우
-                    if(customize != null && customize.customizeName != oldCustomizeName) {
-                        Toast.makeText(applicationContext, "이미 생성된 커스텀 이름입니다", Toast.LENGTH_SHORT).show()
-                    }
-                    // 변경하려는 이름이 없거나 변경하지 않는 경우
-                    else startWidgetSettingActivity()
-                }
-                // Create mode
-                else if(mode == CUSTOMIZE_CREATE_MODE) {
-                    customize?.let {
-                        Toast.makeText(applicationContext, "이미 생성된 커스텀 이름입니다", Toast.LENGTH_SHORT).show()
-                    } ?: run {
-                        startWidgetSettingActivity()
-                    }
-                }
-            }
+            // Observe
+            customizeViewModel.getCustomize(binding.editText.text.toString())
         }
     }
 

@@ -42,12 +42,7 @@ class CustomizeViewModel(application: Application) : AndroidViewModel(applicatio
             }.join()
 
             launch { // Job 2 (update customize)
-                customizeRepository.updateCustomize(oldCustomizeName,
-                    newCustomizeName,
-                    newDeviceName,
-                    newDeviceAddress,
-                    newOrientation
-                )
+                customizeRepository.updateCustomize(oldCustomizeName, newCustomizeName, newDeviceName, newDeviceAddress, newOrientation)
             }.join()
 
             launch { // Job 3 (insert widget)
