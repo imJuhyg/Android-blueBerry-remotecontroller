@@ -13,10 +13,6 @@ class ArduinoGuidelineActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityArduinoGuidelineBinding.inflate(layoutInflater)
         setContentView(binding.root)
-    }
-
-    override fun onResume() {
-        super.onResume()
 
         binding.btnClose.setOnClickListener { finish() }
 

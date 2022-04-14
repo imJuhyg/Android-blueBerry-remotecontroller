@@ -56,57 +56,7 @@ class PairedDevicesFragment : Fragment() {
         val animation = AnimationUtils.loadAnimation(requireContext(), R.anim.to_top_from_bottom_2)
         binding.pairedDeviceRecyclerView.animation = animation
 
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // Bluetooth permission
-        requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            permissions.entries.forEach {
-                if(it.value == true) hasPermission = true
-            }
-            if(hasPermission) {
-                if(!bluetoothAdapter!!.isEnabled) {
-                    val intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-                    startActivity(intent)
-                }
-            } else showPermissionAlertDialog()
-        }
-
-        // Request bluetooth enable
-        requestBluetoothEnable = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if(it.resultCode == RESULT_CANCELED) {
-                Toast.makeText(requireContext(), "블루투스를 사용할 수 없습니다.", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-            hasPermission = requestBluetoothPermission()
-
-        // Request bluetooth enable
-        if(hasPermission && !bluetoothAdapter!!.isEnabled) {
-            val intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            requestBluetoothEnable.launch(intent)
-        }
-
-        val pairedDevicesObserver = Observer<ArrayList<BluetoothDevice>> {
-            bluetoothDevices = it
-            for(device in bluetoothDevices) {
-                addDeviceItem(device.name, device.address, deviceRecyclerViewAdapter!!)
-            }
-            refreshView()
-        }
-        scanPairViewModel.pairedDevices.observe(viewLifecycleOwner, pairedDevicesObserver)
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        deviceRecyclerViewAdapter!!.clear()
-        if(hasPermission) scanPairViewModel.getPairedDevices()
-
+        // click listener
         // Paired device click event
         deviceRecyclerViewAdapter!!.setOnItemClickListener(object: DeviceRecyclerViewAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
@@ -161,6 +111,57 @@ class PairedDevicesFragment : Fragment() {
                 binding.pairedDeviceRecyclerView.animation = animation
             }
         }
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Bluetooth permission
+        requestMultiplePermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            permissions.entries.forEach {
+                if(it.value == true) hasPermission = true
+            }
+            if(hasPermission) {
+                if(!bluetoothAdapter!!.isEnabled) {
+                    val intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+                    startActivity(intent)
+                }
+            } else showPermissionAlertDialog()
+        }
+
+        // Request bluetooth enable
+        requestBluetoothEnable = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if(it.resultCode == RESULT_CANCELED) {
+                Toast.makeText(requireContext(), "블루투스를 사용할 수 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+            hasPermission = requestBluetoothPermission()
+
+        // Request bluetooth enable
+        if(hasPermission && !bluetoothAdapter!!.isEnabled) {
+            val intent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            requestBluetoothEnable.launch(intent)
+        }
+
+        val pairedDevicesObserver = Observer<ArrayList<BluetoothDevice>> {
+            bluetoothDevices = it
+            for(device in bluetoothDevices) {
+                addDeviceItem(device.name, device.address, deviceRecyclerViewAdapter!!)
+            }
+            refreshView()
+        }
+        scanPairViewModel.pairedDevices.observe(viewLifecycleOwner, pairedDevicesObserver)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        deviceRecyclerViewAdapter!!.clear()
+        if(hasPermission) scanPairViewModel.getPairedDevices()
     }
 
     private fun showPermissionAlertDialog() {

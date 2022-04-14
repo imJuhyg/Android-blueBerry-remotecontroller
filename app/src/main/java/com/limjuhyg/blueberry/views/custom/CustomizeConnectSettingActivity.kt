@@ -51,19 +51,13 @@ class CustomizeConnectSettingActivity : AppCompatActivity() {
 
         val isModifiedObserver = Observer<Boolean> { finishAll() }
         customizeViewModel.isCustomizeModified.observe(this, isModifiedObserver)
-    }
 
-    override fun onResume() {
-        super.onResume()
-
+        // click listener
         binding.btnBefore.setOnClickListener { finish() }
 
         // (Skip button) Save only customize name, widgets, orientation
         binding.btnSkip.setOnClickListener {
             if(mode == CUSTOMIZE_CREATE_MODE) { // 연결정보 스킵 && 커스터마이즈 생성 모드
-                // TODO 수정
-                //val customizeName = tempCustomizeSettingData.getCustomize().customizeName
-                //val customize = Customize(customizeName, null, null)
                 val customize = tempCustomizeSettingData.getCustomize()
                 val customizeName = tempCustomizeSettingData.getCustomizeName()
                 val widgets = createWidgetList(customizeName)

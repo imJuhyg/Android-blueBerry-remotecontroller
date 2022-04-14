@@ -110,10 +110,8 @@ class DeviceScanActivity : AppCompatActivity() {
         }
         scanPairViewModel.isBonded.observe(this, pairDeviceObserver)
         if(hasPermission) scanPairViewModel.startScan()
-    }
 
-    override fun onResume() {
-        super.onResume()
+        // click listener
         binding.btnFinish.setOnClickListener { finish() }
 
         // Scan or Stop button

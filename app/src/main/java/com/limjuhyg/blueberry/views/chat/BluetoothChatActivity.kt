@@ -198,11 +198,17 @@ class BluetoothChatActivity : AppCompatActivity() {
         } else { // 퍼미션이 없는 경우
             showPermissionAlertDialog()
         }
-    }
 
-    override fun onResume() {
-        super.onResume()
+        // 키보드 팝업시 자동 스크롤
+        binding.chatView.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
+            if(bottom < oldBottom) {
+                if(chatRecyclerViewAdapter!!.itemCount > 0) {
+                    binding.chatView.smoothScrollToPosition(chatRecyclerViewAdapter!!.itemCount-1)
+                }
+            }
+        }
 
+        // click listener
         // Reconnect button listener
         binding.btnReconnect.setOnClickListener {
             progressAnimator?.startAnimation()
@@ -214,15 +220,6 @@ class BluetoothChatActivity : AppCompatActivity() {
         }
 
         binding.btnNaviBefore.setOnClickListener { finish() }
-
-        // 키보드 팝업시 자동 스크롤
-        binding.chatView.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
-            if(bottom < oldBottom) {
-                if(chatRecyclerViewAdapter!!.itemCount > 0) {
-                    binding.chatView.smoothScrollToPosition(chatRecyclerViewAdapter!!.itemCount-1)
-                }
-            }
-        }
 
         // Send message to remote device
         binding.btnSend.setOnClickListener {
@@ -240,6 +237,10 @@ class BluetoothChatActivity : AppCompatActivity() {
         binding.btnFinish.setOnClickListener {
             finish()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
     @RequiresApi(31)

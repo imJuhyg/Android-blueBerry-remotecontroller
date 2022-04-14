@@ -13,10 +13,6 @@ class RaspberryGuidelineActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRaspberryGuidelineBinding.inflate(layoutInflater)
         setContentView(binding.root)
-    }
-
-    override fun onResume() {
-        super.onResume()
 
         binding.btnClose.setOnClickListener { finish() }
 

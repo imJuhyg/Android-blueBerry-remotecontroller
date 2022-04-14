@@ -73,14 +73,8 @@ class CustomizeListFragment : Fragment() {
             intent.putExtra("ORIENTATION", customize.orientation)
             startActivity(intent)
         })
-    }
 
-    override fun onResume() {
-        super.onResume()
-
-        binding.customizeRecyclerView.scrollToPosition(0)
-        customizeViewModel.getAllCustomize()
-
+        // click listener
         // Create custom
         binding.btnAdd.setOnClickListener {
             val intent = Intent(requireContext(), CustomizeNameSettingActivity::class.java)
@@ -144,6 +138,13 @@ class CustomizeListFragment : Fragment() {
                 }
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        binding.customizeRecyclerView.scrollToPosition(0)
+        customizeViewModel.getAllCustomize()
     }
 
     private fun refreshView() {

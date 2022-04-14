@@ -149,21 +149,6 @@ class SearchGoogleIconsActivity : AppCompatActivity() {
         } else {
             binding.networkGroup.visibility = View.VISIBLE
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        registerNetworkCallback(networkCallback)
-
-        binding.btnFinish.setOnClickListener { finish() }
-
-        binding.btnRefresh.setOnClickListener {
-            if(getNetworkState()) {
-                binding.networkGroup.visibility = View.GONE
-                iconStorageViewModel.getFileReferences()
-            }
-        }
 
         binding.searchEditText.setOnEditorActionListener { textView, actionId, keyEvent ->
             if(textView.text.length < 2) {
@@ -181,6 +166,17 @@ class SearchGoogleIconsActivity : AppCompatActivity() {
             true
         }
 
+        // click listener
+
+        binding.btnFinish.setOnClickListener { finish() }
+
+        binding.btnRefresh.setOnClickListener {
+            if(getNetworkState()) {
+                binding.networkGroup.visibility = View.GONE
+                iconStorageViewModel.getFileReferences()
+            }
+        }
+
         iconRecyclerViewAdapter!!.setItemClickListener(object: IconRecyclerViewAdapter.OnItemClickListener {
             override fun onItemClick(view: ImageView, position: Int) {
                 val drawable: BitmapDrawable = view.drawable as BitmapDrawable
@@ -190,6 +186,12 @@ class SearchGoogleIconsActivity : AppCompatActivity() {
                 finish()
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        registerNetworkCallback(networkCallback)
     }
 
     private fun registerNetworkCallback(networkCallback: ConnectivityManager.NetworkCallback) {

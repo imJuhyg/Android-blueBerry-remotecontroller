@@ -16,11 +16,6 @@ class TroubleshootingFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentTroubleshootingBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
 
         binding.caseRaspberryConnectFailGroup.setOnClickListener {
             val intent = Intent(requireContext(), RaspberryTroubleshootingActivity::class.java)
@@ -31,6 +26,8 @@ class TroubleshootingFragment : Fragment() {
             val intent = Intent(requireContext(), ArduinoTroubleshootingActivity::class.java)
             startActivity(intent)
         }
+
+        return binding.root
     }
 
     override fun onDestroyView() {

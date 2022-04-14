@@ -11,10 +11,6 @@ class RaspberryTroubleshootingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRaspberryTroubleshootingBinding.inflate(layoutInflater)
         setContentView(binding.root)
-    }
-
-    override fun onResume() {
-        super.onResume()
 
         binding.btnClose.setOnClickListener { finish() }
     }

@@ -109,11 +109,6 @@ class CustomizeNameSettingActivity : AppCompatActivity() {
             }
         }
         customizeViewModel.customize.observe(this, customizeObserver)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.btnFinish.setOnClickListener { finish() }
 
         // edit text changed listener
         binding.editText.addTextChangedListener(object: TextWatcher {
@@ -126,6 +121,11 @@ class CustomizeNameSettingActivity : AppCompatActivity() {
             }
             override fun afterTextChanged(s: Editable?) {}
         })
+
+
+        // click listener
+
+        binding.btnFinish.setOnClickListener { finish() }
 
         // 이름 중복 확인 후 다음 단계
         binding.btnNext.setOnClickListener {

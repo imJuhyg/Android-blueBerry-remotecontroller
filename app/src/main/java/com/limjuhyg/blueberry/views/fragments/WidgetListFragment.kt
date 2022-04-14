@@ -40,6 +40,7 @@ class WidgetListFragment : Fragment() {
     private var isFling = false
     private lateinit var activityLauncher: ActivityResultLauncher<Intent>
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentWidgetListBinding.inflate(layoutInflater)
 
@@ -63,53 +64,7 @@ class WidgetListFragment : Fragment() {
             }
         }
 
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // Add default widgets
-        addDefaultWidgetItems(widgetRecyclerViewAdapter!!)
-
-        binding.apply {
-            mainLayout.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    mainLayoutTop = mainLayout.top
-                    mainLayoutBottom = mainLayout.bottom
-                    mainLayoutHeight = mainLayout.height
-
-                    mainLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                }
-            })
-        }
-
-        // Fling gesture
-        gestureDetector = GestureDetector(context, object: GestureDetector.SimpleOnGestureListener() {
-            override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
-                if (velocityY > 0) {
-                    isFling = true
-                    editTextClear()
-                    ObjectAnimator.ofFloat(binding.mainLayout, "translationY", mainLayoutBottom.toFloat()).apply {
-                        duration = 200
-                        start()
-                        addListener(object: AnimatorListenerAdapter() {
-                            override fun onAnimationEnd(animation: Animator?) {
-                                super.onAnimationEnd(animation)
-                                fragmentFinish()
-                            }
-                        })
-                    }
-                }
-                return true
-            }
-        })
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onResume() {
-        super.onResume()
-
+        // click listener
         // horizontal bar interaction
         binding.horizontalBar.setOnTouchListener { _, event ->
             gestureDetector.onTouchEvent(event)
@@ -171,6 +126,48 @@ class WidgetListFragment : Fragment() {
                 Toast.makeText(requireContext(), "데이터에 값을 입력해주세요", Toast.LENGTH_SHORT).show()
             }
         }
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Add default widgets
+        addDefaultWidgetItems(widgetRecyclerViewAdapter!!)
+
+        binding.apply {
+            mainLayout.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    mainLayoutTop = mainLayout.top
+                    mainLayoutBottom = mainLayout.bottom
+                    mainLayoutHeight = mainLayout.height
+
+                    mainLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                }
+            })
+        }
+
+        // Fling gesture
+        gestureDetector = GestureDetector(context, object: GestureDetector.SimpleOnGestureListener() {
+            override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
+                if (velocityY > 0) {
+                    isFling = true
+                    editTextClear()
+                    ObjectAnimator.ofFloat(binding.mainLayout, "translationY", mainLayoutBottom.toFloat()).apply {
+                        duration = 200
+                        start()
+                        addListener(object: AnimatorListenerAdapter() {
+                            override fun onAnimationEnd(animation: Animator?) {
+                                super.onAnimationEnd(animation)
+                                fragmentFinish()
+                            }
+                        })
+                    }
+                }
+                return true
+            }
+        })
     }
 
     private fun showWidgetSettings() {

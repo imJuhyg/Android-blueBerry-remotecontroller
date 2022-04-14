@@ -229,10 +229,9 @@ class CustomizeCommunicationActivity : AppCompatActivity(), View.OnClickListener
         } else { // 퍼미션이 없는 경우
             showPermissionAlertDialog()
         }
-    }
 
-    override fun onResume() {
-        super.onResume()
+
+        // click listener
         btnFinish.setOnClickListener { finish() }
         btnNaviBefore.setOnClickListener { finish() }
 

@@ -15,17 +15,14 @@ class SampleFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSampleBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
 
         binding.githubImage.setOnClickListener {
             val uri = Uri.parse("https://github.com/Android-blueBerry")
             val intent = Intent(Intent.ACTION_VIEW, uri)
             startActivity(intent)
         }
+
+        return binding.root
     }
 
     override fun onDestroyView() {

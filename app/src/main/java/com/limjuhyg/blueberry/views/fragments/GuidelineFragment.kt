@@ -17,11 +17,6 @@ class GuidelineFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentGuidlineBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
 
         binding.appGuidelineGroup.setOnClickListener {
             val intent = Intent(requireContext(), AppGuidelineActivity::class.java)
@@ -37,6 +32,8 @@ class GuidelineFragment : Fragment() {
             val intent = Intent(requireContext(), ArduinoGuidelineActivity::class.java)
             startActivity(intent)
         }
+
+        return binding.root
     }
 
     override fun onDestroyView() {

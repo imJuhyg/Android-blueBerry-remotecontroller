@@ -172,11 +172,8 @@ class WidgetSettingActivity : AppCompatActivity() {
 
         verticalGuideline.setOnTouchListener(WidgetMotionEvent())
         horizontalGuideline.setOnTouchListener(WidgetMotionEvent())
-    }
 
-    override fun onResume() {
-        super.onResume()
-
+        // click listener
         btnBefore.setOnClickListener { finish() }
 
         // Show WidgetListFragment

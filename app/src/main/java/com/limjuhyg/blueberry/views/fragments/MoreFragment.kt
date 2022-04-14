@@ -37,12 +37,7 @@ class MoreFragment : Fragment() {
 
         addChildFragment(binding.fragmentContainer.id, guidelineFragment, false)
 
-        return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-
+        // click listener
         binding.guideline.setOnClickListener { view ->
             onMenuItemSelected(view)
             setMenuTracerAnimation(view) // Animation
@@ -66,6 +61,8 @@ class MoreFragment : Fragment() {
             setMenuTracerAnimation( view) // Animation
             setSelectedMenuColor(view) // Set text color
         }
+
+        return binding.root
     }
 
     private fun setMenuTracerAnimation(view: View) {
