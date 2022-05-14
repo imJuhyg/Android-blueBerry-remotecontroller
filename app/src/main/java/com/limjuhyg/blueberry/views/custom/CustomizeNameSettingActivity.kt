@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -18,12 +17,8 @@ import com.limjuhyg.blueberry.applications.MainApplication
 import com.limjuhyg.blueberry.R
 import com.limjuhyg.blueberry.databinding.ActivityCustomizeNameSettingBinding
 import com.limjuhyg.blueberry.dataclass.TempCustomizeSettingData
-import com.limjuhyg.blueberry.models.CustomizeRepository
 import com.limjuhyg.blueberry.models.room.entities.Customize
 import com.limjuhyg.blueberry.viewmodels.CustomizeViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class CustomizeNameSettingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCustomizeNameSettingBinding

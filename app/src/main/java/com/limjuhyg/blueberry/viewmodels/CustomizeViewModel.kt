@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.limjuhyg.blueberry.models.CustomizeRepository
+import com.limjuhyg.blueberry.models.LocalDatabaseRepository
 import com.limjuhyg.blueberry.models.room.entities.Customize
 import com.limjuhyg.blueberry.models.room.entities.Widget
 import kotlinx.coroutines.CoroutineScope
@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class CustomizeViewModel(application: Application) : AndroidViewModel(application) {
-    private val customizeRepository by lazy { CustomizeRepository.getInstance(application) }
+    private val customizeRepository by lazy { LocalDatabaseRepository.getInstance(application) }
     val customize by lazy { MutableLiveData<Customize>() }
     val customizeList by lazy { MutableLiveData<List<Customize>>() }
     val widgets by lazy { MutableLiveData<List<Widget>>() }

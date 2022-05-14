@@ -8,14 +8,14 @@ import com.limjuhyg.blueberry.models.room.entities.Widget
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class CustomizeRepository private constructor() {
+class LocalDatabaseRepository private constructor() {
     companion object {
-        private var instance: CustomizeRepository? = null
+        private var instance: LocalDatabaseRepository? = null
         private lateinit var localDatabase: LocalDatabase
 
-        fun getInstance(application: Application): CustomizeRepository =
+        fun getInstance(application: Application): LocalDatabaseRepository =
             instance ?: synchronized(this) {
-                instance ?: CustomizeRepository().also {
+                instance ?: LocalDatabaseRepository().also {
                     instance = it
                     localDatabase = Room.databaseBuilder(application, LocalDatabase::class.java, "LocalDB").build()
                 }
