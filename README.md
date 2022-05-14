@@ -44,8 +44,8 @@
 ### Android
 * ### Android Bluetooth API - 블루투스 디바이스 스캔 및 페어링과 클라이언트 소켓 생성
 * ### Thread/Hander - 블루투스 통신을 위한 스레드 및 UI 업데이트를 위한 핸들러
-* ### Room Database - 커스터마이징 리모컨 저장
-* ### Firebase Storage - 리모컨 커스터마이징을 위한 2천 가지 이상의 아이콘 제공
+* ### Room Database - 커스텀 리모컨 저장
+* ### Firebase Storage - 리모컨 커스터마이징을 위한 2천 가지 이상의 외부 아이콘 제공
 * ### Glide - 아이콘 이미지 표시
 * ### Coroutines(CoroutineScope, withContext, launch/Job/join) - 네트워킹 비동기 처리
 * ### AAC(ViewModel, LiveData, Observer) - MVVM 아키텍쳐
