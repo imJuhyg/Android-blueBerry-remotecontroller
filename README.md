@@ -1,9 +1,10 @@
-# blueBerry
+# (Android)blueBerry - 블루투스 원격 제어 시스템
 
 ### 개발 기간: 2021. 10. 22 ~ 2022. 03. 12
 
 &nbsp;
 
+### :link:
 |Homepage|Google Play Store|QR Code|
 |---|---|---|
 |[<img src="./readme_resource/app_logo.png"/>](https://internal-anemone-a9c.notion.site/blueBerry-8cb1eb5994c7420f996a644672ef2ea6)|[<img src="./readme_resource/google-play-badge.png"/>](https://play.google.com/store/apps/details?id=com.limjuhyg.blueberry)|<img width="40%" src="./readme_resource/qr_code.png"/>|
@@ -61,44 +62,44 @@
 * HC-05 또는 HC-06 모듈이 부착된 모든 아두이노 제품
 ---
 ## 미리보기
-### 스캔 및 페어링
+### :arrow_forward: 스캔 및 페어링
 * 주변 블루투스 디바이스를 탐색하고 페어링 요청을 보냅니다.
 
 &nbsp;
 
-### 커스텀 리모컨 아이콘 배치
+### :arrow_forward: 커스텀 리모컨 아이콘 배치
 * 아이콘을 선택하고 가이드라인을 통해 적절하게 배치합니다.
 * 배치된 아이콘에 이름과 전송될 데이터를 설정합니다.
 
 &nbsp;
 
-### 외부 아이콘 가져오기
+### :arrow_forward: 외부 아이콘 가져오기
 * 외부 아이콘을 검색하여 가져옵니다.
 
 &nbsp;
 
-### 리모컨 연결 설정
+### :arrow_forward: 리모컨 연결 설정
 * 리모컨과 연결될 블루투스 디바이스를 선택합니다.
 
 &nbsp;
 
-### 커스텀된 리모컨으로 통신하기
+### :arrow_forward: 커스텀된 리모컨으로 통신하기
 * 커스텀된 리모컨을 통해 연결된 디바이스를 제어할 수 있습니다.
 * 아이콘을 터치하면 데이터가 전송됩니다.
 
 &nbsp;
 
-### 데이터 전송 로그 확인하기
+### :arrow_forward: 데이터 전송 로그 확인하기
 * 어떤 데이터를 전송했는지 전송 시간과 함께 확인할 수 있습니다.
 
 &nbsp;
 
-### 테스트 모드로 연결 요청하기
+### :arrow_forward: 테스트 모드로 연결 요청하기
 * 페어링된 디바이스로 연결 요청을 보냅니다.
 
 &nbsp;
 
-### 테스트 모드로 연결된 디바이스와 채팅하기
+### :arrow_forward: 테스트 모드로 연결된 디바이스와 채팅하기
 * 데이터를 전송하고 수신함으로써 데이터가 제대로 전송되는지 확인합니다.
 
 &nbsp;
