@@ -1,5 +1,5 @@
 # (Android)blueBerry - 블루투스 원격 제어 시스템
-
+### 개인 프로젝트
 ### 개발 기간: 2021. 10. 22 ~ 2022. 03. 12
 
 &nbsp;
@@ -117,3 +117,8 @@
 &nbsp;
 
 ---
+
+&nbsp;
+
+## 라즈베리파이 및 아두이노용 소켓 통신 예제 프로그램을 제공하고 있습니다.
+## :link: [Server socket Example](https://github.com/Android-blueBerry)
