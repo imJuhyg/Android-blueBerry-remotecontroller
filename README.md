@@ -72,44 +72,47 @@
 ---
 ## 미리보기
 ### :arrow_forward: 스캔 및 페어링
-* 주변 블루투스 디바이스를 탐색하고 페어링 요청을 보냅니다.
+* 주변 블루투스 디바이스를 탐색하고 페어링 요청을 보냅니다.  
+<img width="40%" src="./readme_resource/scanpair.gif"/>
 
 &nbsp;
 
 ### :arrow_forward: 커스텀 리모컨 아이콘 배치
 * 아이콘을 선택하고 가이드라인을 통해 적절하게 배치합니다.
-* 배치된 아이콘에 이름과 전송될 데이터를 설정합니다.
+* 배치된 아이콘에 이름과 전송될 데이터를 설정합니다.  
+<img width="40%" src="./readme_resource/iconsetting.gif"/>
 
 &nbsp;
 
 ### :arrow_forward: 외부 아이콘 가져오기
-* 외부 아이콘을 검색하여 가져옵니다.
+* 외부 아이콘을 검색하여 가져옵니다.  
+<img width="40%" src="./readme_resource/iconstorage.gif"/>
 
 &nbsp;
 
 ### :arrow_forward: 리모컨 연결 설정
-* 리모컨과 연결될 블루투스 디바이스를 선택합니다.
+* 리모컨과 연결될 블루투스 디바이스를 선택합니다.  
+<img width="40%" src="./readme_resource/connectsetting.gif"/>
 
 &nbsp;
 
 ### :arrow_forward: 커스텀된 리모컨으로 통신하기
 * 커스텀된 리모컨을 통해 연결된 디바이스를 제어할 수 있습니다.
 * 아이콘을 터치하면 데이터가 전송됩니다.
-
-&nbsp;
-
-### :arrow_forward: 데이터 전송 로그 확인하기
-* 어떤 데이터를 전송했는지 전송 시간과 함께 확인할 수 있습니다.
+* 전송 데이터와 전송 시간을 기록한 로그를 확인할 수 있습니다.  
+<img width="90%" src="./readme_resource/communication.gif"/>
 
 &nbsp;
 
 ### :arrow_forward: 테스트 모드로 연결 요청하기
-* 페어링된 디바이스로 연결 요청을 보냅니다.
+* 페어링된 디바이스로 연결 요청을 보냅니다.  
+<img width="40%" src="./readme_resource/paired.gif"/>
 
 &nbsp;
 
 ### :arrow_forward: 테스트 모드로 연결된 디바이스와 채팅하기
-* 데이터를 전송하고 수신함으로써 데이터가 제대로 전송되는지 확인합니다.
+* 데이터를 전송하고 수신함으로써 데이터가 제대로 전송되는지 확인합니다.  
+<img width="90%" src="./readme_resource/chat.gif"/>
 
 &nbsp;
 
