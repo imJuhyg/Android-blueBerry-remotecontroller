@@ -1,5 +1,14 @@
 package com.limjuhyg.blueberry.viewmodels
 
+/**
+ * 블루투스 스캔 및 페어링 요청 뷰모델
+ * 기능
+ * 1. getPairedDevices(): 페어링된 디바이스 찾기
+ * 2. startScan(): 주변 기기 스캔
+ * 3. stopScan(): 주변 기기 스캔 중지
+ * 4. requestPair(): 탐색된 기기에 페어링 요청
+ */
+
 import android.app.Application
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
@@ -24,56 +33,61 @@ class BluetoothScanPair(application: Application) : AndroidViewModel(application
     private var isScanReceiverRegistered: Boolean = false
 
     fun getPairedDevices() {
+        // pairedDevices Live Data 로 전달
         pairedDevices.value = ArrayList(bluetoothAdapter!!.bondedDevices)
     }
 
     fun startScan() {
         if(bluetoothAdapter!!.isDiscovering) bluetoothAdapter!!.cancelDiscovery()
 
-        scanIntentFilter.apply {
-            addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
-            addAction(BluetoothDevice.ACTION_FOUND)
-            addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
+        scanIntentFilter.apply { // 스캔 인텐트 필터 설정
+            addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED) // 주변 기기 검색 시작 알림 받기
+            addAction(BluetoothDevice.ACTION_FOUND) // 주변 기기 찾았을 대 알림 받기
+            addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED) // 검색이 끝나면 알림 받기
         }
 
+        // 리시버와 인텐트 필터 등록
         getApplication<Application>().registerReceiver(scanReceiver, scanIntentFilter)
-        isScanReceiverRegistered = true
-        bluetoothAdapter!!.startDiscovery()
+        isScanReceiverRegistered = true //  리시버 해지 시 오류 방지
+        bluetoothAdapter!!.startDiscovery() // 주변 기기 검색 시작(scanReceiver 로 알림 받음)
     }
 
     fun stopScan() {
         if(bluetoothAdapter!!.isDiscovering) bluetoothAdapter!!.cancelDiscovery()
     }
 
-    fun requestPair(bluetoothDevice: BluetoothDevice) {
+    // DeviceScanActivity 에서 사용
+    fun requestPair(bluetoothDevice: BluetoothDevice) { // 블루투스 디바이스 외부에서 넘겨 받기
         this.bluetoothDevice = bluetoothDevice
-        bondIntentFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
-        getApplication<Application>().registerReceiver(bondReceiver, bondIntentFilter)
-        isBondReceiverRegistered = true
+        bondIntentFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED) // 페어링 진행 상황이 변경되었을 때 알림받기
+        getApplication<Application>().registerReceiver(bondReceiver, bondIntentFilter) // 리시버 등록
+        isBondReceiverRegistered = true // 리시버 해지 시 오류 방지
 
-        bluetoothDevice.createBond()
+        bluetoothDevice.createBond() // 페어링 수행
     }
 
-    private val scanReceiver = object: BroadcastReceiver() {
+    private val scanReceiver = object: BroadcastReceiver() { // 스캔 작업
         override fun onReceive(context: Context?, intent: Intent?) {
             when(intent?.action) {
-                BluetoothAdapter.ACTION_DISCOVERY_STARTED -> {
-                    isDiscovering.value = true
+                BluetoothAdapter.ACTION_DISCOVERY_STARTED -> { // 검색을 시작하면
+                    isDiscovering.value = true // Live Data 변경
                 }
 
-                BluetoothDevice.ACTION_FOUND -> {
+                BluetoothDevice.ACTION_FOUND -> { // 주변 기기를 찾았으면
+                    // 블루투스 디바이스 객체를 생성하고
                     val bluetoothDevice: BluetoothDevice? = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
-                    bluetoothDevice?.let { foundDevice.value = it }
+                    bluetoothDevice?.let { foundDevice.value = it } // 블루투스 디바이스가 null 이 아닌 경우
+                    // foundDevice Live Data 에 블루투스 디바이스 등록
                 }
 
-                BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
-                    isDiscovering.value = false
+                BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> { // 탐색이 종료되면
+                    isDiscovering.value = false // Live Data 변경
                 }
             }
         }
     }
 
-    private val bondReceiver = object: BroadcastReceiver() {
+    private val bondReceiver = object: BroadcastReceiver() { // 페어링 요청 작업
         override fun onReceive(context: Context?, intent: Intent?) {
             when(intent?.action) {
                 BluetoothDevice.ACTION_BOND_STATE_CHANGED -> {
@@ -81,10 +95,10 @@ class BluetoothScanPair(application: Application) : AndroidViewModel(application
                         BluetoothDevice.BOND_NONE -> {
                             // 페어링 요청이 수락되지 않은 경우
                             isBonded.value = false
-                            onCleared()
+                            onCleared() // 뷰 모델 종료
                         }
 
-                        BluetoothDevice.BOND_BONDED -> {
+                        BluetoothDevice.BOND_BONDED -> { // 페어링 요청이 수락된 경우
                             isBonded.value = true
                         }
                     }
