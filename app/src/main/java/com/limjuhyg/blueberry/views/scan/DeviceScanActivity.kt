@@ -73,7 +73,8 @@ class DeviceScanActivity : AppCompatActivity() {
         // Observer
         // paired devices observer
         val pairedDevicesObserver = Observer<ArrayList<BluetoothDevice>> {
-            pairedDevices = it
+            pairedDevices = it // 이미 페어링 되어있는 디바이스 저장
+            // 이미 페어링되어있는 디바이스에 다시 페어링 요청을 보내지 않기 위해서
         }
         scanPairViewModel.pairedDevices.observe(this, pairedDevicesObserver)
         scanPairViewModel.getPairedDevices()
@@ -132,6 +133,9 @@ class DeviceScanActivity : AppCompatActivity() {
                 isPairingAvailable = true
                 val selectedItem = deviceRecyclerViewAdapter!!.getItem(position)
 
+                /**
+                 * 검색된 디바이스가 이미 페어링되어 있는 디바이스라면 페어링 요청을 보내지 않는다.
+                 */
                 for(pairedDevice in pairedDevices) {
                     if(pairedDevice.address == selectedItem.address) {
                         isPairingAvailable = false
@@ -139,19 +143,25 @@ class DeviceScanActivity : AppCompatActivity() {
                     }
                 }
 
-                if(isPairingAvailable) {
+                if(isPairingAvailable) { // 페어링 가능한 디바이스라면
                     binding.apply {
                         scanViewLayout.visibility = View.GONE
                         pairProcessLayout.visibility = View.VISIBLE
                         pairingProgressAnimator?.startAnimation()
                     }
-                    scanPairViewModel.requestPair(scannedDevices[position])
+                    scanPairViewModel.requestPair(scannedDevices[position]) // ViewModel 을 통해 페어링 요청
                 }
             }
         })
     }
 
     private fun requestLocationPermission(): Boolean {
+        /**
+         * FINE_LOCATION: 정확한 위치 권한
+         * COARSE_LOCATION: 대략적인 위치 권한
+         * * API 31 이상에서는 FINE_LOCATION 권한만 요청할 경우 대략적인 위치 권한만 허용되거나, 요청이 무시될 수 있음
+         * 따라서 FINE_LOCATION 권한과 COARSE_LOCATION 권한을 함께 요청하는 것이 좋음
+         */
         return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { // more than api level 28
             if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
