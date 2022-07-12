@@ -7,7 +7,7 @@
 ### :link: Link
 |Homepage|Google Play Store|QR Code|
 |---|---|---|
-|[<img src="./readme_resource/app_logo.png"/>](https://devnewb.notion.site/blueBerry-8cb1eb5994c7420f996a644672ef2ea6)|[<img src="./readme_resource/google-play-badge.png"/>](https://play.google.com/store/apps/details?id=com.limjuhyg.blueberry)|<img width="40%" src="./readme_resource/qr_code.png"/>|
+|[<img src="./readme_resource/app_logo.png"/>](https://cs-docs.notion.site/blueBerry-8cb1eb5994c7420f996a644672ef2ea6)|[<img src="./readme_resource/google-play-badge.png"/>](https://play.google.com/store/apps/details?id=com.limjuhyg.blueberry)|<img width="40%" src="./readme_resource/qr_code.png"/>|
 
 &nbsp;
 
