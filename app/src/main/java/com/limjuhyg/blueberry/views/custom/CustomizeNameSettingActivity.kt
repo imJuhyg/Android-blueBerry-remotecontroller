@@ -127,7 +127,10 @@ class CustomizeNameSettingActivity : AppCompatActivity() {
             keyboard.hideSoftInputFromWindow(binding.editText.windowToken, 0)
 
             // Observe
-            customizeViewModel.getCustomize(binding.editText.text.toString())
+            /**
+             * 이름 중복 확인을 위해 ViewModel 에서 customize 정보를 요청한다
+             */
+            customizeViewModel.getCustomize(binding.editText.text.toString()) // 일부 커스터마이즈 조회
         }
     }
 

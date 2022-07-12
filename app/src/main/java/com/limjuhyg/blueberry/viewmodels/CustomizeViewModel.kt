@@ -23,29 +23,29 @@ class CustomizeViewModel(application: Application) : AndroidViewModel(applicatio
     // 커스터마이즈 생성
     fun createCustomize(customize: Customize, widgets: ArrayList<Widget>) {
         CoroutineScope(Dispatchers.Main).launch {
-            launch { // Job 1
+            launch { // Job 1: 커스터마이즈 생성
                 customizeRepository.insertCustomize(customize)
-            }.join()
+            }.join() // 대기
 
-            launch { // Job 2
+            launch { // Job 2: 위젯 생성
                 for(widget in widgets) customizeRepository.insertWidget(widget)
-            }.join()
-            isCustomizeCreated.value = true
+            }.join() // 대기
+            isCustomizeCreated.value = true // Job1 Job2 가 모두 끝나면 true
         }
     }
 
-    // 커스터마이즈 수정 순차 실행
+    // 커스터마이즈 수정
     fun modifyCustomize(oldCustomizeName: String, newCustomizeName: String, newDeviceName: String?, newDeviceAddress: String?, newOrientation: String, widgets: ArrayList<Widget>) {
         CoroutineScope(Dispatchers.Main).launch {
-            launch { // Job 1 (delete widget)
+            launch { // Job 1: 전체 위젯 삭제
                 customizeRepository.deleteWidget(oldCustomizeName)
             }.join()
 
-            launch { // Job 2 (update customize)
+            launch { // Job 2: 커스터마이즈 이름, 디바이스 이름, 디바이스 주소, 방향 수정
                 customizeRepository.updateCustomize(oldCustomizeName, newCustomizeName, newDeviceName, newDeviceAddress, newOrientation)
             }.join()
 
-            launch { // Job 3 (insert widget)
+            launch { // Job 3: 새로운 위젯 삽입
                 for(widget in widgets) customizeRepository.insertWidget(widget)
             }.join()
             isCustomizeModified.value = true

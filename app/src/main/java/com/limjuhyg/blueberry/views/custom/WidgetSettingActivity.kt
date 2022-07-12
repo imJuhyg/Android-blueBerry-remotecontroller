@@ -92,6 +92,11 @@ class WidgetSettingActivity : AppCompatActivity() {
         activity = this
         overridePendingTransition(R.anim.to_left_from_right, R.anim.none)
 
+        /**
+         * 기본 설정 Setting
+         * status bar 크기, 아이콘 기본 크기, 가이드라인 좌표 등
+         */
+
         // Get status bar height
         val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
         if(resourceId > 0) statusBarHeight = resources.getDimensionPixelSize(resourceId)
@@ -132,7 +137,10 @@ class WidgetSettingActivity : AppCompatActivity() {
             }
         })
 
-        // Create mode
+        /**
+         * 커스터마이즈 생성 모드
+         * WidgetListFragment 를 불러온다.
+         */
         if(CustomizeNameSettingActivity.mode == CUSTOMIZE_CREATE_MODE) {
             addWidgetListFragment()
         }
