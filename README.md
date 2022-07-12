@@ -74,10 +74,7 @@
 ### :arrow_forward: 스캔 및 페어링
 * 주변 블루투스 디바이스를 탐색하고 페어링 요청을 보냅니다.  
 
-|실행과정|구조|
-|---|---|
-|<img src="./readme_resource/scanpair.gif"/>|<img width="100%" src="./readme_resource/scan_pair_process.png"/>|
-
+<img width="40%" src="./readme_resource/scanpair.gif"/>
 
 &nbsp;
 
