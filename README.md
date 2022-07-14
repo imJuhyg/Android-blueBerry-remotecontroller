@@ -85,7 +85,7 @@
 &nbsp;
 
 ### :arrow_forward: 리모컨 연결 설정
-* 리모컨과 연결될 블루투스 디바이스를 선택합니다.  
+* 리모컨과 연결될 블루투스 디바이스를 선택하면 커스텀 생성이 완료됩니다.  
 <img width="50%" src="./readme_resource/connectsetting.gif"/>
 
 &nbsp;
