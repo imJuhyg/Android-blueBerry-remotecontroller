@@ -59,7 +59,11 @@ class BluetoothScanPair(application: Application) : AndroidViewModel(application
     // DeviceScanActivity 에서 사용
     fun requestPair(bluetoothDevice: BluetoothDevice) { // 블루투스 디바이스 외부에서 넘겨 받기
         this.bluetoothDevice = bluetoothDevice
-        bondIntentFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED) // 페어링 진행 상황이 변경되었을 때 알림받기
+        /**
+         * BluetoothDevice.ACTION_BOND_STATE_CHANGED
+         * 페어링 요청이 수락되지 않은 경우와 수락된 경우를 알림받을 수 있다.
+         */
+        bondIntentFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
         getApplication<Application>().registerReceiver(bondReceiver, bondIntentFilter) // 리시버 등록
         isBondReceiverRegistered = true // 리시버 해지 시 오류 방지
 
