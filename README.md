@@ -51,7 +51,7 @@
 ### Language
 * ### Kotlin
 ### Android
-* ### Android Bluetooth API - 블루투스 디바이스 스캔 및 페어링과 클라이언트 소켓 생성
+* ### Android Bluetooth API - 블루투스 디바이스 스캔 및 페어링과 클라이언트 소켓 생성, Serial 통신으로 연결
 * ### Thread/Hander - 블루투스 소켓 통신 스레드 및 UI 업데이트를 위한 핸들러
 * ### Room Database - 사용자가 생성한 리모컨 저장, 수정, 삭제
 * ### Firebase Storage - 2천 가지 이상의 아이콘을 제공하기 위한 외부 저장소
